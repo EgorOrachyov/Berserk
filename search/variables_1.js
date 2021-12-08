@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['default_5fsize_437',['DEFAULT_SIZE',['../classLogger.html#a9dfd465bda333aad7b3ebbea6bbc9b37',1,'Logger']]]
+  ['big_5fnumber_5ffloat32_831',['BIG_NUMBER_FLOAT32',['../classMathUtils.html#ab3d5def879195c2f9520440f4e48d86d',1,'MathUtils']]]
 ];

@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['uint16_467',['uint16',['../Typedefs_8hpp.html#aea9840dd402bd5d5201bef4633398cb3',1,'Typedefs.hpp']]],
-  ['uint32_468',['uint32',['../Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8',1,'Typedefs.hpp']]],
-  ['uint64_469',['uint64',['../Typedefs_8hpp.html#a60e8696a4678cd348e991a1f172e53f7',1,'Typedefs.hpp']]],
-  ['uint8_470',['uint8',['../Typedefs_8hpp.html#a115946cb5fc5879545e9ccea096a6031',1,'Typedefs.hpp']]]
+  ['rect2i_883',['Rect2i',['../group__core.html#ga2b3a0a7f268523fa5a9adee914d9a75e',1,'TVecN.hpp']]],
+  ['rect2u_884',['Rect2u',['../group__core.html#ga51725e9979df3b69ce31fe6cc2824534',1,'TVecN.hpp']]],
+  ['releaseproc_885',['ReleaseProc',['../classData.html#aebe2c2346bdb1a7b474bf8a2ec94700a',1,'Data']]]
 ];

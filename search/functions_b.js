@@ -1,13 +1,6 @@
 var searchData=
 [
-  ['readfile_389',['ReadFile',['../classFileSystem.html#a0629ef3da87a4c79cd6740c97297483b',1,'FileSystem']]],
-  ['reallocate_390',['Reallocate',['../classMemory.html#abe2041485ca4af55c9fea535756b5292',1,'Memory']]],
-  ['ref_391',['Ref',['../classRef.html#ade05c923fd792ac47f53f675ae79024d',1,'Ref::Ref()=default'],['../classRef.html#aab342c4aa66d1a2975e3849300962baa',1,'Ref::Ref(T *object)'],['../classRef.html#ac796b4c7e6eff4922e5ffc6e5bb4172a',1,'Ref::Ref(const Ref &amp;other)'],['../classRef.html#accf8d3327b5eedfaa78b0d771aea8659',1,'Ref::Ref(Ref &amp;&amp;other) noexcept']]],
-  ['release_392',['Release',['../classRef.html#a80070fc1e77a7deb2ca841363018119f',1,'Ref']]],
-  ['relref_393',['RelRef',['../classRefCnt.html#a272fe11621124c7514cb60ab4877e146',1,'RefCnt']]],
-  ['remove_394',['Remove',['../classSingleton.html#ae3fbd9d12a7cb4d63567a36e310063c1',1,'Singleton']]],
-  ['requestclose_395',['RequestClose',['../classEngine.html#af6260baf5e200999a996587045d7e148',1,'Engine']]],
-  ['reset_396',['Reset',['../classRef.html#ab0daf9edaba1a498a7c725e6f8c57fba',1,'Ref']]],
-  ['resume_397',['Resume',['../classEventDispatcher.html#a4caa9c924d29a7889480c757b4b6d10c',1,'EventDispatcher::Resume()'],['../classScheduler.html#a9619b0d8d4cfa441187170deda797eb3',1,'Scheduler::Resume()']]],
-  ['run_398',['Run',['../classApplication.html#a426da13c4e5ee9082bf2264a024a0229',1,'Application']]]
+  ['normalize_698',['Normalize',['../classTQuat.html#a3c2602dd2dac69e1a9c6a6125b7be074',1,'TQuat']]],
+  ['normalized_699',['Normalized',['../classTQuat.html#ad738594dfb5e4a7ab9f92afaed39c207',1,'TQuat::Normalized()'],['../classTVecN.html#a9fc35364e05faa1c4eefa0bec7edbcf5',1,'TVecN::Normalized() const']]],
+  ['normalizethis_700',['NormalizeThis',['../classTVecN.html#ae57d27495a8e930170439c00de3917e8',1,'TVecN']]]
 ];

@@ -1,4 +1,5 @@
 <map id="Event" name="Event">
-<area shape="rect" id="node1" title="Base class for any engine event." alt="" coords="9,80,64,107"/>
-<area shape="rect" id="node2" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="5,5,68,32"/>
+<area shape="rect" id="node1" title="Base class for any engine event." alt="" coords="29,80,83,107"/>
+<area shape="rect" id="node3" href="$classEventWindow.html" title="Event dispatched when window state changed." alt="" coords="5,155,107,181"/>
+<area shape="rect" id="node2" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="25,5,87,32"/>
 </map>

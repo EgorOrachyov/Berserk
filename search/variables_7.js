@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['repeat_5fforever_446',['REPEAT_FOREVER',['../classScheduler.html#a66759366449073a3b33fd640096e240a',1,'Scheduler']]]
+  ['level_840',['level',['../structLogger_1_1Entry.html#a983b6cece1568cc00c46024ed2c58b56',1,'Logger::Entry']]],
+  ['line_841',['line',['../structLogger_1_1Entry.html#a374663480531d73320445b5d579d04d1',1,'Logger::Entry']]]
 ];

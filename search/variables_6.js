@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['name_445',['name',['../structFileSystem_1_1Entry.html#ad27e768a6e754abe15c7ea67a7b7f784',1,'FileSystem::Entry']]]
+  ['kib_839',['KiB',['../classMemory.html#aa908c2666a92f1cc85f4340024624da5',1,'Memory']]]
 ];

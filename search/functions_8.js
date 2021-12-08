@@ -1,5 +1,19 @@
 var searchData=
 [
-  ['make_372',['Make',['../classData.html#a293cc91fcb5e53a2c29911d56bd09b72',1,'Data::Make(const void *data, size_t sizeInBytes)'],['../classData.html#a9e996187a17d1420d753093597060bf3',1,'Data::Make(size_t sizeInBytes)']]],
-  ['markimmutable_373',['MarkImmutable',['../classData.html#a809da89f422c95390b7f001e57a8c34b',1,'Data']]]
+  ['identity_665',['Identity',['../classTQuat.html#a67ada4ab6e4f0c280e4fb0b90c9d5cd4',1,'TQuat']]],
+  ['identitymatrix_666',['IdentityMatrix',['../classMathUtils2d.html#a233dc69fb10a37744077ef4ee21ecfec',1,'MathUtils2d::IdentityMatrix()'],['../classMathUtils3d.html#a4f626d36b53d922a1d74a8874bc0d7b7',1,'MathUtils3d::IdentityMatrix()'],['../classMathUtils3d.html#a4f626d36b53d922a1d74a8874bc0d7b7',1,'MathUtils3d::IdentityMatrix()']]],
+  ['instance_667',['Instance',['../classEngine.html#a134df7c9c41b67bf06a13d0414c9ee3b',1,'Engine::Instance()'],['../classLogger.html#ab72bf7e89486563061c6bb14f0f374ec',1,'Logger::Instance()'],['../classSingleton.html#a9c3deea35a354d05095c58fed2aed1be',1,'Singleton::Instance()']]],
+  ['instancepointer_668',['InstancePointer',['../classSingleton.html#ac02883b9bff545295b57206c8486a934',1,'Singleton']]],
+  ['inverse_669',['Inverse',['../classTQuat.html#ab635b8f59b9c81c23a73c18b980a1fc6',1,'TQuat']]],
+  ['is_670',['Is',['../classRef.html#a168508919a714df9c5f0cfd84c9f0665',1,'Ref']]],
+  ['isabsolutepath_671',['IsAbsolutePath',['../classFileSystem.html#a8bcdefd6fb10af9a37ad27e61dd141d4',1,'FileSystem']]],
+  ['isactive_672',['IsActive',['../classLogger.html#a41e2374606d57bb34b6e59cec8417a59',1,'Logger']]],
+  ['isclosed_673',['IsClosed',['../classWindow.html#aa786c2c4db675f6d12d65c4a3e833f1a',1,'Window']]],
+  ['isdirexists_674',['IsDirExists',['../classFileSystem.html#acdecde253ab45c86af813b2defdeb8e9',1,'FileSystem']]],
+  ['isfileexists_675',['IsFileExists',['../classFileSystem.html#a6124e6c55fa04d88085bef6b15890e0d',1,'FileSystem']]],
+  ['isinfocus_676',['IsInFocus',['../classWindow.html#a51c6ec58919e454dfe7556dfed31ad5a',1,'Window']]],
+  ['ismutable_677',['IsMutable',['../classData.html#aa7e7461ea11d6a19efb5a955a13554e2',1,'Data']]],
+  ['isnotnull_678',['IsNotNull',['../classRef.html#a241eda7708924b9209efc3b7d7ebd2ed',1,'Ref']]],
+  ['isnull_679',['IsNull',['../classRef.html#a5bd9bdca044cc8cb01896852ad6d1841',1,'Ref']]],
+  ['isunique_680',['IsUnique',['../classRef.html#a2cce24f24ce58d169f93ca4b76bc849a',1,'Ref::IsUnique()'],['../classRefCnt.html#a4177913bc8d7e6b8e828dcd11f06d1f4',1,'RefCnt::IsUnique()']]]
 ];

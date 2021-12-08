@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['link_477',['Link',['../classFileSystem.html#a3a63e6bc14aa7ba83a56eaf64478042fa97e7c9a7d06eac006a28bf05467fcc8b',1,'FileSystem']]]
+  ['info_911',['Info',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa4059b0251f66a18cb56f544728796875',1,'Logger']]]
 ];

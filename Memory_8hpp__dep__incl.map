@@ -1,4 +1,14 @@
 <map id="code/runtime/core/Memory.hpp" name="code/runtime/core/Memory.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,205,32"/>
-<area shape="rect" id="node2" href="$Data_8cpp.html" title=" " alt="" coords="15,80,196,107"/>
+<area shape="rect" id="node1" title=" " alt="" coords="422,5,622,32"/>
+<area shape="rect" id="node2" href="$Data_8cpp.html" title=" " alt="" coords="334,87,515,114"/>
+<area shape="rect" id="node3" href="$TVecN_8hpp.html" title=" " alt="" coords="540,80,699,121"/>
+<area shape="rect" id="node4" href="$EventWindow_8hpp.html" title=" " alt="" coords="657,259,819,300"/>
+<area shape="rect" id="node6" href="$TMatMxN_8hpp.html" title=" " alt="" coords="305,169,464,211"/>
+<area shape="rect" id="node9" href="$TQuat_8hpp.html" title=" " alt="" coords="423,259,581,300"/>
+<area shape="rect" id="node10" href="$Transformf_8hpp.html" title=" " alt="" coords="423,348,581,389"/>
+<area shape="rect" id="node11" href="$Window_8hpp.html" title=" " alt="" coords="708,169,856,211"/>
+<area shape="rect" id="node5" href="$EventWindow_8cpp.html" title=" " alt="" coords="657,348,819,389"/>
+<area shape="rect" id="node7" href="$MathUtils2d_8hpp.html" title=" " alt="" coords="5,259,164,300"/>
+<area shape="rect" id="node8" href="$MathUtils3d_8hpp.html" title=" " alt="" coords="188,259,347,300"/>
+<area shape="rect" id="node12" href="$WindowManager_8hpp.html" title=" " alt="" coords="844,259,992,300"/>
 </map>

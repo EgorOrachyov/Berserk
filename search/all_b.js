@@ -1,9 +1,26 @@
 var searchData=
 [
-  ['make_130',['Make',['../classData.html#a293cc91fcb5e53a2c29911d56bd09b72',1,'Data::Make(const void *data, size_t sizeInBytes)'],['../classData.html#a9e996187a17d1420d753093597060bf3',1,'Data::Make(size_t sizeInBytes)']]],
-  ['markimmutable_131',['MarkImmutable',['../classData.html#a809da89f422c95390b7f001e57a8c34b',1,'Data']]],
-  ['memory_132',['Memory',['../classMemory.html',1,'']]],
-  ['memory_2ehpp_133',['Memory.hpp',['../Memory_8hpp.html',1,'']]],
-  ['message_134',['message',['../structLogger_1_1Entry.html#a7de7c908bb2642a42f3051e04adee6a3',1,'Logger::Entry']]],
-  ['mib_135',['MiB',['../classMemory.html#a22ef4c66234f3b0d30c4b5700ea916ad',1,'Memory']]]
+  ['make_218',['Make',['../classData.html#a293cc91fcb5e53a2c29911d56bd09b72',1,'Data::Make(const void *data, size_t sizeInBytes)'],['../classData.html#a9e996187a17d1420d753093597060bf3',1,'Data::Make(size_t sizeInBytes)']]],
+  ['markimmutable_219',['MarkImmutable',['../classData.html#a809da89f422c95390b7f001e57a8c34b',1,'Data']]],
+  ['mat_220',['Mat',['../classTQuat.html#a1d3a6eb3f02b4c53a6163b1c8a1a1578',1,'TQuat']]],
+  ['mat2x2f_221',['Mat2x2f',['../group__core.html#ga559a7845adc7240e6d40e30b2f17c09c',1,'TMatMxN.hpp']]],
+  ['mat3x3f_222',['Mat3x3f',['../group__core.html#ga046c3631a3266a22010195ea36a4cbc0',1,'TMatMxN.hpp']]],
+  ['mat4x4f_223',['Mat4x4f',['../group__core.html#ga9335541d33306a40a3b34aae8bcb134a',1,'TMatMxN.hpp']]],
+  ['mathutils_224',['MathUtils',['../classMathUtils.html',1,'']]],
+  ['mathutils_2ecpp_225',['MathUtils.cpp',['../MathUtils_8cpp.html',1,'']]],
+  ['mathutils_2ehpp_226',['MathUtils.hpp',['../MathUtils_8hpp.html',1,'']]],
+  ['mathutils2d_227',['MathUtils2d',['../classMathUtils2d.html',1,'']]],
+  ['mathutils2d_2ehpp_228',['MathUtils2d.hpp',['../MathUtils2d_8hpp.html',1,'']]],
+  ['mathutils3d_229',['MathUtils3d',['../classMathUtils3d.html',1,'']]],
+  ['mathutils3d_2ehpp_230',['MathUtils3d.hpp',['../MathUtils3d_8hpp.html',1,'']]],
+  ['max_231',['Max',['../classMathUtils.html#aa4aaa0fb4870b00607f0f216da252733',1,'MathUtils::Max()'],['../classTVecN.html#a55f8ceaa9afd8a81b545c43733de0326',1,'TVecN::Max()'],['../classMathUtils.html#abbf440abec3b8f7fcde15976bea0ef1d',1,'MathUtils::Max(double a, double b)'],['../classMathUtils.html#acdb6cb505e2d2c81f7b77b5116040aab',1,'MathUtils::Max(float a, float b)']]],
+  ['maximized_232',['Maximized',['../classEventWindow.html#ae7c6e4715ba685d5d7bf3fabe9166e59a49d903a5c02560cf79bf6b516cc89457',1,'EventWindow']]],
+  ['memory_233',['Memory',['../classMemory.html',1,'']]],
+  ['memory_2ehpp_234',['Memory.hpp',['../Memory_8hpp.html',1,'']]],
+  ['message_235',['message',['../structLogger_1_1Entry.html#a7de7c908bb2642a42f3051e04adee6a3',1,'Logger::Entry']]],
+  ['mib_236',['MiB',['../classMemory.html#a22ef4c66234f3b0d30c4b5700ea916ad',1,'Memory']]],
+  ['min_237',['Min',['../classMathUtils.html#a182e4dab71bdd637d1c6cae6ecc39dac',1,'MathUtils::Min(double a, double b)'],['../classMathUtils.html#aa8b3bd1cfadd267ba9afac8bae7721dd',1,'MathUtils::Min(T a, T b)'],['../classTVecN.html#a0ad5c8150f07c1096c92cb481c98126c',1,'TVecN::Min()'],['../classMathUtils.html#a3b5772c6c0e4ae318a9dffe18bcd9691',1,'MathUtils::Min()']]],
+  ['minimized_238',['Minimized',['../classEventWindow.html#ae7c6e4715ba685d5d7bf3fabe9166e59a074afcc50ae51f248cbae4950845549e',1,'EventWindow']]],
+  ['moved_239',['Moved',['../classEventWindow.html#ae7c6e4715ba685d5d7bf3fabe9166e59a95bfdefaaf01553cbf21ccd942855c69',1,'EventWindow']]],
+  ['multiply_240',['Multiply',['../classMathUtils3d.html#ad58ce107e54df2759d44a2260e28a1ea',1,'MathUtils3d::Multiply(const Mat4x4f &amp;m, const TVecN&lt; float, 3 &gt; &amp;v)'],['../classMathUtils3d.html#ad58ce107e54df2759d44a2260e28a1ea',1,'MathUtils3d::Multiply(const Mat4x4f &amp;m, const TVecN&lt; float, 3 &gt; &amp;v)']]]
 ];

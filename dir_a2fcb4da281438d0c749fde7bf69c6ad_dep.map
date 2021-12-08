@@ -1,11 +1,11 @@
 <map id="code/runtime/platform" name="code/runtime/platform">
 <area shape="rect" id="node1" href="dir_72ceccc1a2e74afe4e9b6d256ddcab09.html" title="core" alt="" coords="184,159,256,207"/>
-<area shape="rect" id="edge1-headlabel" href="dir_000002_000007.html" title="2" alt="" coords="245,117,253,132"/>
-<area shape="rect" id="edge4-headlabel" href="dir_000007_000002.html" title="19" alt="" coords="232,138,246,153"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000002_000008.html" title="3" alt="" coords="245,117,253,132"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000008_000002.html" title="27" alt="" coords="232,138,246,153"/>
 <area shape="rect" id="node3" href="dir_14cd790b62b16f80a4278d4be5a2b969.html" title="unix" alt="" coords="136,63,208,111"/>
-<area shape="rect" id="edge2-headlabel" href="dir_000008_000002.html" title="3" alt="" coords="203,131,211,146"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000009_000002.html" title="3" alt="" coords="203,131,211,146"/>
 <area shape="rect" id="node4" href="dir_3d55cf2dd16c87e7228a55248a459dd6.html" title="windows" alt="" coords="38,63,111,111"/>
-<area shape="rect" id="edge3-headlabel" href="dir_000009_000002.html" title="3" alt="" coords="169,135,177,150"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000010_000002.html" title="3" alt="" coords="169,135,177,150"/>
 <area shape="rect" id="clust2" href="dir_a2fcb4da281438d0c749fde7bf69c6ad.html" alt="" coords="27,52,315,121"/>
 <area shape="rect" id="clust1" href="dir_0013aa2ba2625dab2248ad8153f6afc1.html" title="runtime" alt="" coords="16,16,325,217"/>
 </map>

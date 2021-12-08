@@ -78,8 +78,9 @@ Inheritance diagram for Event:</div>
 <div class="dyncontent">
 <div class="center"><img src="classEvent__inherit__graph.png" border="0" usemap="#aEvent_inherit__map" alt="Inheritance graph"/></div>
 <map name="aEvent_inherit__map" id="aEvent_inherit__map">
-<area shape="rect" title="Base class for any engine event." alt="" coords="9,80,64,107"/>
-<area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="5,5,68,32"/>
+<area shape="rect" title="Base class for any engine event." alt="" coords="29,80,83,107"/>
+<area shape="rect" href="classEventWindow.html" title="Event dispatched when window state changed." alt="" coords="5,155,107,181"/>
+<area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="25,5,87,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -94,10 +95,12 @@ Collaboration diagram for Event:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a44fbebf0c9a18501623233dfdfc86c32"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEvent.html#a44fbebf0c9a18501623233dfdfc86c32">~Event</a> () override=default</td></tr>
-<tr class="separator:a44fbebf0c9a18501623233dfdfc86c32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5fd4981c8e040b6244f869d91d2938d"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classEventType.html">EventType</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEvent.html#af5fd4981c8e040b6244f869d91d2938d">GetType</a> () const =0</td></tr>
-<tr class="separator:af5fd4981c8e040b6244f869d91d2938d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1eb0acc24920bc69416321a845cf9bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEvent.html#ae1eb0acc24920bc69416321a845cf9bb">Event</a> ()=default</td></tr>
+<tr class="separator:ae1eb0acc24920bc69416321a845cf9bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af79fe367683ad90b0f1056b640be00be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEvent.html#af79fe367683ad90b0f1056b640be00be">~Event</a> () override=default</td></tr>
+<tr class="separator:af79fe367683ad90b0f1056b640be00be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20d8d0a9f62288d17564dca38e2a64b3"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> const <a class="el" href="classEventType.html">EventType</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEvent.html#a20d8d0a9f62288d17564dca38e2a64b3">GetEventType</a> () const =0</td></tr>
+<tr class="separator:a20d8d0a9f62288d17564dca38e2a64b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classRefCnt"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classRefCnt')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classRefCnt.html">RefCnt</a></td></tr>
 <tr class="memitem:a24861db93d74d7ba6801b086f7fa5a7d inherit pub_methods_classRefCnt"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRefCnt.html#a24861db93d74d7ba6801b086f7fa5a7d">~RefCnt</a> ()</td></tr>
 <tr class="separator:a24861db93d74d7ba6801b086f7fa5a7d inherit pub_methods_classRefCnt"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -114,8 +117,8 @@ Public Member Functions</h2></td></tr>
 <div class="textblock"><p>Base class for any engine event. </p>
 <p>Inherit from this class to create custom event. Uses <a class="el" href="classStringName.html" title="Cached shared utf-8 string id.">StringName</a> as event type to distinguish event kinds. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a44fbebf0c9a18501623233dfdfc86c32"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44fbebf0c9a18501623233dfdfc86c32">&#9670;&nbsp;</a></span>~Event()</h2>
+<a id="ae1eb0acc24920bc69416321a845cf9bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1eb0acc24920bc69416321a845cf9bb">&#9670;&nbsp;</a></span>Event()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -124,7 +127,32 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Event::~Event </td>
+          <td class="memname"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> Event::Event </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af79fe367683ad90b0f1056b640be00be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af79fe367683ad90b0f1056b640be00be">&#9670;&nbsp;</a></span>~Event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> Event::~Event </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -140,8 +168,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="af5fd4981c8e040b6244f869d91d2938d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af5fd4981c8e040b6244f869d91d2938d">&#9670;&nbsp;</a></span>GetType()</h2>
+<a id="a20d8d0a9f62288d17564dca38e2a64b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20d8d0a9f62288d17564dca38e2a64b3">&#9670;&nbsp;</a></span>GetEventType()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -150,7 +178,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="el" href="classEventType.html">EventType</a>&amp; Event::GetType </td>
+          <td class="memname">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> const <a class="el" href="classEventType.html">EventType</a>&amp; Event::GetEventType </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -164,6 +192,8 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Returns type of this event. Override this function in your custom event implementation.</p>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="classEvent.html" title="Base class for any engine event.">Event</a> type string name </dd></dl>
+
+<p>Implemented in <a class="el" href="classEventWindow.html#ada72cd7d029a740ec591e0337005bc9b">EventWindow</a>.</p>
 
 </div>
 </div>

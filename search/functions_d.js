@@ -1,11 +1,8 @@
 var searchData=
 [
-  ['todouble_412',['ToDouble',['../classStringUtils.html#a166a9e49c82e21eae2fdf6af66ec7266',1,'StringUtils']]],
-  ['tofloat_413',['ToFloat',['../classStringUtils.html#a8de20a8a15344a6dbab65119dbe3ef5e',1,'StringUtils']]],
-  ['toint32_414',['ToInt32',['../classStringUtils.html#abcf7f8c5ee57c79233308a03f6c9e000',1,'StringUtils']]],
-  ['toint64_415',['ToInt64',['../classStringUtils.html#a6a036f2a8a8eb54c54fa917893518898',1,'StringUtils']]],
-  ['tolower_416',['ToLower',['../classUnicode.html#a4e70ed402a61de3e609232df1cffd12e',1,'Unicode']]],
-  ['touint32_417',['ToUint32',['../classStringUtils.html#a20a8fa2ddd1cf8f0516fac1fb21b0f2c',1,'StringUtils']]],
-  ['touint64_418',['ToUint64',['../classStringUtils.html#a7f5322d43edb7d64e1513cba01e5eba8',1,'StringUtils']]],
-  ['toupper_419',['ToUpper',['../classUnicode.html#ad13ef95bb2aa3e8b7a3bf02b6a3ff739',1,'Unicode']]]
+  ['parse_727',['Parse',['../classArgumentParser.html#a7dfce243210bbd4e8bd9ad44c0237e88',1,'ArgumentParser']]],
+  ['pause_728',['Pause',['../classEventDispatcher.html#a4f65f5bd7ad34b746ba41e3883f9bf8e',1,'EventDispatcher::Pause()'],['../classScheduler.html#adf43d34fe71547d5a4403bc074eb88b4',1,'Scheduler::Pause()']]],
+  ['perspective_729',['Perspective',['../classMathUtils3d.html#a29a84e72e6d9fdcb96d12dbf311d3190',1,'MathUtils3d::Perspective(float fov, float aspect, float near, float far)'],['../classMathUtils3d.html#a29a84e72e6d9fdcb96d12dbf311d3190',1,'MathUtils3d::Perspective(float fov, float aspect, float near, float far)']]],
+  ['pow_730',['Pow',['../classMathUtils.html#a66c5a2fc419f0d630040bd65059dd7eb',1,'MathUtils::Pow(float a, float p)'],['../classMathUtils.html#a04abc0a9d0899f88e2bf9ea3d53296e7',1,'MathUtils::Pow(double a, double p)'],['../classTVecN.html#ae6c8cee548f1294a0cd40a04692f2b48',1,'TVecN::Pow()']]],
+  ['provide_731',['Provide',['../classSingleton.html#a11233c7d84395c699c43700ad50c5bec',1,'Singleton']]]
 ];

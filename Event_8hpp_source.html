@@ -110,24 +110,27 @@ $(function() {
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
 <div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classEvent.html">   56</a></span>&#160;<span class="keyword">class </span><a class="code" href="classEvent.html">Event</a> : <span class="keyword">public</span> <a class="code" href="classRefCnt.html">RefCnt</a> {</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classEvent.html#a44fbebf0c9a18501623233dfdfc86c32">   58</a></span>&#160;    <a class="code" href="classEvent.html#a44fbebf0c9a18501623233dfdfc86c32">~Event</a>() <span class="keyword">override</span> = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classEvent.html#af5fd4981c8e040b6244f869d91d2938d">   66</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classEventType.html">EventType</a> &amp;<a class="code" href="classEvent.html#af5fd4981c8e040b6244f869d91d2938d">GetType</a>() <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;};</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<a class="code" href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_EVENT_HPP</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classEvent.html#ae1eb0acc24920bc69416321a845cf9bb">   58</a></span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="code" href="classEvent.html#ae1eb0acc24920bc69416321a845cf9bb">Event</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classEvent.html#af79fe367683ad90b0f1056b640be00be">   59</a></span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="code" href="classEvent.html#af79fe367683ad90b0f1056b640be00be">~Event</a>() <span class="keyword">override</span> = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="classEvent.html#a20d8d0a9f62288d17564dca38e2a64b3">   67</a></span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classEventType.html">EventType</a> &amp;<a class="code" href="classEvent.html#a20d8d0a9f62288d17564dca38e2a64b3">GetEventType</a>() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;};</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<a class="code" href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_EVENT_HPP</span></div>
 <div class="ttc" id="aConfig_8hpp_html"><div class="ttname"><a href="Config_8hpp.html">Config.hpp</a></div></div>
 <div class="ttc" id="aConfig_8hpp_html_a206fc1c8e28399b1f48e8215d5584500"><div class="ttname"><a href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div><div class="ttdeci">#define BRK_NS_END</div><div class="ttdef"><b>Definition:</b> Config.hpp:48</div></div>
+<div class="ttc" id="aConfig_8hpp_html_a3a924191d1ccbaaa2df0885c249353f4"><div class="ttname"><a href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a></div><div class="ttdeci">#define BRK_API</div><div class="ttdef"><b>Definition:</b> Config.hpp:32</div></div>
 <div class="ttc" id="aConfig_8hpp_html_a879e3b805923a7033431eed6bb5eddc1"><div class="ttname"><a href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a></div><div class="ttdeci">#define BRK_NS_BEGIN</div><div class="ttdef"><b>Definition:</b> Config.hpp:47</div></div>
 <div class="ttc" id="aRefCnt_8hpp_html"><div class="ttname"><a href="RefCnt_8hpp.html">RefCnt.hpp</a></div></div>
 <div class="ttc" id="aStringName_8hpp_html"><div class="ttname"><a href="StringName_8hpp.html">StringName.hpp</a></div></div>
 <div class="ttc" id="aTypedefs_8hpp_html"><div class="ttname"><a href="Typedefs_8hpp.html">Typedefs.hpp</a></div></div>
 <div class="ttc" id="aclassEventType_html"><div class="ttname"><a href="classEventType.html">EventType</a></div><div class="ttdoc">StringName based event type.</div></div>
 <div class="ttc" id="aclassEvent_html"><div class="ttname"><a href="classEvent.html">Event</a></div><div class="ttdoc">Base class for any engine event.</div><div class="ttdef"><b>Definition:</b> Event.hpp:56</div></div>
-<div class="ttc" id="aclassEvent_html_a44fbebf0c9a18501623233dfdfc86c32"><div class="ttname"><a href="classEvent.html#a44fbebf0c9a18501623233dfdfc86c32">Event::~Event</a></div><div class="ttdeci">~Event() override=default</div></div>
-<div class="ttc" id="aclassEvent_html_af5fd4981c8e040b6244f869d91d2938d"><div class="ttname"><a href="classEvent.html#af5fd4981c8e040b6244f869d91d2938d">Event::GetType</a></div><div class="ttdeci">virtual const EventType &amp; GetType() const =0</div></div>
+<div class="ttc" id="aclassEvent_html_a20d8d0a9f62288d17564dca38e2a64b3"><div class="ttname"><a href="classEvent.html#a20d8d0a9f62288d17564dca38e2a64b3">Event::GetEventType</a></div><div class="ttdeci">virtual BRK_API const EventType &amp; GetEventType() const =0</div></div>
+<div class="ttc" id="aclassEvent_html_ae1eb0acc24920bc69416321a845cf9bb"><div class="ttname"><a href="classEvent.html#ae1eb0acc24920bc69416321a845cf9bb">Event::Event</a></div><div class="ttdeci">BRK_API Event()=default</div></div>
+<div class="ttc" id="aclassEvent_html_af79fe367683ad90b0f1056b640be00be"><div class="ttname"><a href="classEvent.html#af79fe367683ad90b0f1056b640be00be">Event::~Event</a></div><div class="ttdeci">BRK_API ~Event() override=default</div></div>
 <div class="ttc" id="aclassRefCnt_html"><div class="ttname"><a href="classRefCnt.html">RefCnt</a></div><div class="ttdoc">Reference counted base object.</div><div class="ttdef"><b>Definition:</b> RefCnt.hpp:52</div></div>
 <div class="ttc" id="aclassStringName_html"><div class="ttname"><a href="classStringName.html">StringName</a></div><div class="ttdoc">Cached shared utf-8 string id.</div><div class="ttdef"><b>Definition:</b> StringName.hpp:60</div></div>
 </div><!-- fragment --></div><!-- contents -->

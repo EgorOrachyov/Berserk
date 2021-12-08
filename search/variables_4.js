@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['level_441',['level',['../structLogger_1_1Entry.html#a983b6cece1568cc00c46024ed2c58b56',1,'Logger::Entry']]],
-  ['line_442',['line',['../structLogger_1_1Entry.html#a374663480531d73320445b5d579d04d1',1,'Logger::Entry']]]
+  ['file_835',['file',['../structLogger_1_1Entry.html#ade644276e7964d8d815b63f0f3e29547',1,'Logger::Entry']]],
+  ['function_836',['function',['../structLogger_1_1Entry.html#ae43b13c2852e0ad3b8a9daebb980632b',1,'Logger::Entry']]]
 ];

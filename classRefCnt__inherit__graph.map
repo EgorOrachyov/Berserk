@@ -1,5 +1,7 @@
 <map id="RefCnt" name="RefCnt">
-<area shape="rect" id="node1" title="Reference counted base object." alt="" coords="36,5,99,32"/>
+<area shape="rect" id="node1" title="Reference counted base object." alt="" coords="75,5,137,32"/>
 <area shape="rect" id="node2" href="$classData.html" title="Generic shared byte data storage." alt="" coords="5,80,55,107"/>
 <area shape="rect" id="node3" href="$classEvent.html" title="Base class for any engine event." alt="" coords="79,80,133,107"/>
+<area shape="rect" id="node5" href="$classWindow.html" title="Platform specific OS window for rendering." alt="" coords="157,80,225,107"/>
+<area shape="rect" id="node4" href="$classEventWindow.html" title="Event dispatched when window state changed." alt="" coords="55,155,157,181"/>
 </map>

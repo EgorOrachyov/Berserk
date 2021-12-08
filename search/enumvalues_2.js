@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['file_475',['File',['../classFileSystem.html#a3a63e6bc14aa7ba83a56eaf64478042fa0b27918290ff5323bea1e3b78a9cf04e',1,'FileSystem']]]
+  ['error_906',['Error',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa902b0d55fddef6f8d651fe1035b7d4bd',1,'Logger']]]
 ];
