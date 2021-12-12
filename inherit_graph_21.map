@@ -4,4 +4,5 @@
 <area shape="rect" id="node3" href="$classEvent.html" title="Base class for any engine event." alt="" coords="123,56,177,83"/>
 <area shape="rect" id="node5" href="$classWindow.html" title="Platform specific OS window for rendering." alt="" coords="116,107,184,133"/>
 <area shape="rect" id="node4" href="$classEventWindow.html" title="Event dispatched when window state changed." alt="" coords="232,56,333,83"/>
+<area shape="rect" id="node6" href="$classGlfwWindow.html" title="Glfw window implementation." alt="" coords="235,107,330,133"/>
 </map>

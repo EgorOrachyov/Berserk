@@ -118,6 +118,9 @@ $(function() {
 : <a class="el" href="classEvent.html#a20d8d0a9f62288d17564dca38e2a64b3">Event</a>
 , <a class="el" href="classEventWindow.html#ada72cd7d029a740ec591e0337005bc9b">EventWindow</a>
 </li>
+<li>GetEventTypeStatic()
+: <a class="el" href="classEventWindow.html#a9732067e49a6f999425866415ac26a43">EventWindow</a>
+</li>
 <li>GetExecutablePath()
 : <a class="el" href="classFileSystem.html#abf3f2d1cc7d28ce4916cba8ac65a432d">FileSystem</a>
 </li>
@@ -135,6 +138,7 @@ $(function() {
 </li>
 <li>GetFramebufferSize()
 : <a class="el" href="classEventWindow.html#a8c40c08c419df95a76dbc7b857a8e40c">EventWindow</a>
+, <a class="el" href="classGlfwWindow.html#a1901c5f90523e844c18d0cf41900d308">GlfwWindow</a>
 , <a class="el" href="classWindow.html#ac9d2bbc341e0ce5217488018629a9ac5">Window</a>
 </li>
 <li>GetFullDirPath()
@@ -154,7 +158,8 @@ $(function() {
 : <a class="el" href="classLogger.html#aeee405457f0da144bfde0c27cea8b194">Logger</a>
 </li>
 <li>GetName()
-: <a class="el" href="classWindow.html#aef639a4fcf23599b65a9c0c1f286b542">Window</a>
+: <a class="el" href="classGlfwWindow.html#af0f4db59954bbde34ff8828a301150f0">GlfwWindow</a>
+, <a class="el" href="classWindow.html#aef639a4fcf23599b65a9c0c1f286b542">Window</a>
 </li>
 <li>GetOffset()
 : <a class="el" href="classTransformf.html#aadd218abc8517e6baef1ff4b0c54a0d6">Transformf</a>
@@ -164,32 +169,36 @@ $(function() {
 </li>
 <li>GetPixelRatio()
 : <a class="el" href="classEventWindow.html#a0aa74c875690844bd7ab19d45609f8ab">EventWindow</a>
+, <a class="el" href="classGlfwWindow.html#a18f63f8ebfa916ee89f30ce6c9c84ab9">GlfwWindow</a>
 , <a class="el" href="classWindow.html#aab6a86bb5e04579bfb00ad6f6604420d">Window</a>
 </li>
 <li>GetPosition()
 : <a class="el" href="classEventWindow.html#a49a5bfab98ac851b49a8ea856960c5ff">EventWindow</a>
+, <a class="el" href="classGlfwWindow.html#a24bb66b712c54be0fad2be2c358c8e7e">GlfwWindow</a>
 , <a class="el" href="classWindow.html#a4f416e2e893d50a0a4acb5dc913da2b8">Window</a>
 </li>
 <li>GetPrimaryWindow()
-: <a class="el" href="classWindowManager.html#a6b63ed61b678eefd1226cf26355c34cc">WindowManager</a>
+: <a class="el" href="classGlfwWindowManager.html#aa4e5152c1aec374df74ef8f74888b9f1">GlfwWindowManager</a>
+, <a class="el" href="classWindowManager.html#a6b63ed61b678eefd1226cf26355c34cc">WindowManager</a>
 </li>
 <li>GetRefs()
 : <a class="el" href="classRefCnt.html#a3c663af8e6b3a4cbaa26d5a4f83591a9">RefCnt</a>
 </li>
 <li>GetRotation()
-: <a class="el" href="classTransformf.html#a900603eb48ab7ee9f1f163dd81e04b04">Transformf</a>
+: <a class="el" href="classTransformf.html#ae8fe4bda6f3b8251d39989b1044da3e1">Transformf</a>
 </li>
 <li>GetRow()
 : <a class="el" href="classTMatMxN.html#a2564b56d4f6fab8887ef6dcacf7fd714">TMatMxN&lt; T, M, N &gt;</a>
 </li>
 <li>GetScale()
-: <a class="el" href="classTransformf.html#a380abc6e02277fc398e275867d87e0e0">Transformf</a>
+: <a class="el" href="classTransformf.html#adb7a213eb963a04c72b292dbecc4fa08">Transformf</a>
 </li>
 <li>GetScheduler()
 : <a class="el" href="classEngine.html#a253290edee3ff6b3395de9489ca5ff7c">Engine</a>
 </li>
 <li>GetSize()
 : <a class="el" href="classData.html#a2c8d4e8bd07ca2f85a38db5d0be36133">Data</a>
+, <a class="el" href="classGlfwWindow.html#a49039e3611351ad22ed64b972aced11f">GlfwWindow</a>
 , <a class="el" href="classTMatMxN.html#a23acbb33e22783543aa24e71ea79bd8a">TMatMxN&lt; T, M, N &gt;</a>
 , <a class="el" href="classWindow.html#a7e331833f8e58d69a3c2a8b21fae26cf">Window</a>
 </li>
@@ -200,7 +209,8 @@ $(function() {
 : <a class="el" href="classTMatMxN.html#a72c7435f86029fafa751e20575ac8bfb">TMatMxN&lt; T, M, N &gt;</a>
 </li>
 <li>GetTitle()
-: <a class="el" href="classWindow.html#aa3dcc1742fb1036d9e47f5dc20a579ef">Window</a>
+: <a class="el" href="classGlfwWindow.html#a360b96bedf7f1c83286a4ff636b53df3">GlfwWindow</a>
+, <a class="el" href="classWindow.html#aa3dcc1742fb1036d9e47f5dc20a579ef">Window</a>
 </li>
 <li>GetType()
 : <a class="el" href="classEventWindow.html#a6ba129d6300fe944d4ba6f799172d027">EventWindow</a>
@@ -213,6 +223,12 @@ $(function() {
 </li>
 <li>GetWindowSize()
 : <a class="el" href="classEventWindow.html#a7df53eaedbb38122ba5f23f88dbe92c9">EventWindow</a>
+</li>
+<li>GlfwWindow()
+: <a class="el" href="classGlfwWindow.html#a6e2a7cb79ecd883aea2fb01eebe49d63">GlfwWindow</a>
+</li>
+<li>GlfwWindowManager()
+: <a class="el" href="classGlfwWindowManager.html#afcc36586910e5c20a5d04de8ebcd807f">GlfwWindowManager</a>
 </li>
 </ul>
 </div><!-- contents -->

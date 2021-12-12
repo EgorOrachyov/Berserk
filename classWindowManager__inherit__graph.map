@@ -1,0 +1,4 @@
+<map id="WindowManager" name="WindowManager">
+<area shape="rect" id="node1" title="Manager for OS windows." alt="" coords="19,5,137,32"/>
+<area shape="rect" id="node2" href="$classGlfwWindowManager.html" title="Glfw window manager implementation." alt="" coords="5,80,151,107"/>
+</map>

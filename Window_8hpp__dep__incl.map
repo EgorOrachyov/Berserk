@@ -1,12 +1,16 @@
 <map id="code/runtime/platform/Window.hpp" name="code/runtime/platform/Window.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="113,5,261,47"/>
-<area shape="rect" id="node2" href="$EventWindow_8hpp.html" title=" " alt="" coords="16,95,179,136"/>
-<area shape="rect" id="node4" href="$WindowManager_8hpp.html" title=" " alt="" coords="209,95,357,136"/>
-<area shape="rect" id="node3" href="$EventWindow_8cpp.html" title=" " alt="" coords="5,184,168,225"/>
-<area shape="rect" id="node5" href="$Engine_8hpp.html" title=" " alt="" coords="193,191,386,218"/>
-<area shape="rect" id="node6" href="$Berserk_8hpp.html" title=" " alt="" coords="139,370,309,397"/>
-<area shape="rect" id="node7" href="$Engine_8cpp.html" title=" " alt="" coords="89,281,282,307"/>
-<area shape="rect" id="node8" href="$LoggerListenerOutput_8cpp.html" title=" " alt="" coords="307,273,483,315"/>
-<area shape="rect" id="node9" href="$Application_8hpp.html" title=" " alt="" coords="507,273,655,315"/>
-<area shape="rect" id="node10" href="$Application_8cpp.html" title=" " alt="" coords="507,363,655,404"/>
+<area shape="rect" id="node1" title=" " alt="" coords="237,5,385,47"/>
+<area shape="rect" id="node2" href="$Berserk_8hpp.html" title=" " alt="" coords="5,370,176,397"/>
+<area shape="rect" id="node3" href="$EventWindow_8hpp.html" title=" " alt="" coords="103,95,265,136"/>
+<area shape="rect" id="node8" href="$GlfwWindow_8hpp.html" title=" " alt="" coords="774,95,925,136"/>
+<area shape="rect" id="node10" href="$WindowManager_8hpp.html" title=" " alt="" coords="315,95,463,136"/>
+<area shape="rect" id="node4" href="$EventWindow_8cpp.html" title=" " alt="" coords="77,184,240,225"/>
+<area shape="rect" id="node5" href="$GlfwWindowManager_8hpp.html" title=" " alt="" coords="589,184,790,225"/>
+<area shape="rect" id="node6" href="$Application_8cpp.html" title=" " alt="" coords="567,363,715,404"/>
+<area shape="rect" id="node7" href="$GlfwWindowManager_8cpp.html" title=" " alt="" coords="770,273,971,315"/>
+<area shape="rect" id="node9" href="$GlfwWindow_8cpp.html" title=" " alt="" coords="887,184,1038,225"/>
+<area shape="rect" id="node11" href="$Engine_8hpp.html" title=" " alt="" coords="329,191,522,218"/>
+<area shape="rect" id="node12" href="$Engine_8cpp.html" title=" " alt="" coords="553,281,746,307"/>
+<area shape="rect" id="node13" href="$LoggerListenerOutput_8cpp.html" title=" " alt="" coords="352,273,528,315"/>
+<area shape="rect" id="node14" href="$Application_8hpp.html" title=" " alt="" coords="179,273,327,315"/>
 </map>

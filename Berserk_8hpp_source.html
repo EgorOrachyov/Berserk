@@ -106,24 +106,28 @@ $(function() {
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Scheduler_8hpp.html">core/Scheduler.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Typedefs_8hpp.html">core/Typedefs.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Event_8hpp.html">core/event/Event.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Logger_8hpp.html">core/io/Logger.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="String_8hpp.html">core/string/String.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="String16u_8hpp.html">core/string/String16u.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="StringName_8hpp.html">core/string/StringName.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Unicode_8hpp.html">core/string/Unicode.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Ref_8hpp.html">core/templates/Ref.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="RefCnt_8hpp.html">core/templates/RefCnt.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Application_8hpp.html">platform/Application.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="FileSystem_8hpp.html">platform/FileSystem.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Output_8hpp.html">platform/Output.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_BERSERK_HPP</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="EventWindow_8hpp.html">core/event/EventWindow.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Logger_8hpp.html">core/io/Logger.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="String_8hpp.html">core/string/String.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="String16u_8hpp.html">core/string/String16u.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="StringName_8hpp.html">core/string/StringName.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Unicode_8hpp.html">core/string/Unicode.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Ref_8hpp.html">core/templates/Ref.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="RefCnt_8hpp.html">core/templates/RefCnt.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Application_8hpp.html">platform/Application.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="FileSystem_8hpp.html">platform/FileSystem.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Output_8hpp.html">platform/Output.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Window_8hpp.html">platform/Window.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="WindowManager_8hpp.html">platform/WindowManager.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_BERSERK_HPP</span></div>
 <div class="ttc" id="aApplication_8hpp_html"><div class="ttname"><a href="Application_8hpp.html">Application.hpp</a></div></div>
 <div class="ttc" id="aConfig_8hpp_html"><div class="ttname"><a href="Config_8hpp.html">Config.hpp</a></div></div>
 <div class="ttc" id="aData_8hpp_html"><div class="ttname"><a href="Data_8hpp.html">Data.hpp</a></div></div>
 <div class="ttc" id="aEngine_8hpp_html"><div class="ttname"><a href="Engine_8hpp.html">Engine.hpp</a></div></div>
 <div class="ttc" id="aEventDispatcher_8hpp_html"><div class="ttname"><a href="EventDispatcher_8hpp.html">EventDispatcher.hpp</a></div></div>
+<div class="ttc" id="aEventWindow_8hpp_html"><div class="ttname"><a href="EventWindow_8hpp.html">EventWindow.hpp</a></div></div>
 <div class="ttc" id="aEvent_8hpp_html"><div class="ttname"><a href="Event_8hpp.html">Event.hpp</a></div></div>
 <div class="ttc" id="aFileSystem_8hpp_html"><div class="ttname"><a href="FileSystem_8hpp.html">FileSystem.hpp</a></div></div>
 <div class="ttc" id="aLogger_8hpp_html"><div class="ttname"><a href="Logger_8hpp.html">Logger.hpp</a></div></div>
@@ -136,6 +140,8 @@ $(function() {
 <div class="ttc" id="aString_8hpp_html"><div class="ttname"><a href="String_8hpp.html">String.hpp</a></div></div>
 <div class="ttc" id="aTypedefs_8hpp_html"><div class="ttname"><a href="Typedefs_8hpp.html">Typedefs.hpp</a></div></div>
 <div class="ttc" id="aUnicode_8hpp_html"><div class="ttname"><a href="Unicode_8hpp.html">Unicode.hpp</a></div></div>
+<div class="ttc" id="aWindowManager_8hpp_html"><div class="ttname"><a href="WindowManager_8hpp.html">WindowManager.hpp</a></div></div>
+<div class="ttc" id="aWindow_8hpp_html"><div class="ttname"><a href="Window_8hpp.html">Window.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

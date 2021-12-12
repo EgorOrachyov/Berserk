@@ -10,7 +10,7 @@ var searchData=
   ['alignsize_7',['AlignSize',['../classMemory.html#a1c41848e2cf142500bfedc334ca21acf',1,'Memory']]],
   ['allocate_8',['Allocate',['../classMemory.html#a561e3cc666e9dd90e1a5c37a6247c09c',1,'Memory']]],
   ['angle_9',['Angle',['../classTVecN.html#ac459b8cf6a582535a098df4e1ecbe88a',1,'TVecN::Angle()'],['../classTQuat.html#a6a7c7afeb3f0cc1d06e6f78923a90156',1,'TQuat::Angle()']]],
-  ['application_10',['Application',['../classEngine.html#a23f25bcc02a0e94c2f5a4188496b04d0',1,'Engine::Application()'],['../classApplication.html',1,'Application']]],
+  ['application_10',['Application',['../classEngine.html#a23f25bcc02a0e94c2f5a4188496b04d0',1,'Engine::Application()'],['../classGlfwWindowManager.html#a23f25bcc02a0e94c2f5a4188496b04d0',1,'GlfwWindowManager::Application()'],['../classApplication.html',1,'Application']]],
   ['application_2ecpp_11',['Application.cpp',['../Application_8cpp.html',1,'']]],
   ['application_2ehpp_12',['Application.hpp',['../Application_8hpp.html',1,'']]],
   ['argumentparser_13',['ArgumentParser',['../classArgumentParser.html#ae8e2296c8d78a03222699529ff38db9c',1,'ArgumentParser::ArgumentParser()'],['../classArgumentParser.html',1,'ArgumentParser']]],

@@ -76,6 +76,7 @@ $(function() {
 <code>#include &lt;<a class="el" href="Scheduler_8hpp_source.html">core/Scheduler.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="Typedefs_8hpp_source.html">core/Typedefs.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="Event_8hpp_source.html">core/event/Event.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="EventWindow_8hpp_source.html">core/event/EventWindow.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="Logger_8hpp_source.html">core/io/Logger.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="String_8hpp_source.html">core/string/String.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="String16u_8hpp_source.html">core/string/String16u.hpp</a>&gt;</code><br />
@@ -86,56 +87,59 @@ $(function() {
 <code>#include &lt;<a class="el" href="Application_8hpp_source.html">platform/Application.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="FileSystem_8hpp_source.html">platform/FileSystem.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="Output_8hpp_source.html">platform/Output.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="Window_8hpp_source.html">platform/Window.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="WindowManager_8hpp_source.html">platform/WindowManager.hpp</a>&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for Berserk.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="Berserk_8hpp__incl.png" border="0" usemap="#acode_2runtime_2Berserk_8hpp" alt=""/></div>
 <map name="acode_2runtime_2Berserk_8hpp" id="acode_2runtime_2Berserk_8hpp">
-<area shape="rect" title=" " alt="" coords="1200,5,1371,32"/>
-<area shape="rect" href="Config_8hpp.html" title=" " alt="" coords="1573,603,1683,629"/>
-<area shape="rect" href="Data_8hpp.html" title=" " alt="" coords="975,379,1078,405"/>
-<area shape="rect" href="Typedefs_8hpp.html" title=" " alt="" coords="2873,528,3001,555"/>
-<area shape="rect" href="Ref_8hpp.html" title=" " alt="" coords="319,453,475,480"/>
-<area shape="rect" href="RefCnt_8hpp.html" title=" " alt="" coords="65,528,241,555"/>
-<area shape="rect" href="Engine_8hpp.html" title=" " alt="" coords="1795,155,1909,181"/>
-<area shape="rect" href="EventDispatcher_8hpp.html" title=" " alt="" coords="1200,229,1371,256"/>
-<area shape="rect" href="Event_8hpp.html" title=" " alt="" coords="403,304,547,331"/>
-<area shape="rect" href="StringName_8hpp.html" title=" " alt="" coords="566,379,746,405"/>
-<area shape="rect" href="String_8hpp.html" title=" " alt="" coords="2653,453,2798,480"/>
-<area shape="rect" href="Scheduler_8hpp.html" title=" " alt="" coords="1153,379,1287,405"/>
-<area shape="rect" href="FileSystem_8hpp.html" title=" " alt="" coords="1769,304,1932,331"/>
-<area shape="rect" href="Output_8hpp.html" title=" " alt="" coords="3260,379,3396,405"/>
-<area shape="rect" href="Logger_8hpp.html" title=" " alt="" coords="770,379,899,405"/>
-<area shape="rect" href="String16u_8hpp.html" title=" " alt="" coords="3279,453,3446,480"/>
-<area shape="rect" href="Unicode_8hpp.html" title=" " alt="" coords="3077,379,3235,405"/>
-<area shape="rect" href="Application_8hpp.html" title=" " alt="" coords="3359,80,3521,107"/>
-<area shape="rect" title=" " alt="" coords="1090,453,1169,480"/>
-<area shape="rect" title=" " alt="" coords="2900,603,2975,629"/>
-<area shape="rect" title=" " alt="" coords="3326,603,3394,629"/>
-<area shape="rect" title=" " alt="" coords="79,603,140,629"/>
-<area shape="rect" title=" " alt="" coords="165,603,230,629"/>
-<area shape="rect" href="WindowManager_8hpp.html" title=" " alt="" coords="1526,229,1719,256"/>
-<area shape="rect" title=" " alt="" coords="1867,229,1928,256"/>
-<area shape="rect" title=" " alt="" coords="1952,229,2011,256"/>
-<area shape="rect" title=" " alt="" coords="1245,453,1355,480"/>
-<area shape="rect" title=" " alt="" coords="1380,453,1439,480"/>
-<area shape="rect" title=" " alt="" coords="957,453,1014,480"/>
-<area shape="rect" title=" " alt="" coords="551,453,603,480"/>
-<area shape="rect" title=" " alt="" coords="3087,528,3142,555"/>
-<area shape="rect" title=" " alt="" coords="2533,379,2590,405"/>
-<area shape="rect" href="Window_8hpp.html" title=" " alt="" coords="1602,304,1745,331"/>
-<area shape="rect" href="TVecN_8hpp.html" title=" " alt="" coords="1873,379,2023,405"/>
-<area shape="rect" href="Crc32_8hpp.html" title=" " alt="" coords="1812,453,1921,480"/>
-<area shape="rect" href="Memory_8hpp.html" title=" " alt="" coords="1666,453,1787,480"/>
-<area shape="rect" href="MathUtils_8hpp.html" title=" " alt="" coords="1946,453,2110,480"/>
-<area shape="rect" title=" " alt="" coords="2431,453,2527,480"/>
-<area shape="rect" title=" " alt="" coords="2337,453,2407,480"/>
-<area shape="rect" title=" " alt="" coords="1717,528,1777,555"/>
-<area shape="rect" title=" " alt="" coords="1801,528,1863,555"/>
-<area shape="rect" title=" " alt="" coords="2039,528,2097,555"/>
-<area shape="rect" title=" " alt="" coords="730,453,787,480"/>
-<area shape="rect" title=" " alt="" coords="812,453,881,480"/>
-<area shape="rect" href="ArgumentParser_8hpp.html" title=" " alt="" coords="2666,379,2849,405"/>
+<area shape="rect" title=" " alt="" coords="1867,5,2037,32"/>
+<area shape="rect" href="Config_8hpp.html" title=" " alt="" coords="1651,603,1762,629"/>
+<area shape="rect" href="Data_8hpp.html" title=" " alt="" coords="2275,379,2378,405"/>
+<area shape="rect" href="Typedefs_8hpp.html" title=" " alt="" coords="1984,528,2112,555"/>
+<area shape="rect" href="Ref_8hpp.html" title=" " alt="" coords="1361,453,1517,480"/>
+<area shape="rect" href="RefCnt_8hpp.html" title=" " alt="" coords="885,528,1061,555"/>
+<area shape="rect" href="Engine_8hpp.html" title=" " alt="" coords="2833,155,2948,181"/>
+<area shape="rect" href="EventDispatcher_8hpp.html" title=" " alt="" coords="3112,229,3283,256"/>
+<area shape="rect" href="Event_8hpp.html" title=" " alt="" coords="987,304,1131,331"/>
+<area shape="rect" href="StringName_8hpp.html" title=" " alt="" coords="1169,379,1349,405"/>
+<area shape="rect" href="String_8hpp.html" title=" " alt="" coords="1795,453,1941,480"/>
+<area shape="rect" href="Scheduler_8hpp.html" title=" " alt="" coords="2947,379,3080,405"/>
+<area shape="rect" href="FileSystem_8hpp.html" title=" " alt="" coords="2385,304,2548,331"/>
+<area shape="rect" href="Output_8hpp.html" title=" " alt="" coords="1728,379,1864,405"/>
+<area shape="rect" href="WindowManager_8hpp.html" title=" " alt="" coords="1475,229,1669,256"/>
+<area shape="rect" href="Window_8hpp.html" title=" " alt="" coords="1206,304,1349,331"/>
+<area shape="rect" href="EventWindow_8hpp.html" title=" " alt="" coords="1135,229,1326,256"/>
+<area shape="rect" href="Logger_8hpp.html" title=" " alt="" coords="3358,379,3487,405"/>
+<area shape="rect" href="String16u_8hpp.html" title=" " alt="" coords="1965,453,2131,480"/>
+<area shape="rect" href="Unicode_8hpp.html" title=" " alt="" coords="2041,379,2199,405"/>
+<area shape="rect" href="Application_8hpp.html" title=" " alt="" coords="3202,80,3363,107"/>
+<area shape="rect" title=" " alt="" coords="2933,453,3011,480"/>
+<area shape="rect" title=" " alt="" coords="2011,603,2085,629"/>
+<area shape="rect" title=" " alt="" coords="3673,603,3741,629"/>
+<area shape="rect" title=" " alt="" coords="3581,603,3643,629"/>
+<area shape="rect" title=" " alt="" coords="941,603,1006,629"/>
+<area shape="rect" title=" " alt="" coords="2893,229,2955,256"/>
+<area shape="rect" title=" " alt="" coords="2979,229,3037,256"/>
+<area shape="rect" title=" " alt="" coords="2511,453,2622,480"/>
+<area shape="rect" title=" " alt="" coords="3036,453,3095,480"/>
+<area shape="rect" title=" " alt="" coords="2749,453,2806,480"/>
+<area shape="rect" title=" " alt="" coords="987,453,1056,480"/>
+<area shape="rect" title=" " alt="" coords="1233,453,1285,480"/>
+<area shape="rect" title=" " alt="" coords="1843,528,1898,555"/>
+<area shape="rect" title=" " alt="" coords="2555,379,2613,405"/>
+<area shape="rect" href="TVecN_8hpp.html" title=" " alt="" coords="712,379,861,405"/>
+<area shape="rect" href="Crc32_8hpp.html" title=" " alt="" coords="512,453,621,480"/>
+<area shape="rect" href="Memory_8hpp.html" title=" " alt="" coords="366,453,487,480"/>
+<area shape="rect" href="MathUtils_8hpp.html" title=" " alt="" coords="646,453,810,480"/>
+<area shape="rect" title=" " alt="" coords="245,453,341,480"/>
+<area shape="rect" title=" " alt="" coords="405,528,465,555"/>
+<area shape="rect" title=" " alt="" coords="319,528,380,555"/>
+<area shape="rect" title=" " alt="" coords="699,528,757,555"/>
+<area shape="rect" title=" " alt="" coords="3373,453,3430,480"/>
+<area shape="rect" title=" " alt="" coords="3455,453,3524,480"/>
+<area shape="rect" href="ArgumentParser_8hpp.html" title=" " alt="" coords="2689,379,2871,405"/>
 </map>
 </div>
 </div>

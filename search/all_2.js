@@ -24,6 +24,6 @@ var searchData=
   ['crc32_2ehpp_64',['Crc32.hpp',['../Crc32_8hpp.html',1,'']]],
   ['crc32builder_65',['Crc32Builder',['../classCrc32Builder.html',1,'']]],
   ['crc32hash_66',['Crc32Hash',['../classCrc32Hash.html',1,'Crc32Hash'],['../group__core.html#ga40a0a81c4d50dca8bc1908b7d26786f8',1,'Crc32Hash():&#160;Crc32.hpp']]],
-  ['createwindow_67',['CreateWindow',['../classWindowManager.html#ab4b089781360a08f6745ae36985aaae7',1,'WindowManager']]],
+  ['createwindow_67',['CreateWindow',['../classGlfwWindowManager.html#a567b0f7093e3d5841f45eccea4c2576a',1,'GlfwWindowManager::CreateWindow()'],['../classWindowManager.html#ab4b089781360a08f6745ae36985aaae7',1,'WindowManager::CreateWindow()']]],
   ['cross_68',['Cross',['../classTVecN.html#a45fc2a208bf1000e486e182ea263435b',1,'TVecN']]]
 ];
