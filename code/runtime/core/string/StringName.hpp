@@ -35,6 +35,7 @@
 #include <core/templates/RefCnt.hpp>
 
 #include <mutex>
+#include <ostream>
 #include <unordered_map>
 #include <utility>
 
@@ -60,7 +61,7 @@ BRK_NS_BEGIN
 class StringName {
 public:
     /** Construct string id from utf-8 string */
-    BRK_API explicit StringName(const String &str);
+    BRK_API explicit StringName(const String &str = String());
 
     /** Safe release id. If it is last id reference, erase it from the cache. */
     BRK_API ~StringName();
@@ -116,5 +117,10 @@ namespace std {
     };
 
 }// namespace std
+
+inline std::ostream &operator<<(std::ostream &stream, const BRK_NS::StringName &name) {
+    stream << name.GetStr();
+    return stream;
+}
 
 #endif//BERSERK_STRINGNAME_HPP

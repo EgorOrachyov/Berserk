@@ -47,7 +47,7 @@ StringName::StringName(const String &str) {
 }
 
 StringName::~StringName() {
-    if (mNode.IsNotNull() && mNode.IsUnique()) {
+    if (mNode.IsNotNull() && mNode->GetRefs() <= 2) {
         std::lock_guard<std::mutex> guard(GetAccessMutex());
         GetCachedNames().erase(mNode->GetStr());
     }

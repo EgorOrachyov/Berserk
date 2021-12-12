@@ -106,6 +106,7 @@ private:
 
     void Init();
     void Configure();
+    void SetWindowManager(std::shared_ptr<WindowManager> windowManager);
     void Update(float dt);
 
 private:
@@ -122,7 +123,7 @@ private:
     std::unique_ptr<EventDispatcher> mEventDispatcher;
 
     /** Engine windows manager class */
-    std::unique_ptr<WindowManager> mWindowManager;
+    std::shared_ptr<WindowManager> mWindowManager;
 
     /** Main game thread id */
     std::thread::id mGameThreadID;

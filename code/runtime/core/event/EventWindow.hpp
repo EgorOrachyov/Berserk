@@ -78,6 +78,8 @@ public:
 
     /** @copydoc Event::GetType() */
     BRK_API const EventType &GetEventType() const override;
+    /** @copydoc Event::GetType() */
+    BRK_API static const EventType &GetEventTypeStatic();
 
     BRK_API void SetWindow(Ref<Window> window);
     BRK_API void SetWindowSize(const Size2i &size);

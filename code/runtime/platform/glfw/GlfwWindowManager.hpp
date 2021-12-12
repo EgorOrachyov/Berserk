@@ -25,50 +25,68 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_BERSERK_HPP
-#define BERSERK_BERSERK_HPP
+#ifndef BERSERK_GLFWWINDOWMANAGER_HPP
+#define BERSERK_GLFWWINDOWMANAGER_HPP
 
-/**
- * @defgroup core
- * @brief Core functionality of the engine
- *
- * Provides access to engine core functionality, used among others
- * runtime modules. Defines essential engine building blocks, such
- * as strings manipulation and encoding, events, config, io,
- * engine globals access, such as event dispatcher, scheduler,
- * platform manager, and etc.
- */
-
-#include <core/Config.hpp>
-#include <core/Data.hpp>
-#include <core/Engine.hpp>
-#include <core/EventDispatcher.hpp>
-#include <core/Scheduler.hpp>
-#include <core/Typedefs.hpp>
-#include <core/event/Event.hpp>
 #include <core/event/EventWindow.hpp>
-#include <core/io/Logger.hpp>
-#include <core/string/String.hpp>
-#include <core/string/String16u.hpp>
-#include <core/string/StringName.hpp>
-#include <core/string/Unicode.hpp>
-#include <core/templates/Ref.hpp>
-#include <core/templates/RefCnt.hpp>
-
-/**
- * @defgroup platform
- * @brief Platform specific functionality abstraction
- *
- * Provides unified and platform agnostic access to os specific
- * objects, such as file system access, windows and input management and
- * game application core structure. Use this module to access
- * platform specific features.
- */
-
-#include <platform/Application.hpp>
-#include <platform/FileSystem.hpp>
-#include <platform/Output.hpp>
-#include <platform/Window.hpp>
 #include <platform/WindowManager.hpp>
 
-#endif//BERSERK_BERSERK_HPP
+#include <unordered_map>
+
+#include <GLFW/glfw3.h>
+
+BRK_NS_BEGIN
+
+/**
+ * @addtogroup platform
+ * @{
+ */
+
+/**
+ * @class GlfwWindowManager
+ * @brief Glfw window manager implementation
+ */
+class GlfwWindowManager final : public WindowManager {
+public:
+    BRK_API GlfwWindowManager(bool vsync, bool clientApi);
+    BRK_API ~GlfwWindowManager() override;
+    BRK_API Ref<Window> CreateWindow(const StringName &name, const Size2i &size, const String &title) override;
+    BRK_API Ref<Window> GetPrimaryWindow() override;
+
+private:
+    friend class Application;
+    BRK_API void PollEvents();
+    BRK_API void DispatchEvent(const Ref<Window> &window, EventWindow::Type type);
+    BRK_API Ref<Window> GetWindow(GLFWwindow *HND);
+
+private:
+    // Glfw Specifics
+    static void WindowCloseCallback(GLFWwindow *HND);
+    static void WindowResizedCallback(GLFWwindow *HND, int32 width, int32 height);
+    static void WindowContentScaleCallback(GLFWwindow *HND, float xScale, float yScale);
+    static void FramebufferSizeCallback(GLFWwindow *HND, int32 width, int32 height);
+    static void IconifyCallback(GLFWwindow *HND, int32 iconify);
+    static void MaximizeCallback(GLFWwindow *HND, int32 maximize);
+    static void PositionCallback(GLFWwindow *HND, int32 posX, int32 posY);
+    static void FocusCallback(GLFWwindow *HND, int32 focus);
+    static void ErrorCallback(int32 errorCode, const char *description);
+
+private:
+    /** Primary window of application */
+    Ref<Window> mPrimaryWindow;
+    /** All application windows */
+    std::unordered_map<StringName, Ref<Window>> mWindows;
+    /** Aux hnd map */
+    std::unordered_map<GLFWwindow *, Ref<Window>> mWindowsByHND;
+    /** Use client-api (gl); otherwise no - for vulkan and directx */
+    bool mClientApi = true;
+    bool mVsync = true;
+};
+
+/**
+ * @}
+ */
+
+BRK_NS_END
+
+#endif//BERSERK_GLFWWINDOWMANAGER_HPP

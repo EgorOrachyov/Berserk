@@ -25,50 +25,72 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_BERSERK_HPP
-#define BERSERK_BERSERK_HPP
+#include <platform/glfw/GlfwWindow.hpp>
+#include <utility>
 
-/**
- * @defgroup core
- * @brief Core functionality of the engine
- *
- * Provides access to engine core functionality, used among others
- * runtime modules. Defines essential engine building blocks, such
- * as strings manipulation and encoding, events, config, io,
- * engine globals access, such as event dispatcher, scheduler,
- * platform manager, and etc.
- */
+BRK_NS_BEGIN
 
-#include <core/Config.hpp>
-#include <core/Data.hpp>
-#include <core/Engine.hpp>
-#include <core/EventDispatcher.hpp>
-#include <core/Scheduler.hpp>
-#include <core/Typedefs.hpp>
-#include <core/event/Event.hpp>
-#include <core/event/EventWindow.hpp>
-#include <core/io/Logger.hpp>
-#include <core/string/String.hpp>
-#include <core/string/String16u.hpp>
-#include <core/string/StringName.hpp>
-#include <core/string/Unicode.hpp>
-#include <core/templates/Ref.hpp>
-#include <core/templates/RefCnt.hpp>
+GlfwWindow::GlfwWindow(const StringName &name, const Size2i &size, String title, bool clientApi) : mName(name), mTitle(std::move(title)) {
+    if (clientApi) {
+#if defined(BERSERK_TARGET_MACOS)
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+#elif defined(BERSERK_TARGET_LINUX)
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+#elif defined(BERSERK_TARGET_WINDOWS)
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+#endif
+    }
 
-/**
- * @defgroup platform
- * @brief Platform specific functionality abstraction
- *
- * Provides unified and platform agnostic access to os specific
- * objects, such as file system access, windows and input management and
- * game application core structure. Use this module to access
- * platform specific features.
- */
+    mHND = glfwCreateWindow(size.x(), size.y(), title.c_str(), nullptr, nullptr);
 
-#include <platform/Application.hpp>
-#include <platform/FileSystem.hpp>
-#include <platform/Output.hpp>
-#include <platform/Window.hpp>
-#include <platform/WindowManager.hpp>
+    glfwGetWindowPos(mHND, &mPosition[0], &mPosition[1]);
+    glfwGetWindowSize(mHND, &mSize[0], &mSize[1]);
+    glfwGetFramebufferSize(mHND, &mFramebufferSize[0], &mFramebufferSize[1]);
+    glfwGetWindowContentScale(mHND, &mPixelRatio[0], &mPixelRatio[1]);
 
-#endif//BERSERK_BERSERK_HPP
+    mInFocus = glfwGetWindowAttrib(mHND, GLFW_FOCUSED);
+}
+
+GlfwWindow::~GlfwWindow() {
+    if (mHND) {
+        glfwDestroyWindow(mHND);
+        mHND = nullptr;
+    }
+}
+
+Point2i GlfwWindow::GetPosition() const {
+    return mPosition;
+}
+
+Size2i GlfwWindow::GetSize() const {
+    return mSize;
+}
+
+Size2i GlfwWindow::GetFramebufferSize() const {
+    return mFramebufferSize;
+}
+
+Vec2f GlfwWindow::GetPixelRatio() const {
+    return mPixelRatio;
+}
+
+bool GlfwWindow::IsInFocus() const {
+    return mInFocus;
+}
+
+bool GlfwWindow::IsClosed() const {
+    return false;
+}
+
+String GlfwWindow::GetTitle() const {
+    return mTitle;
+}
+
+StringName GlfwWindow::GetName() const {
+    return mName;
+}
+
+BRK_NS_END

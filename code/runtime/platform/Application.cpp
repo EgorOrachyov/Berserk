@@ -26,6 +26,7 @@
 /**********************************************************************************/
 
 #include <platform/Application.hpp>
+#include <platform/glfw/GlfwWindowManager.hpp>
 
 #include <chrono>
 
@@ -33,12 +34,17 @@ BRK_NS_BEGIN
 
 int Application::Run(int argc, const char *const *argv) {
     // Parse args
-    mArgs = std::make_shared<ArgumentParser>();
-    mArgs->Parse(argc, argv);
+    gArgs = std::make_shared<ArgumentParser>();
+    gArgs->Parse(argc, argv);
 
     // Setup engine
-    mEngine = std::unique_ptr<Engine>(new Engine());
-    mEngine->Init();
+    gEngine = std::unique_ptr<Engine>(new Engine());
+    gEngine->Init();
+
+    // Create platform window manager
+    // NOTE: use glfw, it is sufficient for know
+    auto gWindowManager = std::make_shared<GlfwWindowManager>(true, true);
+    gEngine->SetWindowManager(gWindowManager);
 
     // Post init call
     OnInitialize();
@@ -49,11 +55,15 @@ int Application::Run(int argc, const char *const *argv) {
     auto time = clock::now();
 
     // Main loop
-    while (!mEngine->CloseRequested()) {
+    while (!gEngine->CloseRequested()) {
         auto newTime = clock::now();
         auto dt = static_cast<double>(std::chrono::duration_cast<ns>(newTime - time).count()) / 1.0e9;
 
-        mEngine->Update(static_cast<float>(dt));
+        // Update engine and game
+        gEngine->Update(static_cast<float>(dt));
+
+        // Poll platform events
+        gWindowManager->PollEvents();
 
         time = newTime;
     }
@@ -61,8 +71,11 @@ int Application::Run(int argc, const char *const *argv) {
     // Pre-finalize call
     OnFinalize();
 
+    // Release platform window manager first
+    gWindowManager.reset();
+
     // Release engine
-    mEngine.reset();
+    gEngine.reset();
 
     return 0;
 }

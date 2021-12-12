@@ -49,7 +49,7 @@ set(BERSERK_ARCH)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(BERSERK_TARGET_WINDOWS YES)
-    #    set(BERSERK_WITH_GLFW YES)
+    set(BERSERK_WITH_GLFW YES)
     #    set(BERSERK_WITH_GLEW YES)
     #    set(BERSERK_WITH_OPENGL YES)
     #    set(BERSERK_WITH_VULKAN YES)
@@ -57,7 +57,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     list(APPEND BERSERK_DEFINES BERSERK_TARGET_WINDOWS)
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(BERSERK_TARGET_LINUX YES)
-    #    set(BERSERK_WITH_GLFW YES)
+    set(BERSERK_WITH_GLFW YES)
     #    set(BERSERK_WITH_GLEW YES)
     #    set(BERSERK_WITH_OPENGL YES)
     #    set(BERSERK_WITH_VULKAN YES)
@@ -65,7 +65,7 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     list(APPEND BERSERK_DEFINES BERSERK_TARGET_LINUX)
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(BERSERK_TARGET_MACOS YES)
-    #    set(BERSERK_WITH_GLFW YES)
+    set(BERSERK_WITH_GLFW YES)
     #    set(BERSERK_WITH_GLEW YES)
     #    set(BERSERK_WITH_OPENGL YES)
     #    set(BERSERK_WITH_VULKAN YES)
@@ -182,17 +182,17 @@ function(berserk_target_arch target)
     set_target_properties(${target} PROPERTIES OUTPUT_NAME "${target}_${BERSERK_ARCH}")
 endfunction()
 
-function(berserk_target_copy_to_test_dir target path)
+function(berserk_target_copy_to target dep type path dest)
     if (BERSERK_BUILD_TESTS AND BERSERK_TARGET_WINDOWS)
-        set(COMMON_NAME "${CMAKE_BINARY_DIR}/${path}/${target}_${BERSERK_ARCH}")
-        set(TARGET_FILE "${COMMON_NAME}.dll")
-        message(STATUS "${TARGET_FILE}")
+        get_target_property(TARGET_NAME ${target} OUTPUT_NAME)
+        set(TARGET_FILE "${CMAKE_BINARY_DIR}/${path}/${TARGET_NAME}.dll")
+        message(STATUS "Copy file ${TARGET_FILE}")
 
-        add_custom_command(TARGET ${target} POST_BUILD
+        add_custom_command(TARGET ${dep} ${type}
                 COMMAND "${CMAKE_COMMAND}" -E
                 copy
                 ${TARGET_FILE}
-                "${CMAKE_BINARY_DIR}/tests"
+                "${CMAKE_BINARY_DIR}/${dest}"
                 COMMENT "Copy ${TARGET_FILE} into test directory")
     endif ()
 endfunction()

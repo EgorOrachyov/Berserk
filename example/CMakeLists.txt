@@ -81,16 +81,8 @@ list(APPEND GAME_SRC
 set(GAME_ALL_SOURCES ${GAME_HEADERS} ${GAME_SRC})
 
 if (GAME_BUILD_EXE)
-    # Copy library to bin directory
-    # set(BERSERK_PREFIX "berserk_runtime_dynamic")
-    # file(GLOB TARGETS "${BERSERK_PATH}/code/runtime/berserk_runtime_dynamic*")
-    # file(COPY ${TARGETS} DESTINATION ${CMAKE_BINARY_DIR}/example)
-
-    # Define executable
     add_executable(${APP_NAME} ${GAME_ALL_SOURCES})
     target_include_directories(${APP_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/code)
     target_link_libraries(${APP_NAME} PRIVATE berserk_runtime_dynamic)
-    target_compile_definitions(${APP_NAME} PRIVATE BERSERK_DYNAMIC_BUILD)
-
-    # target_link_libraries(${APP_NAME} PRIVATE "${BERSERK_PREFIX}_${GAME_ARCH}.${GAME_EXT}")
+    berserk_target_copy_to(berserk_runtime_dynamic example POST_BUILD code/runtime example)
 endif ()

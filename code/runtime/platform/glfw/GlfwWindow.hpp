@@ -25,50 +25,55 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_BERSERK_HPP
-#define BERSERK_BERSERK_HPP
+#ifndef BERSERK_GLFWWINDOW_HPP
+#define BERSERK_GLFWWINDOW_HPP
 
-/**
- * @defgroup core
- * @brief Core functionality of the engine
- *
- * Provides access to engine core functionality, used among others
- * runtime modules. Defines essential engine building blocks, such
- * as strings manipulation and encoding, events, config, io,
- * engine globals access, such as event dispatcher, scheduler,
- * platform manager, and etc.
- */
-
-#include <core/Config.hpp>
-#include <core/Data.hpp>
-#include <core/Engine.hpp>
-#include <core/EventDispatcher.hpp>
-#include <core/Scheduler.hpp>
-#include <core/Typedefs.hpp>
-#include <core/event/Event.hpp>
-#include <core/event/EventWindow.hpp>
-#include <core/io/Logger.hpp>
-#include <core/string/String.hpp>
-#include <core/string/String16u.hpp>
-#include <core/string/StringName.hpp>
-#include <core/string/Unicode.hpp>
-#include <core/templates/Ref.hpp>
-#include <core/templates/RefCnt.hpp>
-
-/**
- * @defgroup platform
- * @brief Platform specific functionality abstraction
- *
- * Provides unified and platform agnostic access to os specific
- * objects, such as file system access, windows and input management and
- * game application core structure. Use this module to access
- * platform specific features.
- */
-
-#include <platform/Application.hpp>
-#include <platform/FileSystem.hpp>
-#include <platform/Output.hpp>
 #include <platform/Window.hpp>
-#include <platform/WindowManager.hpp>
 
-#endif//BERSERK_BERSERK_HPP
+#include <GLFW/glfw3.h>
+
+BRK_NS_BEGIN
+
+/**
+ * @addtogroup platform
+ * @{
+ */
+
+/**
+ * @class GlfwWindow
+ * @brief Glfw window implementation
+ */
+class GlfwWindow final : public Window {
+public:
+    BRK_API GlfwWindow(const StringName &name, const Size2i &size, String title, bool clientApi);
+    BRK_API ~GlfwWindow() override;
+    BRK_API Point2i GetPosition() const override;
+    BRK_API Size2i GetSize() const override;
+    BRK_API Size2i GetFramebufferSize() const override;
+    BRK_API Vec2f GetPixelRatio() const override;
+    BRK_API bool IsInFocus() const override;
+    BRK_API bool IsClosed() const override;
+    BRK_API String GetTitle() const override;
+    BRK_API StringName GetName() const override;
+
+private:
+    friend class GlfwWindowManager;
+
+    Point2i mPosition;
+    Size2i mSize;
+    Size2i mFramebufferSize;
+    Vec2f mPixelRatio;
+    String mTitle;
+    StringName mName;
+    bool mInFocus = false;
+
+    GLFWwindow *mHND = nullptr;
+};
+
+/**
+ * @}
+ */
+
+BRK_NS_END
+
+#endif//BERSERK_GLFWWINDOW_HPP

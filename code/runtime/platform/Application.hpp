@@ -99,10 +99,10 @@ public:
 
 private:
     /** Global engine instance of the application */
-    std::unique_ptr<Engine> mEngine;
+    std::unique_ptr<Engine> gEngine;
 
     /** Input arguments */
-    std::shared_ptr<ArgumentParser> mArgs;
+    std::shared_ptr<ArgumentParser> gArgs;
 };
 
 /**

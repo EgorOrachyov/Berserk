@@ -33,6 +33,7 @@ BRK_NS_BEGIN
 
 Engine::~Engine() {
     // Release in reverse order
+    mWindowManager.reset();
     mEventDispatcher.reset();
     mScheduler.reset();
     mFileSystem.reset();
@@ -101,6 +102,10 @@ void Engine::Init() {
 }
 
 void Engine::Configure() {
+}
+
+void Engine::SetWindowManager(std::shared_ptr<WindowManager> windowManager) {
+    mWindowManager = std::move(windowManager);
 }
 
 void Engine::Update(float dt) {

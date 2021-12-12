@@ -80,7 +80,7 @@ public:
      *
      * @param func Function to schedule
      * @param interval Interval in seconds to schedule; must be greater that 0
-     * @param repeat Repeats count to schedule; pass 1 to schedule exactly once
+     * @param repeat Repeats count to schedule; pass 0 to schedule exactly once
      * @param delay Delay in seconds before first schedule
      * @param paused Pass true if paused; not scheduled until paused is set to false
      *
@@ -117,7 +117,7 @@ public:
      * @note Use `REPEAT_FOREVER` to schedule function to repeat forever.
      *
      * @param func Function to schedule
-     * @param repeat Repeats count to schedule; pass 1 to schedule exactly once
+     * @param repeat Repeats count to schedule; pass 0 to schedule exactly once
      * @param delay Delay in seconds before first schedule
      * @param paused Pass true if paused; not scheduled until paused is set to false
      *

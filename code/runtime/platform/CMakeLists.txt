@@ -11,6 +11,13 @@ set(BERSERK_PLATFORM_SRC
         platform/FileSystem.cpp
         )
 
+set(BERSERK_PLATFORM_GLFW_SRC
+        platform/glfw/GlfwWindow.cpp
+        platform/glfw/GlfwWindow.hpp
+        platform/glfw/GlfwWindowManager.cpp
+        platform/glfw/GlfwWindowManager.hpp
+        )
+
 set(BERSERK_PLATFORM_WINDOWS_SRC
         platform/windows/WindowsFileSystem.cpp
         platform/windows/WindowsOutput.cpp

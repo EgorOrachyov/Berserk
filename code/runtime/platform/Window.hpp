@@ -37,6 +37,11 @@
 BRK_NS_BEGIN
 
 /**
+ * @addtogroup platform
+ * @{
+ */
+
+/**
  * @class Window
  * @brief Platform specific OS window for rendering
  */
@@ -74,6 +79,10 @@ public:
     /** @return Window unique name for look-up */
     BRK_API virtual StringName GetName() const = 0;
 };
+
+/**
+ * @}
+ */
 
 BRK_NS_END
 

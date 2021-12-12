@@ -32,6 +32,10 @@
 BRK_NS_BEGIN
 
 const EventType &EventWindow::GetEventType() const {
+    return GetEventTypeStatic();
+}
+
+const EventType &EventWindow::GetEventTypeStatic() {
     static StringName eventType(BRK_TEXT("_brk_core_event_window"));
     return eventType;
 }
