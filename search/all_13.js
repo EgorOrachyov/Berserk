@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['t_547',['T',['../group__core.html#gga1111d135f2af893795d4dab37b5fa827ab9ece18c950afbfa6b0fdbfa4ff731d3',1,'InputDefs.hpp']]],
-  ['tab_548',['Tab',['../group__core.html#gga1111d135f2af893795d4dab37b5fa827a5c6ba25104401c9ee0650230fc6ba413',1,'InputDefs.hpp']]],
+  ['t_547',['T',['../group__platform.html#gga1111d135f2af893795d4dab37b5fa827ab9ece18c950afbfa6b0fdbfa4ff731d3',1,'InputDefs.hpp']]],
+  ['tab_548',['Tab',['../group__platform.html#gga1111d135f2af893795d4dab37b5fa827a5c6ba25104401c9ee0650230fc6ba413',1,'InputDefs.hpp']]],
   ['tan_549',['Tan',['../classMathUtils.html#a51040938b1f09de27232b00f37d90ea7',1,'MathUtils::Tan(double a)'],['../classMathUtils.html#a813af24ea2592532a8c83194ba2452f3',1,'MathUtils::Tan(float a)']]],
-  ['text_550',['Text',['../group__core.html#gga11a34592db80df3b86d2a67a62d62841a9dffbf69ffba8bc38bc4e01abf4b1675',1,'InputDefs.hpp']]],
+  ['text_550',['Text',['../group__platform.html#gga11a34592db80df3b86d2a67a62d62841a9dffbf69ffba8bc38bc4e01abf4b1675',1,'InputDefs.hpp']]],
   ['thresh_5fcompare_5ffloat32_551',['THRESH_COMPARE_FLOAT32',['../classMathUtils.html#a7ed9b7d6cdeae2faf9feb55af0a4789e',1,'MathUtils']]],
   ['thresh_5fcompare_5ffloat64_552',['THRESH_COMPARE_FLOAT64',['../classMathUtils.html#a789491732a5f66723567f07fb25667ec',1,'MathUtils']]],
   ['thresh_5ffloat32_553',['THRESH_FLOAT32',['../classMathUtils.html#ac6d24f54fc6e32af3473c9f16406d210',1,'MathUtils']]],

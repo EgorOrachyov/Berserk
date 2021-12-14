@@ -1,7 +1,7 @@
 var searchData=
 [
   ['w_613',['w',['../classTVecN.html#ab6fb70abd9d9732c00d50626910a434d',1,'TVecN']]],
-  ['w_614',['W',['../group__core.html#gga1111d135f2af893795d4dab37b5fa827a61e9c06ea9a85a5088a499df6458d276',1,'InputDefs.hpp']]],
+  ['w_614',['W',['../group__platform.html#gga1111d135f2af893795d4dab37b5fa827a61e9c06ea9a85a5088a499df6458d276',1,'InputDefs.hpp']]],
   ['warning_615',['Warning',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa0eaadb4fcb48a0a0ed7bc9868be9fbaa',1,'Logger']]],
   ['window_616',['Window',['../classWindow.html',1,'']]],
   ['window_2ehpp_617',['Window.hpp',['../Window_8hpp.html',1,'']]],

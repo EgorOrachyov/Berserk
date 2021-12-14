@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['o_387',['O',['../group__core.html#gga1111d135f2af893795d4dab37b5fa827af186217753c37b9b9f958d906208506e',1,'InputDefs.hpp']]],
+  ['o_387',['O',['../group__platform.html#gga1111d135f2af893795d4dab37b5fa827af186217753c37b9b9f958d906208506e',1,'InputDefs.hpp']]],
   ['onentry_388',['OnEntry',['../classLoggerListenerOutput.html#a748b8455a2880baaa7549638331e99c6',1,'LoggerListenerOutput']]],
   ['onfinalize_389',['OnFinalize',['../classApplication.html#a1ffdc13938d74181997134665f5b49e5',1,'Application']]],
   ['oninitialize_390',['OnInitialize',['../classApplication.html#ad3f42c91a02dfde25c04b1d0e0ba7e28',1,'Application']]],

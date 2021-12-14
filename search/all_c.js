@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['m_340',['M',['../group__core.html#gga1111d135f2af893795d4dab37b5fa827a69691c7bdcc3ce6d5d8a1361f22d04ac',1,'InputDefs.hpp']]],
+  ['m_340',['M',['../group__platform.html#gga1111d135f2af893795d4dab37b5fa827a69691c7bdcc3ce6d5d8a1361f22d04ac',1,'InputDefs.hpp']]],
   ['make_341',['Make',['../classData.html#a9e996187a17d1420d753093597060bf3',1,'Data::Make(size_t sizeInBytes)'],['../classData.html#a293cc91fcb5e53a2c29911d56bd09b72',1,'Data::Make(const void *data, size_t sizeInBytes)']]],
   ['markimmutable_342',['MarkImmutable',['../classData.html#a809da89f422c95390b7f001e57a8c34b',1,'Data']]],
   ['mat_343',['Mat',['../classTQuat.html#a1d3a6eb3f02b4c53a6163b1c8a1a1578',1,'TQuat']]],
@@ -21,14 +21,14 @@ var searchData=
   ['maximized_358',['Maximized',['../classEventWindow.html#ae7c6e4715ba685d5d7bf3fabe9166e59a49d903a5c02560cf79bf6b516cc89457',1,'EventWindow']]],
   ['memory_359',['Memory',['../classMemory.html',1,'']]],
   ['memory_2ehpp_360',['Memory.hpp',['../Memory_8hpp.html',1,'']]],
-  ['menu_361',['Menu',['../group__core.html#gga1111d135f2af893795d4dab37b5fa827ab61541208db7fa7dba42c85224405911',1,'InputDefs.hpp']]],
+  ['menu_361',['Menu',['../group__platform.html#gga1111d135f2af893795d4dab37b5fa827ab61541208db7fa7dba42c85224405911',1,'InputDefs.hpp']]],
   ['message_362',['message',['../structLogger_1_1Entry.html#a7de7c908bb2642a42f3051e04adee6a3',1,'Logger::Entry']]],
   ['mib_363',['MiB',['../classMemory.html#a22ef4c66234f3b0d30c4b5700ea916ad',1,'Memory']]],
   ['min_364',['Min',['../classMathUtils.html#a3b5772c6c0e4ae318a9dffe18bcd9691',1,'MathUtils::Min(float a, float b)'],['../classMathUtils.html#a182e4dab71bdd637d1c6cae6ecc39dac',1,'MathUtils::Min(double a, double b)'],['../classMathUtils.html#aa8b3bd1cfadd267ba9afac8bae7721dd',1,'MathUtils::Min(T a, T b)'],['../classTVecN.html#a0ad5c8150f07c1096c92cb481c98126c',1,'TVecN::Min()']]],
   ['minimized_365',['Minimized',['../classEventWindow.html#ae7c6e4715ba685d5d7bf3fabe9166e59a074afcc50ae51f248cbae4950845549e',1,'EventWindow']]],
-  ['minus_366',['Minus',['../group__core.html#gga1111d135f2af893795d4dab37b5fa827a453fb623e752c5993f65bc410fd74fe5',1,'InputDefs.hpp']]],
+  ['minus_366',['Minus',['../group__platform.html#gga1111d135f2af893795d4dab37b5fa827a453fb623e752c5993f65bc410fd74fe5',1,'InputDefs.hpp']]],
   ['mouse_367',['Mouse',['../classMouse.html',1,'']]],
-  ['move_368',['Move',['../group__core.html#gga11a34592db80df3b86d2a67a62d62841a6bc362dbf494c61ea117fe3c71ca48a5',1,'InputDefs.hpp']]],
+  ['move_368',['Move',['../group__platform.html#gga11a34592db80df3b86d2a67a62d62841a6bc362dbf494c61ea117fe3c71ca48a5',1,'InputDefs.hpp']]],
   ['moved_369',['Moved',['../classEventWindow.html#ae7c6e4715ba685d5d7bf3fabe9166e59a95bfdefaaf01553cbf21ccd942855c69',1,'EventWindow']]],
   ['multiply_370',['Multiply',['../classMathUtils3d.html#ad58ce107e54df2759d44a2260e28a1ea',1,'MathUtils3d::Multiply(const Mat4x4f &amp;m, const TVecN&lt; float, 3 &gt; &amp;v)'],['../classMathUtils3d.html#ad58ce107e54df2759d44a2260e28a1ea',1,'MathUtils3d::Multiply(const Mat4x4f &amp;m, const TVecN&lt; float, 3 &gt; &amp;v)']]]
 ];

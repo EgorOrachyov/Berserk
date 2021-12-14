@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['g_189',['G',['../group__core.html#gga1111d135f2af893795d4dab37b5fa827adfcf28d0734569a6a693bc8194de62bf',1,'InputDefs.hpp']]],
+  ['g_189',['G',['../group__platform.html#gga1111d135f2af893795d4dab37b5fa827adfcf28d0734569a6a693bc8194de62bf',1,'InputDefs.hpp']]],
   ['get_190',['Get',['../classRef.html#a102bc6d09903d7768b36a5bc1ba02044',1,'Ref']]],
   ['getaction_191',['GetAction',['../classEventMouse.html#a6b47dac64b163ce6a7cb5d464e2c11b4',1,'EventMouse::GetAction()'],['../classEventKeyboard.html#a83e070a5f2a55cd95aa9820c74801414',1,'EventKeyboard::GetAction()'],['../classEventJoystick.html#a9dcf8f4757bee5760645064e2c8cb1cb',1,'EventJoystick::GetAction()']]],
   ['getallocatecalls_192',['GetAllocateCalls',['../classMemory.html#a0894c5b2fcb0a9b8b3b0a002cce952a6',1,'Memory']]],
@@ -44,7 +44,7 @@ var searchData=
   ['getlevel_230',['GetLevel',['../classLogger.html#aeee405457f0da144bfde0c27cea8b194',1,'Logger']]],
   ['getmodifiers_231',['GetModifiers',['../classEventMouse.html#a3603a2fdaa526d32824ef1dd6226b4dc',1,'EventMouse::GetModifiers()'],['../classEventKeyboard.html#a6cd912ea41431847626ed5464e95827c',1,'EventKeyboard::GetModifiers()'],['../classEventJoystick.html#abe1ad5965ce0388bbfcceca4d929a205',1,'EventJoystick::GetModifiers()']]],
   ['getmouse_232',['GetMouse',['../classInput.html#a7b8d389c5faef88826d65018f6b276a9',1,'Input']]],
-  ['getname_233',['GetName',['../classKeyboard.html#aa681bc15fc4392bf68704b2c458c5d99',1,'Keyboard::GetName()'],['../classMouse.html#a6283f3a1fa2402bec14706625f2eb34f',1,'Mouse::GetName()'],['../classJoystick.html#a519eb8b95f103ad222213afad26791c2',1,'Joystick::GetName()'],['../classGlfwWindow.html#af0f4db59954bbde34ff8828a301150f0',1,'GlfwWindow::GetName()'],['../classWindow.html#aef639a4fcf23599b65a9c0c1f286b542',1,'Window::GetName()']]],
+  ['getname_233',['GetName',['../classMouse.html#a6283f3a1fa2402bec14706625f2eb34f',1,'Mouse::GetName()'],['../classGlfwWindow.html#af0f4db59954bbde34ff8828a301150f0',1,'GlfwWindow::GetName()'],['../classKeyboard.html#aa681bc15fc4392bf68704b2c458c5d99',1,'Keyboard::GetName()'],['../classJoystick.html#a519eb8b95f103ad222213afad26791c2',1,'Joystick::GetName()'],['../classWindow.html#aef639a4fcf23599b65a9c0c1f286b542',1,'Window::GetName()']]],
   ['getoffset_234',['GetOffset',['../classTransformf.html#aadd218abc8517e6baef1ff4b0c54a0d6',1,'Transformf::GetOffset() const'],['../classTransformf.html#ac43d1d1428fc01082767bf042684f507',1,'Transformf::GetOffset()']]],
   ['getoutput_235',['GetOutput',['../classEngine.html#a17fb19277d99b894f8d613a6c9c516b8',1,'Engine']]],
   ['getpaths_236',['GetPaths',['../classEventDropInput.html#a4809ab0e7fe0e35c4dce8561b31cdb81',1,'EventDropInput']]],

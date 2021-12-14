@@ -102,7 +102,7 @@ $(function() {
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Config_8hpp.html">core/Config.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Typedefs_8hpp.html">core/Typedefs.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Event_8hpp.html">core/event/Event.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="InputDefs_8hpp.html">core/input/InputDefs.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="InputDefs_8hpp.html">platform/InputDefs.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<a class="code" href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
@@ -127,8 +127,8 @@ $(function() {
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <a class="code" href="classString.html">String</a> mText;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <a class="code" href="classInputModifiers.html">InputModifiers</a> mModifiers;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <a class="code" href="classInputAction.html">InputAction</a> mAction = <a class="code" href="group__core.html#gga11a34592db80df3b86d2a67a62d62841a88183b946cc5f0e8c96b2e66e1c74a7e">InputAction::Unknown</a>;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <a class="code" href="classInputKeyboardKey.html">InputKeyboardKey</a> mKey = <a class="code" href="group__core.html#gga1111d135f2af893795d4dab37b5fa827a88183b946cc5f0e8c96b2e66e1c74a7e">InputKeyboardKey::Unknown</a>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <a class="code" href="classInputAction.html">InputAction</a> mAction = <a class="code" href="group__platform.html#gga11a34592db80df3b86d2a67a62d62841a88183b946cc5f0e8c96b2e66e1c74a7e">InputAction::Unknown</a>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <a class="code" href="classInputKeyboardKey.html">InputKeyboardKey</a> mKey = <a class="code" href="group__platform.html#gga1111d135f2af893795d4dab37b5fa827a88183b946cc5f0e8c96b2e66e1c74a7e">InputKeyboardKey::Unknown</a>;</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;};</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<a class="code" href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div>
@@ -160,8 +160,8 @@ $(function() {
 <div class="ttc" id="aclassInputKeyboardKey_html"><div class="ttname"><a href="classInputKeyboardKey.html">InputKeyboardKey</a></div><div class="ttdoc">Keyboard device keys.</div></div>
 <div class="ttc" id="aclassInputModifiers_html"><div class="ttname"><a href="classInputModifiers.html">InputModifiers</a></div><div class="ttdoc">Input modifies mask (as a set of bits)</div></div>
 <div class="ttc" id="aclassString_html"><div class="ttname"><a href="classString.html">String</a></div><div class="ttdoc">Utf-8 encoded std based default string class.</div></div>
-<div class="ttc" id="agroup__core_html_gga1111d135f2af893795d4dab37b5fa827a88183b946cc5f0e8c96b2e66e1c74a7e"><div class="ttname"><a href="group__core.html#gga1111d135f2af893795d4dab37b5fa827a88183b946cc5f0e8c96b2e66e1c74a7e">InputKeyboardKey::Unknown</a></div><div class="ttdeci">@ Unknown</div></div>
-<div class="ttc" id="agroup__core_html_gga11a34592db80df3b86d2a67a62d62841a88183b946cc5f0e8c96b2e66e1c74a7e"><div class="ttname"><a href="group__core.html#gga11a34592db80df3b86d2a67a62d62841a88183b946cc5f0e8c96b2e66e1c74a7e">InputAction::Unknown</a></div><div class="ttdeci">@ Unknown</div></div>
+<div class="ttc" id="agroup__platform_html_gga1111d135f2af893795d4dab37b5fa827a88183b946cc5f0e8c96b2e66e1c74a7e"><div class="ttname"><a href="group__platform.html#gga1111d135f2af893795d4dab37b5fa827a88183b946cc5f0e8c96b2e66e1c74a7e">InputKeyboardKey::Unknown</a></div><div class="ttdeci">@ Unknown</div></div>
+<div class="ttc" id="agroup__platform_html_gga11a34592db80df3b86d2a67a62d62841a88183b946cc5f0e8c96b2e66e1c74a7e"><div class="ttname"><a href="group__platform.html#gga11a34592db80df3b86d2a67a62d62841a88183b946cc5f0e8c96b2e66e1c74a7e">InputAction::Unknown</a></div><div class="ttdeci">@ Unknown</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
