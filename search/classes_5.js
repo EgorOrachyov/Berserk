@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['glfwwindow_483',['GlfwWindow',['../classGlfwWindow.html',1,'']]],
-  ['glfwwindowmanager_484',['GlfwWindowManager',['../classGlfwWindowManager.html',1,'']]]
+  ['glfwwindow_671',['GlfwWindow',['../classGlfwWindow.html',1,'']]],
+  ['glfwwindowmanager_672',['GlfwWindowManager',['../classGlfwWindowManager.html',1,'']]]
 ];

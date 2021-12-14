@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['y_453',['y',['../classTVecN.html#ac2e889ae7e4e1cc69d9eab72a959c04a',1,'TVecN']]]
+  ['x_625',['x',['../classTVecN.html#a3c0a7cc757e94f65086bb8fbd89ed829',1,'TVecN']]],
+  ['x_626',['X',['../group__core.html#gga1111d135f2af893795d4dab37b5fa827a02129bb861061d1a052c592e2dc6b383',1,'InputDefs.hpp']]]
 ];

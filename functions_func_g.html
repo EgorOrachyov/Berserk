@@ -67,6 +67,11 @@ $(function() {
 <li>Get()
 : <a class="el" href="classRef.html#a102bc6d09903d7768b36a5bc1ba02044">Ref&lt; T &gt;</a>
 </li>
+<li>GetAction()
+: <a class="el" href="classEventJoystick.html#a9dcf8f4757bee5760645064e2c8cb1cb">EventJoystick</a>
+, <a class="el" href="classEventKeyboard.html#a83e070a5f2a55cd95aa9820c74801414">EventKeyboard</a>
+, <a class="el" href="classEventMouse.html#a6b47dac64b163ce6a7cb5d464e2c11b4">EventMouse</a>
+</li>
 <li>GetAllocateCalls()
 : <a class="el" href="classMemory.html#a0894c5b2fcb0a9b8b3b0a002cce952a6">Memory</a>
 </li>
@@ -75,6 +80,12 @@ $(function() {
 </li>
 <li>GetAspectRatio()
 : <a class="el" href="classWindow.html#a3bfa6c617b864c2911a7dc40b41b95cb">Window</a>
+</li>
+<li>GetAxesStates()
+: <a class="el" href="classJoystick.html#a2f8924cf257b4143dd04f63c4bb6adb9">Joystick</a>
+</li>
+<li>GetAxis()
+: <a class="el" href="classEventJoystick.html#af90f94fea1465a55804f9904fb3d77f2">EventJoystick</a>
 </li>
 <li>GetAxisAngle()
 : <a class="el" href="classTQuat.html#ae57f1ad30fc7dac7e1f52050c69d2ca6">TQuat&lt; T &gt;</a>
@@ -91,6 +102,14 @@ $(function() {
 <li>GetBasisRotation()
 : <a class="el" href="classTransformf.html#afee249d3c9d1baea3c5f13b1e2184065">Transformf</a>
 </li>
+<li>GetButton()
+: <a class="el" href="classEventJoystick.html#a1e7ec1cd9ee47d699f6f0f91dfb7edc4">EventJoystick</a>
+, <a class="el" href="classEventMouse.html#a9335d0a9c1df6dc465c5e0eec9a9b985">EventMouse</a>
+</li>
+<li>GetButtonsStates()
+: <a class="el" href="classJoystick.html#a488927776edbf899fd9ebd665f4c2de7">Joystick</a>
+, <a class="el" href="classMouse.html#ab07ac8f0273cb1f09208c3d620058e1f">Mouse</a>
+</li>
 <li>GetColumn()
 : <a class="el" href="classTMatMxN.html#a0285f975612e8a5d76ab4f84ba8ade93">TMatMxN&lt; T, M, N &gt;</a>
 </li>
@@ -105,6 +124,9 @@ $(function() {
 <li>GetDeallocateCalls()
 : <a class="el" href="classMemory.html#a4aea26f8f4cead77598d93dc149efc70">Memory</a>
 </li>
+<li>GetDelta()
+: <a class="el" href="classEventMouse.html#a3f9470c9464855a7d8cafbd8f9b7548b">EventMouse</a>
+</li>
 <li>GetDimM()
 : <a class="el" href="classTMatMxN.html#a62f9a31475ae5ac6905c0e53a56aab86">TMatMxN&lt; T, M, N &gt;</a>
 </li>
@@ -116,10 +138,18 @@ $(function() {
 </li>
 <li>GetEventType()
 : <a class="el" href="classEvent.html#a20d8d0a9f62288d17564dca38e2a64b3">Event</a>
+, <a class="el" href="classEventDropInput.html#a8c5cacb51c88a224e6cb98de04d1f36e">EventDropInput</a>
+, <a class="el" href="classEventJoystick.html#ae68b481cfa85f1a9e173aacb09569c9c">EventJoystick</a>
+, <a class="el" href="classEventKeyboard.html#a37c7eb40686cf1c0c6d372c7b2bc8f95">EventKeyboard</a>
+, <a class="el" href="classEventMouse.html#a163807192823f20c93c7fc842da2a93b">EventMouse</a>
 , <a class="el" href="classEventWindow.html#ada72cd7d029a740ec591e0337005bc9b">EventWindow</a>
 </li>
 <li>GetEventTypeStatic()
-: <a class="el" href="classEventWindow.html#a9732067e49a6f999425866415ac26a43">EventWindow</a>
+: <a class="el" href="classEventDropInput.html#a986b25463ab842fd65a3788e9de7d2aa">EventDropInput</a>
+, <a class="el" href="classEventJoystick.html#a5e5f714a290a1936ce7b5f58fe170137">EventJoystick</a>
+, <a class="el" href="classEventKeyboard.html#a346e71ebefc97e8451eaa35e8961c45a">EventKeyboard</a>
+, <a class="el" href="classEventMouse.html#a0c54d37c7ced86bb0c6a37ec34fd1578">EventMouse</a>
+, <a class="el" href="classEventWindow.html#a9732067e49a6f999425866415ac26a43">EventWindow</a>
 </li>
 <li>GetExecutablePath()
 : <a class="el" href="classFileSystem.html#abf3f2d1cc7d28ce4916cba8ac65a432d">FileSystem</a>
@@ -150,15 +180,45 @@ $(function() {
 <li>GetGameThreadId()
 : <a class="el" href="classEngine.html#ae6bf820382284c7698536028fded977f">Engine</a>
 </li>
+<li>GetGUID()
+: <a class="el" href="classJoystick.html#a03ceed77ea36527efca8ed193f95d633">Joystick</a>
+</li>
 <li>GetHash()
 : <a class="el" href="classCrc32Builder.html#abc7a156a9959f5445d5489a94bbe07d4">Crc32Builder</a>
 , <a class="el" href="classStringName.html#ae5835d09cdacde3421233b1eaa561234">StringName</a>
 </li>
+<li>GetInput()
+: <a class="el" href="classEngine.html#aacaf7eb0748156565e4b91bb5794a98d">Engine</a>
+</li>
+<li>GetJoystick()
+: <a class="el" href="classEventJoystick.html#af2d1691631b3fb17e17d7c5f3200a0fc">EventJoystick</a>
+, <a class="el" href="classInput.html#a6a02ae88d775bdf0e14ff14744f3fca8">Input</a>
+</li>
+<li>GetKey()
+: <a class="el" href="classEventKeyboard.html#a3502c886f9776af90d75adfc9b4414f9">EventKeyboard</a>
+</li>
+<li>GetKeyboard()
+: <a class="el" href="classInput.html#ae897970adb71b52f224a7f62b26866ac">Input</a>
+</li>
+<li>GetKeysStates()
+: <a class="el" href="classKeyboard.html#a7856d6762f71b98db69484bcb34d9a8c">Keyboard</a>
+</li>
 <li>GetLevel()
 : <a class="el" href="classLogger.html#aeee405457f0da144bfde0c27cea8b194">Logger</a>
 </li>
+<li>GetModifiers()
+: <a class="el" href="classEventJoystick.html#abe1ad5965ce0388bbfcceca4d929a205">EventJoystick</a>
+, <a class="el" href="classEventKeyboard.html#a6cd912ea41431847626ed5464e95827c">EventKeyboard</a>
+, <a class="el" href="classEventMouse.html#a3603a2fdaa526d32824ef1dd6226b4dc">EventMouse</a>
+</li>
+<li>GetMouse()
+: <a class="el" href="classInput.html#a7b8d389c5faef88826d65018f6b276a9">Input</a>
+</li>
 <li>GetName()
 : <a class="el" href="classGlfwWindow.html#af0f4db59954bbde34ff8828a301150f0">GlfwWindow</a>
+, <a class="el" href="classJoystick.html#a519eb8b95f103ad222213afad26791c2">Joystick</a>
+, <a class="el" href="classKeyboard.html#aa681bc15fc4392bf68704b2c458c5d99">Keyboard</a>
+, <a class="el" href="classMouse.html#a6283f3a1fa2402bec14706625f2eb34f">Mouse</a>
 , <a class="el" href="classWindow.html#aef639a4fcf23599b65a9c0c1f286b542">Window</a>
 </li>
 <li>GetOffset()
@@ -167,13 +227,17 @@ $(function() {
 <li>GetOutput()
 : <a class="el" href="classEngine.html#a17fb19277d99b894f8d613a6c9c516b8">Engine</a>
 </li>
+<li>GetPaths()
+: <a class="el" href="classEventDropInput.html#a4809ab0e7fe0e35c4dce8561b31cdb81">EventDropInput</a>
+</li>
 <li>GetPixelRatio()
 : <a class="el" href="classEventWindow.html#a0aa74c875690844bd7ab19d45609f8ab">EventWindow</a>
 , <a class="el" href="classGlfwWindow.html#a18f63f8ebfa916ee89f30ce6c9c84ab9">GlfwWindow</a>
 , <a class="el" href="classWindow.html#aab6a86bb5e04579bfb00ad6f6604420d">Window</a>
 </li>
 <li>GetPosition()
-: <a class="el" href="classEventWindow.html#a49a5bfab98ac851b49a8ea856960c5ff">EventWindow</a>
+: <a class="el" href="classEventMouse.html#a52d562107203f2c4d1b09e1525c58192">EventMouse</a>
+, <a class="el" href="classEventWindow.html#a49a5bfab98ac851b49a8ea856960c5ff">EventWindow</a>
 , <a class="el" href="classGlfwWindow.html#a24bb66b712c54be0fad2be2c358c8e7e">GlfwWindow</a>
 , <a class="el" href="classWindow.html#a4f416e2e893d50a0a4acb5dc913da2b8">Window</a>
 </li>
@@ -191,7 +255,7 @@ $(function() {
 : <a class="el" href="classTMatMxN.html#a2564b56d4f6fab8887ef6dcacf7fd714">TMatMxN&lt; T, M, N &gt;</a>
 </li>
 <li>GetScale()
-: <a class="el" href="classTransformf.html#adb7a213eb963a04c72b292dbecc4fa08">Transformf</a>
+: <a class="el" href="classTransformf.html#a380abc6e02277fc398e275867d87e0e0">Transformf</a>
 </li>
 <li>GetScheduler()
 : <a class="el" href="classEngine.html#a253290edee3ff6b3395de9489ca5ff7c">Engine</a>
@@ -202,11 +266,19 @@ $(function() {
 , <a class="el" href="classTMatMxN.html#a23acbb33e22783543aa24e71ea79bd8a">TMatMxN&lt; T, M, N &gt;</a>
 , <a class="el" href="classWindow.html#a7e331833f8e58d69a3c2a8b21fae26cf">Window</a>
 </li>
+<li>GetState()
+: <a class="el" href="classJoystick.html#a06718dc775201a1ebea00b7d0c49fe5c">Joystick</a>
+, <a class="el" href="classKeyboard.html#a22849abd7ec3e51615548f0344a1dd93">Keyboard</a>
+, <a class="el" href="classMouse.html#ace6b5673c29755a14bf9897de23f85cf">Mouse</a>
+</li>
 <li>GetStr()
 : <a class="el" href="classStringName.html#aa233d92f56539f7b858123fef2f9ba51">StringName</a>
 </li>
 <li>GetStride()
 : <a class="el" href="classTMatMxN.html#a72c7435f86029fafa751e20575ac8bfb">TMatMxN&lt; T, M, N &gt;</a>
+</li>
+<li>GetText()
+: <a class="el" href="classEventKeyboard.html#a9449910153f4f53387a03b306c692df9">EventKeyboard</a>
 </li>
 <li>GetTitle()
 : <a class="el" href="classGlfwWindow.html#a360b96bedf7f1c83286a4ff636b53df3">GlfwWindow</a>

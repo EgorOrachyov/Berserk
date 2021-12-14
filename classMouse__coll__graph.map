@@ -1,0 +1,4 @@
+<map id="Mouse" name="Mouse">
+<area shape="rect" id="node1" title="Mouse device state." alt="" coords="6,80,67,107"/>
+<area shape="rect" id="node2" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="5,5,68,32"/>
+</map>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['type_925',['Type',['../classEventWindow.html#ae7c6e4715ba685d5d7bf3fabe9166e59',1,'EventWindow']]]
+  ['level_1185',['Level',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f',1,'Logger']]]
 ];

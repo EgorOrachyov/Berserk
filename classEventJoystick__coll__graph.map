@@ -1,0 +1,5 @@
+<map id="EventJoystick" name="EventJoystick">
+<area shape="rect" id="node1" title="Joystick input event." alt="" coords="5,155,108,181"/>
+<area shape="rect" id="node2" href="$classEvent.html" title="Base class for any engine event." alt="" coords="29,80,84,107"/>
+<area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="25,5,88,32"/>
+</map>

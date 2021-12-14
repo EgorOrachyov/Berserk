@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['z_454',['z',['../classTVecN.html#a2da0ed842117be152d61268dec266d8f',1,'TVecN']]],
-  ['zero_455',['Zero',['../classTMatMxN.html#a63640e3975ce8c0540e211a11ad14ebb',1,'TMatMxN::Zero()'],['../classTQuat.html#a258a8fab989a571309f43c09409eb3ab',1,'TQuat::Zero()'],['../classTVecN.html#a10191d03e1a20878f056163791dc2fb5',1,'TVecN::Zero()']]]
+  ['y_627',['y',['../classTVecN.html#ac2e889ae7e4e1cc69d9eab72a959c04a',1,'TVecN']]],
+  ['y_628',['Y',['../group__core.html#gga1111d135f2af893795d4dab37b5fa827a57cec4137b614c87cb4e24a3d003a3e0',1,'InputDefs.hpp']]]
 ];

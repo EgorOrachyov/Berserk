@@ -1,0 +1,5 @@
+<map id="EventDropInput" name="EventDropInput">
+<area shape="rect" id="node1" title="Drop input event." alt="" coords="5,155,116,181"/>
+<area shape="rect" id="node2" href="$classEvent.html" title="Base class for any engine event." alt="" coords="33,80,88,107"/>
+<area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="29,5,92,32"/>
+</map>
