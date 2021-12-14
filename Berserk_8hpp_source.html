@@ -106,30 +106,44 @@ $(function() {
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Scheduler_8hpp.html">core/Scheduler.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Typedefs_8hpp.html">core/Typedefs.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Event_8hpp.html">core/event/Event.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="EventWindow_8hpp.html">core/event/EventWindow.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Logger_8hpp.html">core/io/Logger.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="String_8hpp.html">core/string/String.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="String16u_8hpp.html">core/string/String16u.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="StringName_8hpp.html">core/string/StringName.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Unicode_8hpp.html">core/string/Unicode.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Ref_8hpp.html">core/templates/Ref.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="RefCnt_8hpp.html">core/templates/RefCnt.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Application_8hpp.html">platform/Application.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="FileSystem_8hpp.html">platform/FileSystem.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Output_8hpp.html">platform/Output.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Window_8hpp.html">platform/Window.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="WindowManager_8hpp.html">platform/WindowManager.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_BERSERK_HPP</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="EventDropInput_8hpp.html">core/event/EventDropInput.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="EventJoystick_8hpp.html">core/event/EventJoystick.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="EventKeyboard_8hpp.html">core/event/EventKeyboard.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="EventMouse_8hpp.html">core/event/EventMouse.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="EventWindow_8hpp.html">core/event/EventWindow.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Logger_8hpp.html">core/io/Logger.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="String_8hpp.html">core/string/String.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="String16u_8hpp.html">core/string/String16u.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="StringName_8hpp.html">core/string/StringName.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Unicode_8hpp.html">core/string/Unicode.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Ref_8hpp.html">core/templates/Ref.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="RefCnt_8hpp.html">core/templates/RefCnt.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Application_8hpp.html">platform/Application.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="FileSystem_8hpp.html">platform/FileSystem.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Input_8hpp.html">platform/Input.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="InputDefs_8hpp.html">platform/InputDefs.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="InputDevices_8hpp.html">platform/InputDevices.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Output_8hpp.html">platform/Output.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Window_8hpp.html">platform/Window.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="WindowManager_8hpp.html">platform/WindowManager.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_BERSERK_HPP</span></div>
 <div class="ttc" id="aApplication_8hpp_html"><div class="ttname"><a href="Application_8hpp.html">Application.hpp</a></div></div>
 <div class="ttc" id="aConfig_8hpp_html"><div class="ttname"><a href="Config_8hpp.html">Config.hpp</a></div></div>
 <div class="ttc" id="aData_8hpp_html"><div class="ttname"><a href="Data_8hpp.html">Data.hpp</a></div></div>
 <div class="ttc" id="aEngine_8hpp_html"><div class="ttname"><a href="Engine_8hpp.html">Engine.hpp</a></div></div>
 <div class="ttc" id="aEventDispatcher_8hpp_html"><div class="ttname"><a href="EventDispatcher_8hpp.html">EventDispatcher.hpp</a></div></div>
+<div class="ttc" id="aEventDropInput_8hpp_html"><div class="ttname"><a href="EventDropInput_8hpp.html">EventDropInput.hpp</a></div></div>
+<div class="ttc" id="aEventJoystick_8hpp_html"><div class="ttname"><a href="EventJoystick_8hpp.html">EventJoystick.hpp</a></div></div>
+<div class="ttc" id="aEventKeyboard_8hpp_html"><div class="ttname"><a href="EventKeyboard_8hpp.html">EventKeyboard.hpp</a></div></div>
+<div class="ttc" id="aEventMouse_8hpp_html"><div class="ttname"><a href="EventMouse_8hpp.html">EventMouse.hpp</a></div></div>
 <div class="ttc" id="aEventWindow_8hpp_html"><div class="ttname"><a href="EventWindow_8hpp.html">EventWindow.hpp</a></div></div>
 <div class="ttc" id="aEvent_8hpp_html"><div class="ttname"><a href="Event_8hpp.html">Event.hpp</a></div></div>
 <div class="ttc" id="aFileSystem_8hpp_html"><div class="ttname"><a href="FileSystem_8hpp.html">FileSystem.hpp</a></div></div>
+<div class="ttc" id="aInputDefs_8hpp_html"><div class="ttname"><a href="InputDefs_8hpp.html">InputDefs.hpp</a></div></div>
+<div class="ttc" id="aInputDevices_8hpp_html"><div class="ttname"><a href="InputDevices_8hpp.html">InputDevices.hpp</a></div></div>
+<div class="ttc" id="aInput_8hpp_html"><div class="ttname"><a href="Input_8hpp.html">Input.hpp</a></div></div>
 <div class="ttc" id="aLogger_8hpp_html"><div class="ttname"><a href="Logger_8hpp.html">Logger.hpp</a></div></div>
 <div class="ttc" id="aOutput_8hpp_html"><div class="ttname"><a href="Output_8hpp.html">Output.hpp</a></div></div>
 <div class="ttc" id="aRefCnt_8hpp_html"><div class="ttname"><a href="RefCnt_8hpp.html">RefCnt.hpp</a></div></div>

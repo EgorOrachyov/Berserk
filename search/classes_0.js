@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['application_654',['Application',['../classApplication.html',1,'']]],
-  ['argumentparser_655',['ArgumentParser',['../classArgumentParser.html',1,'']]]
+  ['application_655',['Application',['../classApplication.html',1,'']]],
+  ['argumentparser_656',['ArgumentParser',['../classArgumentParser.html',1,'']]]
 ];
