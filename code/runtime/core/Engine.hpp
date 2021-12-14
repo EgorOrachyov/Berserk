@@ -31,8 +31,8 @@
 #include <core/Config.hpp>
 #include <core/EventDispatcher.hpp>
 #include <core/Scheduler.hpp>
-#include <core/input/Input.hpp>
 #include <platform/FileSystem.hpp>
+#include <platform/Input.hpp>
 #include <platform/Output.hpp>
 #include <platform/WindowManager.hpp>
 

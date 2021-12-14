@@ -36,21 +36,26 @@ void GameApplication::OnInitialize() {
     auto &windowManager = engine.GetWindowManager();
 
     // Create primary window
-    auto window = windowManager.CreateWindow(BRK_NS::StringName("MAIN"), {1280, 720}, "Example window");
+    auto window = windowManager.CreateWindow(berserk::StringName("MAIN"), {1280, 720}, "Example window");
 
     // Capture window events
-    dispatcher.Subscribe(BRK_NS::EventWindow::GetEventTypeStatic(), [](const BRK_NS::Event &_event) {
-        auto event = dynamic_cast<const BRK_NS::EventWindow *>(&_event);
+    dispatcher.Subscribe(berserk::EventWindow::GetEventTypeStatic(), [](const berserk::Event &_event) {
+        auto event = dynamic_cast<const berserk::EventWindow *>(&_event);
         BRK_INFO("Window event: window=" << event->GetWindow()->GetName() << " type=" << static_cast<int>(event->GetType()));
         return false;
     });
 
-    // Finish application after 5 seconds
-    auto func = [](float dt) {
-        BRK_INFO("Request engine close after 5 sec");
-        berserk::Engine::Instance().RequestClose();
-    };
-    scheduler.ScheduleOnce(func, 5.0f, false);
+    // Finish application when close requested
+    dispatcher.Subscribe(berserk::EventWindow::GetEventTypeStatic(), [](const berserk::Event &_event) {
+        auto event = dynamic_cast<const berserk::EventWindow *>(&_event);
+
+        if (event->GetType() == berserk::EventWindow::Type::CloseRequested) {
+            BRK_INFO("Request engine close");
+            berserk::Engine::Instance().RequestClose();
+        }
+
+        return false;
+    });
 }
 
 void GameApplication::OnFinalize() {

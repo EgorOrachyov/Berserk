@@ -31,7 +31,7 @@
 #include <core/Config.hpp>
 #include <core/Typedefs.hpp>
 #include <core/event/Event.hpp>
-#include <core/input/InputDefs.hpp>
+#include <platform/InputDefs.hpp>
 
 BRK_NS_BEGIN
 

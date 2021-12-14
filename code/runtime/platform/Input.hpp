@@ -30,14 +30,14 @@
 
 #include <core/Config.hpp>
 #include <core/Typedefs.hpp>
-#include <core/input/InputDefs.hpp>
-#include <core/input/InputDevices.hpp>
 #include <core/templates/Ref.hpp>
+#include <platform/InputDefs.hpp>
+#include <platform/InputDevices.hpp>
 
 BRK_NS_BEGIN
 
 /**
- * @addtogroup core
+ * @addtogroup platform
  * @{
  */
 

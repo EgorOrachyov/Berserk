@@ -13,9 +13,6 @@ set(BERSERK_CORE_HEADER
         core/event/EventKeyboard.hpp
         core/event/EventMouse.hpp
         core/event/EventWindow.hpp
-        core/input/Input.hpp
-        core/input/InputDefs.hpp
-        core/input/InputDevices.hpp
         core/io/ArgumentParser.hpp
         core/io/Logger.hpp
         core/io/LoggerListenerOutput.hpp

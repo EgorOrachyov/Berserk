@@ -72,6 +72,7 @@ public:
 
     /** Init file system */
     BRK_API FileSystem();
+    BRK_API ~FileSystem() = default;
 
     /**
      * @brief Open file by file path and mode

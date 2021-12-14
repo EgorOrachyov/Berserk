@@ -30,17 +30,17 @@
 
 #include <core/Config.hpp>
 #include <core/Typedefs.hpp>
-#include <core/input/InputDefs.hpp>
 #include <core/math/TVecN.hpp>
 #include <core/string/StringName.hpp>
 #include <core/templates/RefCnt.hpp>
+#include <platform/InputDefs.hpp>
 
 #include <vector>
 
 BRK_NS_BEGIN
 
 /**
- * @addtogroup core
+ * @addtogroup platform
  * @{
  */
 

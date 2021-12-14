@@ -1,6 +1,9 @@
 set(BERSERK_PLATFORM_HEADER
         platform/Application.hpp
         platform/FileSystem.hpp
+        platform/Input.hpp
+        platform/InputDefs.hpp
+        platform/InputDevices.hpp
         platform/Output.hpp
         platform/Window.hpp
         platform/WindowManager.hpp

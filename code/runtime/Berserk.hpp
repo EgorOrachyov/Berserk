@@ -46,6 +46,10 @@
 #include <core/Scheduler.hpp>
 #include <core/Typedefs.hpp>
 #include <core/event/Event.hpp>
+#include <core/event/EventDropInput.hpp>
+#include <core/event/EventJoystick.hpp>
+#include <core/event/EventKeyboard.hpp>
+#include <core/event/EventMouse.hpp>
 #include <core/event/EventWindow.hpp>
 #include <core/io/Logger.hpp>
 #include <core/string/String.hpp>
@@ -67,6 +71,9 @@
 
 #include <platform/Application.hpp>
 #include <platform/FileSystem.hpp>
+#include <platform/Input.hpp>
+#include <platform/InputDefs.hpp>
+#include <platform/InputDevices.hpp>
 #include <platform/Output.hpp>
 #include <platform/Window.hpp>
 #include <platform/WindowManager.hpp>
