@@ -25,103 +25,44 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <core/Engine.hpp>
-#include <core/io/Logger.hpp>
-#include <core/io/LoggerListenerOutput.hpp>
+#ifndef BERSERK_INPUT_HPP
+#define BERSERK_INPUT_HPP
+
+#include <core/Config.hpp>
+#include <core/Typedefs.hpp>
+#include <core/input/InputDefs.hpp>
+#include <core/input/InputDevices.hpp>
+#include <core/templates/Ref.hpp>
 
 BRK_NS_BEGIN
 
-Engine::~Engine() {
-    // Release in reverse order
-    mInput.reset();
-    mWindowManager.reset();
-    mEventDispatcher.reset();
-    mScheduler.reset();
-    mFileSystem.reset();
-    mOutput.reset();
+/**
+ * @addtogroup core
+ * @{
+ */
 
-    // Remove global instance
-    gEngine = nullptr;
-}
+/**
+ * @class Input
+ * @brief Engine input manager
+ */
+class BRK_API Input {
+public:
+    virtual ~Input() = default;
 
-void Engine::RequestClose() {
-    mCloseRequested.store(true);
-}
+    /** @return Mouse device if presented; null if no device */
+    virtual Ref<Mouse> GetMouse() = 0;
 
-bool Engine::CloseRequested() {
-    return mCloseRequested.load();
-}
+    /** @return Keyboard device if presented; null if no device */
+    virtual Ref<Keyboard> GetKeyboard() = 0;
 
-Output &Engine::GetOutput() {
-    return *mOutput;
-}
+    /** @return First joystick device if presented; null if no device */
+    virtual Ref<Joystick> GetJoystick() = 0;
+};
 
-FileSystem &Engine::GetFileSystem() {
-    return *mFileSystem;
-}
-
-Scheduler &Engine::GetScheduler() {
-    return *mScheduler;
-}
-
-EventDispatcher &Engine::GetEventDispatcher() {
-    return *mEventDispatcher;
-}
-
-WindowManager &Engine::GetWindowManager() {
-    return *mWindowManager;
-}
-
-Input &Engine::GetInput() {
-    return *mInput;
-}
-
-std::thread::id Engine::GetGameThreadId() const {
-    return mGameThreadID;
-}
-
-Engine &Engine::Instance() {
-    return *gEngine;
-}
-
-void Engine::Init() {
-    // Setup logger
-    LoggerListenerOutput listener;
-    listener.SetName("Engine");
-    listener.SetLevel(Logger::Level::Error);
-
-#ifdef BERSERK_DEBUG
-    listener.SetLevel(Logger::Level::Info);
-#endif
-
-    Logger::Instance().AddListener([=](const Logger::Entry &entry) { listener.OnEntry(entry); });
-
-    mGameThreadID = std::this_thread::get_id();
-    mOutput = std::unique_ptr<Output>(new Output());
-    mFileSystem = std::unique_ptr<FileSystem>(new FileSystem());
-    mScheduler = std::unique_ptr<Scheduler>(new Scheduler());
-    mEventDispatcher = std::unique_ptr<EventDispatcher>(new EventDispatcher());
-
-    // Provide singleton
-    gEngine = this;
-}
-
-void Engine::Configure() {
-}
-
-void Engine::SetWindowManager(std::shared_ptr<WindowManager> windowManager) {
-    mWindowManager = std::move(windowManager);
-}
-
-void Engine::SetInput(std::shared_ptr<Input> input) {
-    mInput = std::move(input);
-}
-
-void Engine::Update(float dt) {
-    mScheduler->Update(dt);
-    mEventDispatcher->Update();
-}
-
-Engine *Engine::gEngine = nullptr;
+/**
+ * @}
+ */
 
 BRK_NS_END
+
+#endif//BERSERK_INPUT_HPP

@@ -25,103 +25,58 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <core/Engine.hpp>
-#include <core/io/Logger.hpp>
-#include <core/io/LoggerListenerOutput.hpp>
+#include <core/event/EventJoystick.hpp>
+#include <utility>
 
 BRK_NS_BEGIN
 
-Engine::~Engine() {
-    // Release in reverse order
-    mInput.reset();
-    mWindowManager.reset();
-    mEventDispatcher.reset();
-    mScheduler.reset();
-    mFileSystem.reset();
-    mOutput.reset();
-
-    // Remove global instance
-    gEngine = nullptr;
+const EventType &EventJoystick::GetEventType() const {
+    return GetEventTypeStatic();
 }
 
-void Engine::RequestClose() {
-    mCloseRequested.store(true);
+const EventType &EventJoystick::GetEventTypeStatic() {
+    static EventType eventType(BRK_TEXT("_brk_core_event_joystick"));
+    return eventType;
 }
 
-bool Engine::CloseRequested() {
-    return mCloseRequested.load();
+void EventJoystick::SetJoystick(Ref<Joystick> joystick) {
+    mJoystick = std::move(joystick);
 }
 
-Output &Engine::GetOutput() {
-    return *mOutput;
+void EventJoystick::SetModifiers(InputModifiers modifiers) {
+    mModifiers = modifiers;
 }
 
-FileSystem &Engine::GetFileSystem() {
-    return *mFileSystem;
+void EventJoystick::SetAction(InputAction action) {
+    mAction = action;
 }
 
-Scheduler &Engine::GetScheduler() {
-    return *mScheduler;
+void EventJoystick::SetAxis(InputJoystickAxis axis) {
+    mAxis = axis;
 }
 
-EventDispatcher &Engine::GetEventDispatcher() {
-    return *mEventDispatcher;
+void EventJoystick::SetButton(InputJoystickButton button) {
+    mButton = button;
 }
 
-WindowManager &Engine::GetWindowManager() {
-    return *mWindowManager;
+const Ref<Joystick> &EventJoystick::GetJoystick() const {
+    return mJoystick;
 }
 
-Input &Engine::GetInput() {
-    return *mInput;
+InputModifiers EventJoystick::GetModifiers() const {
+    return mModifiers;
 }
 
-std::thread::id Engine::GetGameThreadId() const {
-    return mGameThreadID;
+InputAction EventJoystick::GetAction() const {
+    return mAction;
 }
 
-Engine &Engine::Instance() {
-    return *gEngine;
+InputJoystickAxis EventJoystick::GetAxis() const {
+    return mAxis;
 }
 
-void Engine::Init() {
-    // Setup logger
-    LoggerListenerOutput listener;
-    listener.SetName("Engine");
-    listener.SetLevel(Logger::Level::Error);
-
-#ifdef BERSERK_DEBUG
-    listener.SetLevel(Logger::Level::Info);
-#endif
-
-    Logger::Instance().AddListener([=](const Logger::Entry &entry) { listener.OnEntry(entry); });
-
-    mGameThreadID = std::this_thread::get_id();
-    mOutput = std::unique_ptr<Output>(new Output());
-    mFileSystem = std::unique_ptr<FileSystem>(new FileSystem());
-    mScheduler = std::unique_ptr<Scheduler>(new Scheduler());
-    mEventDispatcher = std::unique_ptr<EventDispatcher>(new EventDispatcher());
-
-    // Provide singleton
-    gEngine = this;
+InputJoystickButton EventJoystick::GetButton() const {
+    return mButton;
 }
-
-void Engine::Configure() {
-}
-
-void Engine::SetWindowManager(std::shared_ptr<WindowManager> windowManager) {
-    mWindowManager = std::move(windowManager);
-}
-
-void Engine::SetInput(std::shared_ptr<Input> input) {
-    mInput = std::move(input);
-}
-
-void Engine::Update(float dt) {
-    mScheduler->Update(dt);
-    mEventDispatcher->Update();
-}
-
-Engine *Engine::gEngine = nullptr;
 
 BRK_NS_END

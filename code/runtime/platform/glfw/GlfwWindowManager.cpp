@@ -78,6 +78,12 @@ GlfwWindowManager::~GlfwWindowManager() {
     for (const auto &entry : mWindows)
         BRK_INFO("Release window name=" << entry.first);
 #endif//BERSERK_DEBUG
+
+    // Clear all windows
+    mWindows.clear();
+
+    // Finally, terminate glfw
+    glfwTerminate();
 }
 
 Ref<Window> GlfwWindowManager::CreateWindow(const StringName &name, const Size2i &size, const String &title) {
@@ -148,90 +154,59 @@ Ref<Window> GlfwWindowManager::GetWindow(GLFWwindow *HND) {
     return query != mWindowsByHND.end() ? query->second : Ref<Window>{};
 }
 
-void GlfwWindowManager::WindowCloseCallback(GLFWwindow *HND) {
-    auto &engine = Engine::Instance();
-    auto &windowManager = *dynamic_cast<GlfwWindowManager *>(&engine.GetWindowManager());
-    auto window = windowManager.GetWindow(HND);
-    auto glfwWindow = dynamic_cast<const GlfwWindow *>(window.Get());
-
+#define BRK_GLFW_CALLBACK_SETUP                                                           \
+    auto &engine = Engine::Instance();                                                    \
+    auto &windowManager = *dynamic_cast<GlfwWindowManager *>(&engine.GetWindowManager()); \
+    auto window = windowManager.GetWindow(HND);                                           \
+    auto glfwWindow = dynamic_cast<GlfwWindow *>(window.Get());                           \
     assert(glfwWindow);
+
+void GlfwWindowManager::WindowCloseCallback(GLFWwindow *HND) {
+    BRK_GLFW_CALLBACK_SETUP
     windowManager.DispatchEvent(window, EventWindow::Type::CloseRequested);
 }
 
 void GlfwWindowManager::WindowResizedCallback(GLFWwindow *HND, int32 width, int32 height) {
-    auto &engine = Engine::Instance();
-    auto &windowManager = *dynamic_cast<GlfwWindowManager *>(&engine.GetWindowManager());
-    auto window = windowManager.GetWindow(HND);
-    auto glfwWindow = dynamic_cast<GlfwWindow *>(window.Get());
-
-    assert(glfwWindow);
+    BRK_GLFW_CALLBACK_SETUP
     glfwWindow->mSize = Size2i(width, height);
     windowManager.DispatchEvent(window, EventWindow::Type::Resized);
 }
 
 void GlfwWindowManager::WindowContentScaleCallback(GLFWwindow *HND, float xScale, float yScale) {
-    auto &engine = Engine::Instance();
-    auto &windowManager = *dynamic_cast<GlfwWindowManager *>(&engine.GetWindowManager());
-    auto window = windowManager.GetWindow(HND);
-    auto glfwWindow = dynamic_cast<GlfwWindow *>(window.Get());
-
-    assert(glfwWindow);
+    BRK_GLFW_CALLBACK_SETUP
     glfwWindow->mPixelRatio = Vec2f(xScale, yScale);
     windowManager.DispatchEvent(window, EventWindow::Type::PixelRatioChanged);
 }
 
 void GlfwWindowManager::FramebufferSizeCallback(GLFWwindow *HND, int32 width, int32 height) {
-    auto &engine = Engine::Instance();
-    auto &windowManager = *dynamic_cast<GlfwWindowManager *>(&engine.GetWindowManager());
-    auto window = windowManager.GetWindow(HND);
-    auto glfwWindow = dynamic_cast<GlfwWindow *>(window.Get());
-
-    assert(glfwWindow);
+    BRK_GLFW_CALLBACK_SETUP
     glfwWindow->mFramebufferSize = Size2i(width, height);
     windowManager.DispatchEvent(window, EventWindow::Type::FramebufferResized);
 }
 
 void GlfwWindowManager::IconifyCallback(GLFWwindow *HND, int32 iconify) {
-    auto &engine = Engine::Instance();
-    auto &windowManager = *dynamic_cast<GlfwWindowManager *>(&engine.GetWindowManager());
-    auto window = windowManager.GetWindow(HND);
-    auto glfwWindow = dynamic_cast<GlfwWindow *>(window.Get());
-
-    assert(glfwWindow);
+    BRK_GLFW_CALLBACK_SETUP
     windowManager.DispatchEvent(window, iconify ? EventWindow::Type::Minimized : EventWindow::Type::Restored);
 }
 
 void GlfwWindowManager::MaximizeCallback(GLFWwindow *HND, int32 maximize) {
-    auto &engine = Engine::Instance();
-    auto &windowManager = *dynamic_cast<GlfwWindowManager *>(&engine.GetWindowManager());
-    auto window = windowManager.GetWindow(HND);
-    auto glfwWindow = dynamic_cast<GlfwWindow *>(window.Get());
-
-    assert(glfwWindow);
+    BRK_GLFW_CALLBACK_SETUP
     windowManager.DispatchEvent(window, maximize ? EventWindow::Type::Maximized : EventWindow::Type::Restored);
 }
 
 void GlfwWindowManager::PositionCallback(GLFWwindow *HND, int32 posX, int32 posY) {
-    auto &engine = Engine::Instance();
-    auto &windowManager = *dynamic_cast<GlfwWindowManager *>(&engine.GetWindowManager());
-    auto window = windowManager.GetWindow(HND);
-    auto glfwWindow = dynamic_cast<GlfwWindow *>(window.Get());
-
-    assert(glfwWindow);
+    BRK_GLFW_CALLBACK_SETUP
     glfwWindow->mPosition = Point2i(posX, posY);
     windowManager.DispatchEvent(window, EventWindow::Type::Moved);
 }
 
 void GlfwWindowManager::FocusCallback(GLFWwindow *HND, int32 focus) {
-    auto &engine = Engine::Instance();
-    auto &windowManager = *dynamic_cast<GlfwWindowManager *>(&engine.GetWindowManager());
-    auto window = windowManager.GetWindow(HND);
-    auto glfwWindow = dynamic_cast<GlfwWindow *>(window.Get());
-
-    assert(glfwWindow);
+    BRK_GLFW_CALLBACK_SETUP
     glfwWindow->mInFocus = focus;
     windowManager.DispatchEvent(window, focus ? EventWindow::Type::FocusReceived : EventWindow::Type::FocusLost);
 }
+
+#undef BRK_GLFW_CALLBACK_SETUP
 
 void GlfwWindowManager::ErrorCallback(int32 errorCode, const char *description) {
     BRK_ERROR("Glfw error: code=" << errorCode << " desc=\"" << description << "\"");

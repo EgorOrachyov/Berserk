@@ -193,7 +193,7 @@ function(berserk_target_copy_to target dep type path dest)
                 copy
                 ${TARGET_FILE}
                 "${CMAKE_BINARY_DIR}/${dest}"
-                COMMENT "Copy ${TARGET_FILE} into test directory")
+                COMMENT "Copy ${TARGET_FILE} into ${dest} directory")
     endif ()
 endfunction()
 

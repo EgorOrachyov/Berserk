@@ -144,7 +144,7 @@ Berserk
 │   ├── pfd - portable file dialogs for native OS dialogs access
 │   ├── stbimage - image utilities for images loading, writing and resizing
 │   ├── vma - vulkan memory allocation library
-│   ├── whereami - for executable location extracting
+│   ├── whereami - for executable location extraction
 │   └── yamc - for C++ locks implementation
 └── CMakeLists.txt - project cmake config
 ```

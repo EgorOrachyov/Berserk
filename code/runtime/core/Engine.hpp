@@ -31,6 +31,7 @@
 #include <core/Config.hpp>
 #include <core/EventDispatcher.hpp>
 #include <core/Scheduler.hpp>
+#include <core/input/Input.hpp>
 #include <platform/FileSystem.hpp>
 #include <platform/Output.hpp>
 #include <platform/WindowManager.hpp>
@@ -95,6 +96,9 @@ public:
     /** @return Engine windows manager class */
     BRK_API WindowManager &GetWindowManager();
 
+    /** @return Engine input class */
+    BRK_API Input &GetInput();
+
     /** @return Game thread id */
     BRK_API std::thread::id GetGameThreadId() const;
 
@@ -107,6 +111,7 @@ private:
     void Init();
     void Configure();
     void SetWindowManager(std::shared_ptr<WindowManager> windowManager);
+    void SetInput(std::shared_ptr<Input> input);
     void Update(float dt);
 
 private:
@@ -124,6 +129,9 @@ private:
 
     /** Engine windows manager class */
     std::shared_ptr<WindowManager> mWindowManager;
+
+    /** Engine input manager */
+    std::shared_ptr<Input> mInput;
 
     /** Main game thread id */
     std::thread::id mGameThreadID;

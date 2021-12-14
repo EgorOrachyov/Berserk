@@ -25,103 +25,49 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <core/Engine.hpp>
-#include <core/io/Logger.hpp>
-#include <core/io/LoggerListenerOutput.hpp>
+#include <core/event/EventKeyboard.hpp>
 
 BRK_NS_BEGIN
 
-Engine::~Engine() {
-    // Release in reverse order
-    mInput.reset();
-    mWindowManager.reset();
-    mEventDispatcher.reset();
-    mScheduler.reset();
-    mFileSystem.reset();
-    mOutput.reset();
-
-    // Remove global instance
-    gEngine = nullptr;
+const EventType &EventKeyboard::GetEventType() const {
+    return GetEventTypeStatic();
 }
 
-void Engine::RequestClose() {
-    mCloseRequested.store(true);
+const EventType &EventKeyboard::GetEventTypeStatic() {
+    static EventType eventType(BRK_TEXT("_brk_core_event_keyboard"));
+    return eventType;
 }
 
-bool Engine::CloseRequested() {
-    return mCloseRequested.load();
+void EventKeyboard::SetText(String text) {
+    mText = std::move(text);
 }
 
-Output &Engine::GetOutput() {
-    return *mOutput;
+void EventKeyboard::SetModifiers(InputModifiers modifiers) {
+    mModifiers = modifiers;
 }
 
-FileSystem &Engine::GetFileSystem() {
-    return *mFileSystem;
+void EventKeyboard::SetAction(InputAction action) {
+    mAction = action;
 }
 
-Scheduler &Engine::GetScheduler() {
-    return *mScheduler;
+void EventKeyboard::SetKey(InputKeyboardKey key) {
+    mKey = key;
 }
 
-EventDispatcher &Engine::GetEventDispatcher() {
-    return *mEventDispatcher;
+const String &EventKeyboard::GetText() const {
+    return mText;
 }
 
-WindowManager &Engine::GetWindowManager() {
-    return *mWindowManager;
+InputModifiers EventKeyboard::GetModifiers() const {
+    return mModifiers;
 }
 
-Input &Engine::GetInput() {
-    return *mInput;
+InputAction EventKeyboard::GetAction() const {
+    return mAction;
 }
 
-std::thread::id Engine::GetGameThreadId() const {
-    return mGameThreadID;
+InputKeyboardKey EventKeyboard::GetKey() const {
+    return mKey;
 }
-
-Engine &Engine::Instance() {
-    return *gEngine;
-}
-
-void Engine::Init() {
-    // Setup logger
-    LoggerListenerOutput listener;
-    listener.SetName("Engine");
-    listener.SetLevel(Logger::Level::Error);
-
-#ifdef BERSERK_DEBUG
-    listener.SetLevel(Logger::Level::Info);
-#endif
-
-    Logger::Instance().AddListener([=](const Logger::Entry &entry) { listener.OnEntry(entry); });
-
-    mGameThreadID = std::this_thread::get_id();
-    mOutput = std::unique_ptr<Output>(new Output());
-    mFileSystem = std::unique_ptr<FileSystem>(new FileSystem());
-    mScheduler = std::unique_ptr<Scheduler>(new Scheduler());
-    mEventDispatcher = std::unique_ptr<EventDispatcher>(new EventDispatcher());
-
-    // Provide singleton
-    gEngine = this;
-}
-
-void Engine::Configure() {
-}
-
-void Engine::SetWindowManager(std::shared_ptr<WindowManager> windowManager) {
-    mWindowManager = std::move(windowManager);
-}
-
-void Engine::SetInput(std::shared_ptr<Input> input) {
-    mInput = std::move(input);
-}
-
-void Engine::Update(float dt) {
-    mScheduler->Update(dt);
-    mEventDispatcher->Update();
-}
-
-Engine *Engine::gEngine = nullptr;
 
 BRK_NS_END

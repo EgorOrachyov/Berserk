@@ -8,7 +8,14 @@ set(BERSERK_CORE_HEADER
         core/Scheduler.hpp
         core/Typedefs.hpp
         core/event/Event.hpp
+        core/event/EventDropInput.hpp
+        core/event/EventJoystick.hpp
+        core/event/EventKeyboard.hpp
+        core/event/EventMouse.hpp
         core/event/EventWindow.hpp
+        core/input/Input.hpp
+        core/input/InputDefs.hpp
+        core/input/InputDevices.hpp
         core/io/ArgumentParser.hpp
         core/io/Logger.hpp
         core/io/LoggerListenerOutput.hpp
@@ -34,6 +41,10 @@ set(BERSERK_CORE_SRC
         core/Engine.cpp
         core/EventDispatcher.cpp
         core/Scheduler.cpp
+        core/event/EventDropInput.cpp
+        core/event/EventJoystick.cpp
+        core/event/EventKeyboard.cpp
+        core/event/EventMouse.cpp
         core/event/EventWindow.cpp
         core/io/ArgumentParser.cpp
         core/io/Logger.cpp

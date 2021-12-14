@@ -25,103 +25,58 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <core/Engine.hpp>
-#include <core/io/Logger.hpp>
-#include <core/io/LoggerListenerOutput.hpp>
+#include <core/event/EventMouse.hpp>
+#include <utility>
 
 BRK_NS_BEGIN
 
-Engine::~Engine() {
-    // Release in reverse order
-    mInput.reset();
-    mWindowManager.reset();
-    mEventDispatcher.reset();
-    mScheduler.reset();
-    mFileSystem.reset();
-    mOutput.reset();
-
-    // Remove global instance
-    gEngine = nullptr;
+const EventType &EventMouse::GetEventType() const {
+    return GetEventTypeStatic();
 }
 
-void Engine::RequestClose() {
-    mCloseRequested.store(true);
+const EventType &EventMouse::GetEventTypeStatic() {
+    static EventType eventType(BRK_TEXT("_brk_core_event_mouse"));
+    return eventType;
 }
 
-bool Engine::CloseRequested() {
-    return mCloseRequested.load();
+void EventMouse::SetPosition(Point2i position) {
+    mPosition = std::move(position);
 }
 
-Output &Engine::GetOutput() {
-    return *mOutput;
+void EventMouse::SetDelta(Size2i delta) {
+    mDelta = std::move(delta);
 }
 
-FileSystem &Engine::GetFileSystem() {
-    return *mFileSystem;
+void EventMouse::SetModifiers(InputModifiers modifiers) {
+    mModifiers = modifiers;
 }
 
-Scheduler &Engine::GetScheduler() {
-    return *mScheduler;
+void EventMouse::SetAction(InputAction action) {
+    mAction = action;
 }
 
-EventDispatcher &Engine::GetEventDispatcher() {
-    return *mEventDispatcher;
+void EventMouse::SetButton(InputMouseButton button) {
+    mMouseButton = button;
 }
 
-WindowManager &Engine::GetWindowManager() {
-    return *mWindowManager;
+Point2i EventMouse::GetPosition() const {
+    return mPosition;
 }
 
-Input &Engine::GetInput() {
-    return *mInput;
+Size2i EventMouse::GetDelta() const {
+    return mDelta;
 }
 
-std::thread::id Engine::GetGameThreadId() const {
-    return mGameThreadID;
+InputModifiers EventMouse::GetModifiers() const {
+    return mModifiers;
 }
 
-Engine &Engine::Instance() {
-    return *gEngine;
+InputAction EventMouse::GetAction() const {
+    return mAction;
 }
 
-void Engine::Init() {
-    // Setup logger
-    LoggerListenerOutput listener;
-    listener.SetName("Engine");
-    listener.SetLevel(Logger::Level::Error);
-
-#ifdef BERSERK_DEBUG
-    listener.SetLevel(Logger::Level::Info);
-#endif
-
-    Logger::Instance().AddListener([=](const Logger::Entry &entry) { listener.OnEntry(entry); });
-
-    mGameThreadID = std::this_thread::get_id();
-    mOutput = std::unique_ptr<Output>(new Output());
-    mFileSystem = std::unique_ptr<FileSystem>(new FileSystem());
-    mScheduler = std::unique_ptr<Scheduler>(new Scheduler());
-    mEventDispatcher = std::unique_ptr<EventDispatcher>(new EventDispatcher());
-
-    // Provide singleton
-    gEngine = this;
+InputMouseButton EventMouse::GetButton() const {
+    return mMouseButton;
 }
-
-void Engine::Configure() {
-}
-
-void Engine::SetWindowManager(std::shared_ptr<WindowManager> windowManager) {
-    mWindowManager = std::move(windowManager);
-}
-
-void Engine::SetInput(std::shared_ptr<Input> input) {
-    mInput = std::move(input);
-}
-
-void Engine::Update(float dt) {
-    mScheduler->Update(dt);
-    mEventDispatcher->Update();
-}
-
-Engine *Engine::gEngine = nullptr;
 
 BRK_NS_END
