@@ -61,10 +61,12 @@ enum class InputAction : uint32 {
     Release = 1,
     /** Button or key is repeated (held) */
     Repeat = 2,
-    /** Move (axis) moved */
+    /** Mouse (touch axis) moved */
     Move = 3,
     /** Keyboard unicode text input */
     Text = 4,
+    /** Device state changed (for joystick) */
+    State = 5,
     /** Unknown */
     Unknown = 0xffffffff
 };

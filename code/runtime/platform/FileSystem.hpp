@@ -52,7 +52,7 @@ BRK_NS_BEGIN
  */
 class FileSystem final {
 public:
-    /** Type of directory entry */
+    /** @brief Type of directory entry */
     enum class EntryType {
         /** Simple file */
         File,
@@ -64,7 +64,7 @@ public:
         Unknown
     };
 
-    /** Directory entry */
+    /** @brief Directory entry */
     struct Entry {
         String name;
         EntryType type;

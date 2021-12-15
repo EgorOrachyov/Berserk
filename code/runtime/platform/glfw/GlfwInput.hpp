@@ -25,42 +25,63 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <core/event/EventJoystick.hpp>
-#include <utility>
+#ifndef BERSERK_GLFWINPUT_HPP
+#define BERSERK_GLFWINPUT_HPP
+
+#include <core/Config.hpp>
+#include <core/Typedefs.hpp>
+#include <platform/Input.hpp>
+#include <platform/glfw/GlfwInputDevices.hpp>
+
+#include <GLFW/glfw3.h>
+#include <vector>
 
 BRK_NS_BEGIN
 
-const EventType &EventJoystick::GetEventType() const {
-    return GetEventTypeStatic();
-}
+/**
+ * @addtogroup platform
+ * @{
+ */
 
-const EventType &EventJoystick::GetEventTypeStatic() {
-    static EventType eventType(BRK_TEXT("_brk_core_event_joystick"));
-    return eventType;
-}
+/**
+ * @class GlfwInput
+ * @brief Glfw input manager implementation
+ */
+class GlfwInput final : public Input {
+public:
+    GlfwInput();
+    ~GlfwInput() override = default;
+    Ref<Mouse> GetMouse() override;
+    Ref<Keyboard> GetKeyboard() override;
+    Ref<Joystick> GetJoystick() override;
 
-void EventJoystick::SetJoystick(Ref<Joystick> joystick) {
-    mJoystick = std::move(joystick);
-}
+private:
+    friend class GlfwWindowManager;
+    void SubscribeWindow(GLFWwindow *window);
+    void PreUpdate();
+    void PostUpdate();
+    void CheckConnectedJoysticks();
+    Ref<GlfwJoystick> GetJoystick(int32 jid);
 
-void EventJoystick::SetAction(InputAction action) {
-    mAction = action;
-}
+private:
+    // Glfw specific
+    static void DropCallback(GLFWwindow *window, int32 count, const char **paths);
+    static void MousePositionCallback(GLFWwindow *window, double x, double y);
+    static void MouseButtonsCallback(GLFWwindow *window, int32 button, int32 action, int32 mods);
+    static void KeyboardKeysCallback(GLFWwindow *window, int32 key, int32 scancode, int32 action, int32 mods);
+    static void KeyboardTextCallback(GLFWwindow *window, unsigned int codePoint);
+    static void JoystickCallback(int32 jid, int32 state);
 
-void EventJoystick::SetButton(InputJoystickButton button) {
-    mButton = button;
-}
+private:
+    Ref<GlfwMouse> mMouse;
+    Ref<GlfwKeyboard> mKeyboard;
+    std::vector<Ref<GlfwJoystick>> mJoysticks;
+};
 
-const Ref<Joystick> &EventJoystick::GetJoystick() const {
-    return mJoystick;
-}
-
-InputAction EventJoystick::GetAction() const {
-    return mAction;
-}
-
-InputJoystickButton EventJoystick::GetButton() const {
-    return mButton;
-}
+/**
+ * @}
+ */
 
 BRK_NS_END
+
+#endif//BERSERK_GLFWINPUT_HPP

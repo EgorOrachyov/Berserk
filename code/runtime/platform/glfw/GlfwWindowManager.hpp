@@ -31,6 +31,7 @@
 #include <core/event/EventWindow.hpp>
 #include <platform/WindowManager.hpp>
 
+#include <memory>
 #include <unordered_map>
 
 #include <GLFW/glfw3.h>
@@ -72,6 +73,8 @@ private:
     static void ErrorCallback(int32 errorCode, const char *description);
 
 private:
+    /** Input manager */
+    std::shared_ptr<class GlfwInput> mInput;
     /** Primary window of application */
     Ref<Window> mPrimaryWindow;
     /** All application windows */

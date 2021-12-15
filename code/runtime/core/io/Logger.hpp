@@ -52,7 +52,7 @@ BRK_NS_BEGIN
  */
 class Logger final {
 public:
-    /** Level of accepted messages */
+    /** @brief Level of accepted messages */
     enum class Level {
         /** Useful for debugging and prototyping things */
         Info = 0,
@@ -62,7 +62,7 @@ public:
         Error = 2
     };
 
-    /** Log entry */
+    /** @brief Log entry */
     struct Entry {
         String message;
         String function;

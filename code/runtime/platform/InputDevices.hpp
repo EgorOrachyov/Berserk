@@ -54,6 +54,12 @@ public:
 
     BRK_API ~Mouse() override = default;
 
+    /** @return Mouse position */
+    const Point2f &GetPosition() const { return mPosition; }
+
+    /** @return Mouse prev-frame delta */
+    const Size2f &GetDelta() const { return mDelta; }
+
     /** @return Name of this device */
     const StringName &GetName() const { return mName; }
 
@@ -63,10 +69,10 @@ public:
     /** @return Current states of device buttons */
     const std::vector<InputAction> &GetButtonsStates() const { return mButtons; }
 
-private:
+protected:
     StringName mName;
-    Point2i mPosition{};
-    Size2i mDelta{};
+    Point2f mPosition{};
+    Size2f mDelta{};
     InputDeviceState mState;
     std::vector<InputAction> mButtons;
 };
@@ -90,7 +96,7 @@ public:
     /** @return Current states of device keys */
     const std::vector<InputAction> &GetKeysStates() const { return mKeys; }
 
-private:
+protected:
     StringName mName;
     InputDeviceState mState;
     std::vector<InputAction> mKeys;
@@ -122,7 +128,7 @@ public:
     /** @return Current states of device buttons */
     const std::vector<InputAction> &GetButtonsStates() const { return mButtons; }
 
-private:
+protected:
     StringName mName;
     StringName mGUID;
     InputDeviceState mState;

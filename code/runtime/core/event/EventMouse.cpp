@@ -39,11 +39,11 @@ const EventType &EventMouse::GetEventTypeStatic() {
     return eventType;
 }
 
-void EventMouse::SetPosition(Point2i position) {
+void EventMouse::SetPosition(Point2f position) {
     mPosition = std::move(position);
 }
 
-void EventMouse::SetDelta(Size2i delta) {
+void EventMouse::SetDelta(Size2f delta) {
     mDelta = std::move(delta);
 }
 
@@ -59,11 +59,11 @@ void EventMouse::SetButton(InputMouseButton button) {
     mMouseButton = button;
 }
 
-Point2i EventMouse::GetPosition() const {
+Point2f EventMouse::GetPosition() const {
     return mPosition;
 }
 
-Size2i EventMouse::GetDelta() const {
+Size2f EventMouse::GetDelta() const {
     return mDelta;
 }
 

@@ -63,8 +63,20 @@ public:
     /** Construct string id from utf-8 string */
     BRK_API explicit StringName(const String &str = String());
 
+    /** Copy */
+    StringName(const StringName &other);
+
+    /** Move */
+    StringName(StringName &&other) noexcept;
+
     /** Safe release id. If it is last id reference, erase it from the cache. */
     BRK_API ~StringName();
+
+    /** Copy */
+    BRK_API StringName &operator=(const StringName &other);
+
+    /** Move */
+    BRK_API StringName &operator=(StringName &&other) noexcept;
 
     /** @return True if this ids equal */
     BRK_API bool operator==(const StringName &other) const;
@@ -90,6 +102,8 @@ private:
         String mString;
         size_t mHash;
     };
+
+    void Release();
 
     /** Entry of id in the cache. Null for empty strings */
     Ref<Node> mNode;

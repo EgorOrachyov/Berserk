@@ -26,6 +26,7 @@
 /**********************************************************************************/
 
 #include <platform/Application.hpp>
+#include <platform/glfw/GlfwInput.hpp>
 #include <platform/glfw/GlfwWindowManager.hpp>
 
 #include <chrono>
@@ -45,6 +46,7 @@ int Application::Run(int argc, const char *const *argv) {
     // NOTE: use glfw, it is sufficient for know
     auto gWindowManager = std::make_shared<GlfwWindowManager>(true, true);
     gEngine->SetWindowManager(gWindowManager);
+    gEngine->SetInput(gWindowManager->mInput);
 
     // Post init call
     OnInitialize();

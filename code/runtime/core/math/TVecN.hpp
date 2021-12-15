@@ -600,7 +600,9 @@ using Vec3f = TVecN<float, 3>;
 using Vec4f = TVecN<float, 4>;
 
 using Point2i = TVecN<int32, 2>;
+using Point2f = TVecN<float, 2>;
 using Size2i = TVecN<int32, 2>;
+using Size2f = TVecN<float, 2>;
 using Size2u = TVecN<uint32, 2>;
 using Rect2i = TVecN<int32, 4>;
 using Rect2u = TVecN<uint32, 4>;

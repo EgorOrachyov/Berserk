@@ -73,6 +73,7 @@ TEST(Berserk, Output) {
 
     Output output;
 
+    output.Write(BRK_TEXT("п"));
     output.Write(BRK_TEXT("Some fancy text привет śążź Ειρήνη zß水🍌\n"));
     output.WriteWarning(BRK_TEXT("Some warn fancy text привет śążź Ειρήνη zß水🍌🍌\n"));
     output.WriteError(BRK_TEXT("Some error fancy text привет śążź Ειρήνη zß水🍌🍌🍌\n"));

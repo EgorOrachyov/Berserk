@@ -55,21 +55,21 @@ public:
     /** @copydoc Event::GetType() */
     BRK_API static const EventType &GetEventTypeStatic();
 
-    BRK_API void SetPosition(Point2i position);
-    BRK_API void SetDelta(Size2i delta);
+    BRK_API void SetPosition(Point2f position);
+    BRK_API void SetDelta(Size2f delta);
     BRK_API void SetModifiers(InputModifiers modifiers);
     BRK_API void SetAction(InputAction action);
     BRK_API void SetButton(InputMouseButton button);
 
-    BRK_API Point2i GetPosition() const;
-    BRK_API Size2i GetDelta() const;
+    BRK_API Point2f GetPosition() const;
+    BRK_API Size2f GetDelta() const;
     BRK_API InputModifiers GetModifiers() const;
     BRK_API InputAction GetAction() const;
     BRK_API InputMouseButton GetButton() const;
 
 private:
-    Point2i mPosition;
-    Size2i mDelta;
+    Point2f mPosition;
+    Size2f mDelta;
     InputModifiers mModifiers;
     InputAction mAction = InputAction::Unknown;
     InputMouseButton mMouseButton = InputMouseButton::Unknown;

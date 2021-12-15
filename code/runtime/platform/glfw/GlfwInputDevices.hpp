@@ -25,42 +25,66 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <core/event/EventJoystick.hpp>
-#include <utility>
+#ifndef BERSERK_GLFWINPUTDEVICES_HPP
+#define BERSERK_GLFWINPUTDEVICES_HPP
+
+#include <core/Config.hpp>
+#include <core/Typedefs.hpp>
+#include <platform/InputDevices.hpp>
 
 BRK_NS_BEGIN
 
-const EventType &EventJoystick::GetEventType() const {
-    return GetEventTypeStatic();
-}
+/**
+ * @addtogroup platform
+ * @{
+ */
 
-const EventType &EventJoystick::GetEventTypeStatic() {
-    static EventType eventType(BRK_TEXT("_brk_core_event_joystick"));
-    return eventType;
-}
+/**
+ * @class GlfwMouse
+ * @brief Glfw device implementation
+ */
+class GlfwMouse final : public Mouse {
+public:
+    GlfwMouse();
+    ~GlfwMouse() override = default;
 
-void EventJoystick::SetJoystick(Ref<Joystick> joystick) {
-    mJoystick = std::move(joystick);
-}
+    void UpdatePosition(const Point2f &pos);
+    void UpdateButton(InputMouseButton button, InputAction action);
+};
 
-void EventJoystick::SetAction(InputAction action) {
-    mAction = action;
-}
+/**
+ * @class GlfwKeyboard
+ * @brief Glfw device implementation
+ */
+class GlfwKeyboard final : public Keyboard {
+public:
+    GlfwKeyboard();
+    ~GlfwKeyboard() override = default;
 
-void EventJoystick::SetButton(InputJoystickButton button) {
-    mButton = button;
-}
+    void UpdateKey(InputKeyboardKey key, InputAction action);
+};
 
-const Ref<Joystick> &EventJoystick::GetJoystick() const {
-    return mJoystick;
-}
+/**
+ * @class GlfwJoystick
+ * @brief Glfw device implementation
+ */
+class GlfwJoystick final : public Joystick {
+public:
+    explicit GlfwJoystick(int32 HND);
+    ~GlfwJoystick() override = default;
 
-InputAction EventJoystick::GetAction() const {
-    return mAction;
-}
+    void Update();
+    void UpdateState(InputDeviceState state);
+    int32 GetHND() const { return mHND; }
 
-InputJoystickButton EventJoystick::GetButton() const {
-    return mButton;
-}
+private:
+    int32 mHND = -1;
+};
+
+/**
+ * @}
+ */
 
 BRK_NS_END
+
+#endif//BERSERK_GLFWINPUTDEVICES_HPP

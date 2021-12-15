@@ -27,6 +27,7 @@
 
 #include <core/Engine.hpp>
 #include <core/io/Logger.hpp>
+#include <platform/glfw/GlfwInput.hpp>
 #include <platform/glfw/GlfwWindow.hpp>
 #include <platform/glfw/GlfwWindowManager.hpp>
 
@@ -71,6 +72,9 @@ GlfwWindowManager::GlfwWindowManager(bool vsync, bool clientApi) {
         // For Vulkan based renderer
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     }
+
+    // Init input
+    mInput = std::make_shared<GlfwInput>();
 }
 
 GlfwWindowManager::~GlfwWindowManager() {
@@ -111,6 +115,10 @@ Ref<Window> GlfwWindowManager::CreateWindow(const StringName &name, const Size2i
     if (mPrimaryWindow.IsNull())
         mPrimaryWindow = window.As<Window>();
 
+    // Subscribe window for input
+    if (mInput)
+        mInput->SubscribeWindow(window->mHND);
+
     if (mClientApi) {
         // First of all, make context current to enable following GL code in renderer
         glfwMakeContextCurrent(window->mHND);
@@ -129,7 +137,14 @@ Ref<Window> GlfwWindowManager::GetPrimaryWindow() {
 }
 
 void GlfwWindowManager::PollEvents() {
+    // Required state reset
+    mInput->PreUpdate();
+
+    // Actual update, trigger of glfw-specific callbacks
     glfwPollEvents();
+
+    // Post update (for joystick for example)
+    mInput->PostUpdate();
 }
 
 void GlfwWindowManager::DispatchEvent(const Ref<Window> &window, EventWindow::Type type) {

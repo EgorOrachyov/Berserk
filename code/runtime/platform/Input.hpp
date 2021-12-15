@@ -45,18 +45,18 @@ BRK_NS_BEGIN
  * @class Input
  * @brief Engine input manager
  */
-class BRK_API Input {
+class Input {
 public:
-    virtual ~Input() = default;
+    BRK_API virtual ~Input() = default;
 
     /** @return Mouse device if presented; null if no device */
-    virtual Ref<Mouse> GetMouse() = 0;
+    BRK_API virtual Ref<Mouse> GetMouse() = 0;
 
     /** @return Keyboard device if presented; null if no device */
-    virtual Ref<Keyboard> GetKeyboard() = 0;
+    BRK_API virtual Ref<Keyboard> GetKeyboard() = 0;
 
     /** @return First joystick device if presented; null if no device */
-    virtual Ref<Joystick> GetJoystick() = 0;
+    BRK_API virtual Ref<Joystick> GetJoystick() = 0;
 };
 
 /**

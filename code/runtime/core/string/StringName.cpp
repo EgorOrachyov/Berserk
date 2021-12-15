@@ -46,11 +46,38 @@ StringName::StringName(const String &str) {
     }
 }
 
+StringName::StringName(const StringName &other) {
+    Release();
+    mNode = other.mNode;
+}
+
+StringName::StringName(StringName &&other) noexcept {
+    Release();
+    mNode = other.mNode;
+    other.mNode.Reset();
+}
+
 StringName::~StringName() {
-    if (mNode.IsNotNull() && mNode->GetRefs() <= 2) {
-        std::lock_guard<std::mutex> guard(GetAccessMutex());
-        GetCachedNames().erase(mNode->GetStr());
+    Release();
+}
+
+StringName &StringName::operator=(const StringName &other) {
+    if (this != &other) {
+        Release();
+        mNode = other.mNode;
     }
+
+    return *this;
+}
+
+StringName &StringName::operator=(StringName &&other) noexcept {
+    if (this != &other) {
+        Release();
+        mNode = other.mNode;
+        other.mNode.Reset();
+    }
+
+    return *this;
 }
 
 bool StringName::operator==(const StringName &other) const {
@@ -68,6 +95,14 @@ const String &StringName::GetStr() const {
 
 size_t StringName::GetHash() const {
     return mNode.IsNotNull() ? mNode->GetHash() : std::hash<String>{}(GetStr());
+}
+
+void StringName::Release() {
+    if (mNode.IsNotNull() && mNode->GetRefs() <= 2) {
+        std::lock_guard<std::mutex> guard(GetAccessMutex());
+        GetCachedNames().erase(mNode->GetStr());
+        mNode.Reset();
+    }
 }
 
 std::mutex &StringName::GetAccessMutex() {

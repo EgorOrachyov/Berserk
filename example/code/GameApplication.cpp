@@ -45,15 +45,50 @@ void GameApplication::OnInitialize() {
         return false;
     });
 
+    // Capture mouse events
+    dispatcher.Subscribe(berserk::EventMouse::GetEventTypeStatic(), [](const berserk::Event &_event) {
+        auto event = dynamic_cast<const berserk::EventMouse *>(&_event);
+        BRK_INFO("Mouse event:"
+                 << " pos=" << event->GetPosition()
+                 << " delta=" << event->GetDelta()
+                 << " action=" << static_cast<int>(event->GetAction())
+                 << " button=" << static_cast<int>(event->GetButton()));
+        return false;
+    });
+
+    // Capture keyboard events
+    dispatcher.Subscribe(berserk::EventKeyboard::GetEventTypeStatic(), [](const berserk::Event &_event) {
+        auto event = dynamic_cast<const berserk::EventKeyboard *>(&_event);
+        BRK_INFO("Keyboard event:"
+                 << " key=" << static_cast<int>(event->GetKey())
+                 << " action=" << static_cast<int>(event->GetAction())
+                 << " text=" << event->GetText());
+        return false;
+    });
+
+    // Capture joystick events
+    dispatcher.Subscribe(berserk::EventJoystick::GetEventTypeStatic(), [](const berserk::Event &_event) {
+        auto event = dynamic_cast<const berserk::EventJoystick *>(&_event);
+        auto &joystick = event->GetJoystick();
+
+        // State event
+        if (event->GetAction() != berserk::InputAction::Move) {
+            BRK_INFO("Joystick event:"
+                     << " state=" << (joystick->GetState() == berserk::InputDeviceState::Connected ? "+" : "-")
+                     << " button=" << static_cast<int>(event->GetButton())
+                     << " action=" << static_cast<int>(event->GetAction()));
+        }
+
+        return false;
+    });
+
     // Finish application when close requested
     dispatcher.Subscribe(berserk::EventWindow::GetEventTypeStatic(), [](const berserk::Event &_event) {
         auto event = dynamic_cast<const berserk::EventWindow *>(&_event);
-
         if (event->GetType() == berserk::EventWindow::Type::CloseRequested) {
             BRK_INFO("Request engine close");
             berserk::Engine::Instance().RequestClose();
         }
-
         return false;
     });
 }

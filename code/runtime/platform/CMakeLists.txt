@@ -15,6 +15,11 @@ set(BERSERK_PLATFORM_SRC
         )
 
 set(BERSERK_PLATFORM_GLFW_SRC
+        platform/glfw/GlfwInput.cpp
+        platform/glfw/GlfwInput.hpp
+        platform/glfw/GlfwInputDefs.hpp
+        platform/glfw/GlfwInputDevices.cpp
+        platform/glfw/GlfwInputDevices.hpp
         platform/glfw/GlfwWindow.cpp
         platform/glfw/GlfwWindow.hpp
         platform/glfw/GlfwWindowManager.cpp

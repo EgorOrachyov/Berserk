@@ -56,22 +56,16 @@ public:
     BRK_API static const EventType &GetEventTypeStatic();
 
     BRK_API void SetJoystick(Ref<Joystick> joystick);
-    BRK_API void SetModifiers(InputModifiers modifiers);
     BRK_API void SetAction(InputAction action);
-    BRK_API void SetAxis(InputJoystickAxis axis);
     BRK_API void SetButton(InputJoystickButton button);
 
     BRK_API const Ref<Joystick> &GetJoystick() const;
-    BRK_API InputModifiers GetModifiers() const;
     BRK_API InputAction GetAction() const;
-    BRK_API InputJoystickAxis GetAxis() const;
     BRK_API InputJoystickButton GetButton() const;
 
 private:
     Ref<Joystick> mJoystick;
-    InputModifiers mModifiers;
     InputAction mAction = InputAction::Unknown;
-    InputJoystickAxis mAxis = InputJoystickAxis::Unknown;
     InputJoystickButton mButton = InputJoystickButton::Unknown;
 };
 
