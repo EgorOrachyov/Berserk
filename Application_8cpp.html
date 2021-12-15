@@ -70,6 +70,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;<a class="el" href="Application_8hpp_source.html">platform/Application.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="GlfwInput_8hpp_source.html">platform/glfw/GlfwInput.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="GlfwWindowManager_8hpp_source.html">platform/glfw/GlfwWindowManager.hpp</a>&gt;</code><br />
 <code>#include &lt;chrono&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -77,53 +78,55 @@ Include dependency graph for Application.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="Application_8cpp__incl.png" border="0" usemap="#acode_2runtime_2platform_2Application_8cpp" alt=""/></div>
 <map name="acode_2runtime_2platform_2Application_8cpp" id="acode_2runtime_2platform_2Application_8cpp">
-<area shape="rect" title=" " alt="" coords="2045,5,2193,47"/>
-<area shape="rect" href="Application_8hpp.html" title=" " alt="" coords="605,95,766,121"/>
-<area shape="rect" title=" " alt="" coords="2088,259,2149,285"/>
-<area shape="rect" href="GlfwWindowManager_8hpp.html" title=" " alt="" coords="2321,169,2495,211"/>
-<area shape="rect" href="Config_8hpp.html" title=" " alt="" coords="2194,632,2305,659"/>
-<area shape="rect" href="Engine_8hpp.html" title=" " alt="" coords="1195,177,1309,203"/>
-<area shape="rect" href="Typedefs_8hpp.html" title=" " alt="" coords="1392,557,1520,584"/>
-<area shape="rect" title=" " alt="" coords="327,632,395,659"/>
-<area shape="rect" href="ArgumentParser_8hpp.html" title=" " alt="" coords="297,408,479,435"/>
-<area shape="rect" href="EventDispatcher_8hpp.html" title=" " alt="" coords="533,259,704,285"/>
-<area shape="rect" title=" " alt="" coords="1029,632,1091,659"/>
-<area shape="rect" href="Scheduler_8hpp.html" title=" " alt="" coords="656,408,789,435"/>
-<area shape="rect" href="FileSystem_8hpp.html" title=" " alt="" coords="1056,333,1219,360"/>
-<area shape="rect" href="Input_8hpp.html" title=" " alt="" coords="1329,259,1455,285"/>
-<area shape="rect" href="Output_8hpp.html" title=" " alt="" coords="1811,408,1947,435"/>
-<area shape="rect" href="WindowManager_8hpp.html" title=" " alt="" coords="2311,259,2505,285"/>
-<area shape="rect" title=" " alt="" coords="1480,259,1539,285"/>
-<area shape="rect" href="Event_8hpp.html" title=" " alt="" coords="2349,333,2493,360"/>
-<area shape="rect" title=" " alt="" coords="811,483,922,509"/>
-<area shape="rect" title=" " alt="" coords="606,483,685,509"/>
-<area shape="rect" title=" " alt="" coords="523,483,581,509"/>
-<area shape="rect" title=" " alt="" coords="1419,632,1493,659"/>
-<area shape="rect" href="StringName_8hpp.html" title=" " alt="" coords="2326,408,2506,435"/>
-<area shape="rect" href="RefCnt_8hpp.html" title=" " alt="" coords="2105,557,2281,584"/>
-<area shape="rect" href="String_8hpp.html" title=" " alt="" coords="1798,483,1943,509"/>
-<area shape="rect" href="Ref_8hpp.html" title=" " alt="" coords="2070,483,2226,509"/>
-<area shape="rect" title=" " alt="" coords="1067,483,1125,509"/>
-<area shape="rect" title=" " alt="" coords="2581,483,2651,509"/>
-<area shape="rect" title=" " alt="" coords="2403,483,2455,509"/>
-<area shape="rect" title=" " alt="" coords="1889,557,1943,584"/>
-<area shape="rect" title=" " alt="" coords="2105,632,2170,659"/>
-<area shape="rect" href="Data_8hpp.html" title=" " alt="" coords="1201,408,1303,435"/>
-<area shape="rect" title=" " alt="" coords="966,408,1023,435"/>
-<area shape="rect" href="InputDefs_8hpp.html" title=" " alt="" coords="1430,408,1583,435"/>
-<area shape="rect" href="InputDevices_8hpp.html" title=" " alt="" coords="1552,333,1725,360"/>
-<area shape="rect" title=" " alt="" coords="1465,483,1519,509"/>
-<area shape="rect" href="TVecN_8hpp.html" title=" " alt="" coords="2979,408,3128,435"/>
-<area shape="rect" href="Crc32_8hpp.html" title=" " alt="" coords="2979,483,3088,509"/>
-<area shape="rect" href="Memory_8hpp.html" title=" " alt="" coords="3113,483,3234,509"/>
-<area shape="rect" href="MathUtils_8hpp.html" title=" " alt="" coords="3258,483,3422,509"/>
-<area shape="rect" title=" " alt="" coords="3497,483,3593,509"/>
-<area shape="rect" title=" " alt="" coords="3089,557,3149,584"/>
-<area shape="rect" title=" " alt="" coords="3173,557,3235,584"/>
-<area shape="rect" title=" " alt="" coords="3311,557,3369,584"/>
-<area shape="rect" href="Window_8hpp.html" title=" " alt="" coords="2633,333,2775,360"/>
-<area shape="rect" href="EventWindow_8hpp.html" title=" " alt="" coords="2529,259,2719,285"/>
-<area shape="rect" title=" " alt="" coords="2743,259,2849,285"/>
+<area shape="rect" title=" " alt="" coords="1239,5,1387,47"/>
+<area shape="rect" href="Application_8hpp.html" title=" " alt="" coords="1067,95,1229,121"/>
+<area shape="rect" title=" " alt="" coords="1221,259,1283,285"/>
+<area shape="rect" href="GlfwInput_8hpp.html" title=" " alt="" coords="1721,177,1903,203"/>
+<area shape="rect" href="GlfwWindowManager_8hpp.html" title=" " alt="" coords="1446,169,1621,211"/>
+<area shape="rect" href="Config_8hpp.html" title=" " alt="" coords="2790,632,2901,659"/>
+<area shape="rect" href="Engine_8hpp.html" title=" " alt="" coords="1021,177,1136,203"/>
+<area shape="rect" href="Typedefs_8hpp.html" title=" " alt="" coords="1720,557,1848,584"/>
+<area shape="rect" title=" " alt="" coords="643,632,711,659"/>
+<area shape="rect" href="ArgumentParser_8hpp.html" title=" " alt="" coords="1171,408,1354,435"/>
+<area shape="rect" href="EventDispatcher_8hpp.html" title=" " alt="" coords="792,259,963,285"/>
+<area shape="rect" title=" " alt="" coords="1184,632,1245,659"/>
+<area shape="rect" href="Scheduler_8hpp.html" title=" " alt="" coords="347,408,480,435"/>
+<area shape="rect" href="FileSystem_8hpp.html" title=" " alt="" coords="732,333,895,360"/>
+<area shape="rect" href="Input_8hpp.html" title=" " alt="" coords="1749,259,1875,285"/>
+<area shape="rect" href="Output_8hpp.html" title=" " alt="" coords="2293,408,2429,435"/>
+<area shape="rect" href="WindowManager_8hpp.html" title=" " alt="" coords="1531,259,1725,285"/>
+<area shape="rect" title=" " alt="" coords="1037,259,1096,285"/>
+<area shape="rect" href="Event_8hpp.html" title=" " alt="" coords="1835,333,1979,360"/>
+<area shape="rect" title=" " alt="" coords="1053,483,1163,509"/>
+<area shape="rect" title=" " alt="" coords="425,483,503,509"/>
+<area shape="rect" title=" " alt="" coords="917,483,976,509"/>
+<area shape="rect" title=" " alt="" coords="1747,632,1821,659"/>
+<area shape="rect" href="StringName_8hpp.html" title=" " alt="" coords="1987,408,2167,435"/>
+<area shape="rect" href="RefCnt_8hpp.html" title=" " alt="" coords="1924,557,2100,584"/>
+<area shape="rect" href="String_8hpp.html" title=" " alt="" coords="2126,483,2271,509"/>
+<area shape="rect" href="Ref_8hpp.html" title=" " alt="" coords="1565,483,1721,509"/>
+<area shape="rect" title=" " alt="" coords="527,483,585,509"/>
+<area shape="rect" title=" " alt="" coords="2883,483,2952,509"/>
+<area shape="rect" title=" " alt="" coords="2050,483,2102,509"/>
+<area shape="rect" title=" " alt="" coords="2171,557,2226,584"/>
+<area shape="rect" title=" " alt="" coords="1979,632,2045,659"/>
+<area shape="rect" href="Data_8hpp.html" title=" " alt="" coords="555,408,658,435"/>
+<area shape="rect" title=" " alt="" coords="785,408,842,435"/>
+<area shape="rect" href="InputDefs_8hpp.html" title=" " alt="" coords="2681,408,2834,435"/>
+<area shape="rect" href="InputDevices_8hpp.html" title=" " alt="" coords="2151,333,2324,360"/>
+<area shape="rect" title=" " alt="" coords="2702,483,2757,509"/>
+<area shape="rect" href="TVecN_8hpp.html" title=" " alt="" coords="3093,408,3243,435"/>
+<area shape="rect" href="Crc32_8hpp.html" title=" " alt="" coords="3128,483,3237,509"/>
+<area shape="rect" href="Memory_8hpp.html" title=" " alt="" coords="3433,483,3554,509"/>
+<area shape="rect" href="MathUtils_8hpp.html" title=" " alt="" coords="3578,483,3742,509"/>
+<area shape="rect" title=" " alt="" coords="3261,483,3357,509"/>
+<area shape="rect" title=" " alt="" coords="3463,557,3523,584"/>
+<area shape="rect" title=" " alt="" coords="3548,557,3609,584"/>
+<area shape="rect" title=" " alt="" coords="3684,557,3743,584"/>
+<area shape="rect" href="Window_8hpp.html" title=" " alt="" coords="2349,333,2491,360"/>
+<area shape="rect" href="GlfwInputDevices_8hpp.html" title=" " alt="" coords="2295,259,2523,285"/>
+<area shape="rect" title=" " alt="" coords="2166,259,2271,285"/>
+<area shape="rect" href="EventWindow_8hpp.html" title=" " alt="" coords="1899,259,2090,285"/>
 </map>
 </div>
 </div></div><!-- contents -->

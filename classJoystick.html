@@ -64,6 +64,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classJoystick-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Joystick Class Reference<div class="ingroups"><a class="el" href="group__platform.html">Platform</a></div></div>  </div>
@@ -79,8 +80,9 @@ Inheritance diagram for Joystick:</div>
 <div class="dyncontent">
 <div class="center"><img src="classJoystick__inherit__graph.png" border="0" usemap="#aJoystick_inherit__map" alt="Inheritance graph"/></div>
 <map name="aJoystick_inherit__map" id="aJoystick_inherit__map">
-<area shape="rect" title="Joystick (gamepad) device state." alt="" coords="5,80,76,107"/>
-<area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="9,5,72,32"/>
+<area shape="rect" title="Joystick (gamepad) device state." alt="" coords="19,80,89,107"/>
+<area shape="rect" href="classGlfwJoystick.html" title="Glfw device implementation." alt="" coords="5,155,103,181"/>
+<area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="23,5,85,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -88,8 +90,10 @@ Collaboration diagram for Joystick:</div>
 <div class="dyncontent">
 <div class="center"><img src="classJoystick__coll__graph.png" border="0" usemap="#aJoystick_coll__map" alt="Collaboration graph"/></div>
 <map name="aJoystick_coll__map" id="aJoystick_coll__map">
-<area shape="rect" title="Joystick (gamepad) device state." alt="" coords="5,80,76,107"/>
-<area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="9,5,72,32"/>
+<area shape="rect" title="Joystick (gamepad) device state." alt="" coords="103,109,173,136"/>
+<area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="5,5,68,32"/>
+<area shape="rect" href="classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="93,5,183,32"/>
+<area shape="rect" href="classInputDeviceState.html" title="State of the input device (used primary for joysticks)" alt="" coords="207,5,330,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -125,6 +129,19 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:aae666a66ed15ec84b431c026b89d0a15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a517c9d41cbd4841d2ba0bd9deebb2688"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJoystick.html#a517c9d41cbd4841d2ba0bd9deebb2688">MAX_AXES</a> = 10</td></tr>
 <tr class="separator:a517c9d41cbd4841d2ba0bd9deebb2688"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a60fe5de0bf059b1ad93f9aa87c76353f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStringName.html">StringName</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJoystick.html#a60fe5de0bf059b1ad93f9aa87c76353f">mName</a></td></tr>
+<tr class="separator:a60fe5de0bf059b1ad93f9aa87c76353f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a360444a28e5a7fe58d8af5141e6b76f0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStringName.html">StringName</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJoystick.html#a360444a28e5a7fe58d8af5141e6b76f0">mGUID</a></td></tr>
+<tr class="separator:a360444a28e5a7fe58d8af5141e6b76f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53b242a38746618b3bdb63886f5ff706"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInputDeviceState.html">InputDeviceState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJoystick.html#a53b242a38746618b3bdb63886f5ff706">mState</a></td></tr>
+<tr class="separator:a53b242a38746618b3bdb63886f5ff706"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee1e62a17d977e28e418ba42677fe739"><td class="memItemLeft" align="right" valign="top">std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJoystick.html#aee1e62a17d977e28e418ba42677fe739">mAxes</a></td></tr>
+<tr class="separator:aee1e62a17d977e28e418ba42677fe739"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a25e671958a652b154d129360289d84"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classInputAction.html">InputAction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJoystick.html#a6a25e671958a652b154d129360289d84">mButtons</a></td></tr>
+<tr class="separator:a6a25e671958a652b154d129360289d84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classJoystick.html" title="Joystick (gamepad) device state.">Joystick</a> (gamepad) device state. </p>
@@ -324,6 +341,116 @@ Static Public Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aee1e62a17d977e28e418ba42677fe739"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee1e62a17d977e28e418ba42677fe739">&#9670;&nbsp;</a></span>mAxes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;float&gt; Joystick::mAxes</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6a25e671958a652b154d129360289d84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a25e671958a652b154d129360289d84">&#9670;&nbsp;</a></span>mButtons</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classInputAction.html">InputAction</a>&gt; Joystick::mButtons</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a360444a28e5a7fe58d8af5141e6b76f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a360444a28e5a7fe58d8af5141e6b76f0">&#9670;&nbsp;</a></span>mGUID</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classStringName.html">StringName</a> Joystick::mGUID</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a60fe5de0bf059b1ad93f9aa87c76353f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60fe5de0bf059b1ad93f9aa87c76353f">&#9670;&nbsp;</a></span>mName</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classStringName.html">StringName</a> Joystick::mName</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a53b242a38746618b3bdb63886f5ff706"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53b242a38746618b3bdb63886f5ff706">&#9670;&nbsp;</a></span>mState</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classInputDeviceState.html">InputDeviceState</a> Joystick::mState</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

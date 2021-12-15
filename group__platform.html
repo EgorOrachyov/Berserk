@@ -81,6 +81,21 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileSystem.html">FileSystem</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Target platform file system access and file utils.  <a href="classFileSystem.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlfwInput.html">GlfwInput</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Glfw input manager implementation.  <a href="classGlfwInput.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlfwInputDefs.html">GlfwInputDefs</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Glfw input defines.  <a href="classGlfwInputDefs.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlfwMouse.html">GlfwMouse</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Glfw device implementation.  <a href="classGlfwMouse.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlfwKeyboard.html">GlfwKeyboard</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Glfw device implementation.  <a href="classGlfwKeyboard.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlfwJoystick.html">GlfwJoystick</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Glfw device implementation.  <a href="classGlfwJoystick.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlfwWindow.html">GlfwWindow</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Glfw window implementation.  <a href="classGlfwWindow.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,6 +164,7 @@ Enumerations</h2></td></tr>
 , <a class="el" href="group__platform.html#gga11a34592db80df3b86d2a67a62d62841a6bc362dbf494c61ea117fe3c71ca48a5">Move</a> = 3
 , <br />
 &#160;&#160;<a class="el" href="group__platform.html#gga11a34592db80df3b86d2a67a62d62841a9dffbf69ffba8bc38bc4e01abf4b1675">Text</a> = 4
+, <a class="el" href="group__platform.html#gga11a34592db80df3b86d2a67a62d62841a46a2a41cc6e552044816a2d04634545d">State</a> = 5
 , <a class="el" href="group__platform.html#gga11a34592db80df3b86d2a67a62d62841a88183b946cc5f0e8c96b2e66e1c74a7e">Unknown</a> = 0xffffffff
 <br />
  }</td></tr>
@@ -366,9 +382,11 @@ Enumerations</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="gga11a34592db80df3b86d2a67a62d62841a7020426cfb0a204051be4b3053d2acc8"></a>Repeat&#160;</td><td class="fielddoc"><p>Button or key is repeated (held) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga11a34592db80df3b86d2a67a62d62841a6bc362dbf494c61ea117fe3c71ca48a5"></a>Move&#160;</td><td class="fielddoc"><p>Move (axis) moved </p>
+<tr><td class="fieldname"><a id="gga11a34592db80df3b86d2a67a62d62841a6bc362dbf494c61ea117fe3c71ca48a5"></a>Move&#160;</td><td class="fielddoc"><p><a class="el" href="classMouse.html" title="Mouse device state.">Mouse</a> (touch axis) moved </p>
 </td></tr>
 <tr><td class="fieldname"><a id="gga11a34592db80df3b86d2a67a62d62841a9dffbf69ffba8bc38bc4e01abf4b1675"></a>Text&#160;</td><td class="fielddoc"><p><a class="el" href="classKeyboard.html" title="Keyboard device state.">Keyboard</a> unicode text input </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga11a34592db80df3b86d2a67a62d62841a46a2a41cc6e552044816a2d04634545d"></a>State&#160;</td><td class="fielddoc"><p>Device state changed (for joystick) </p>
 </td></tr>
 <tr><td class="fieldname"><a id="gga11a34592db80df3b86d2a67a62d62841a88183b946cc5f0e8c96b2e66e1c74a7e"></a>Unknown&#160;</td><td class="fielddoc"><p>Unknown </p>
 </td></tr>

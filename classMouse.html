@@ -64,6 +64,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classMouse-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Mouse Class Reference<div class="ingroups"><a class="el" href="group__platform.html">Platform</a></div></div>  </div>
@@ -79,8 +80,9 @@ Inheritance diagram for Mouse:</div>
 <div class="dyncontent">
 <div class="center"><img src="classMouse__inherit__graph.png" border="0" usemap="#aMouse_inherit__map" alt="Inheritance graph"/></div>
 <map name="aMouse_inherit__map" id="aMouse_inherit__map">
-<area shape="rect" title="Mouse device state." alt="" coords="6,80,67,107"/>
-<area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="5,5,68,32"/>
+<area shape="rect" title="Mouse device state." alt="" coords="19,80,80,107"/>
+<area shape="rect" href="classGlfwMouse.html" title="Glfw device implementation." alt="" coords="5,155,93,181"/>
+<area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="18,5,81,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -88,8 +90,11 @@ Collaboration diagram for Mouse:</div>
 <div class="dyncontent">
 <div class="center"><img src="classMouse__coll__graph.png" border="0" usemap="#aMouse_coll__map" alt="Collaboration graph"/></div>
 <map name="aMouse_coll__map" id="aMouse_coll__map">
-<area shape="rect" title="Mouse device state." alt="" coords="6,80,67,107"/>
+<area shape="rect" title="Mouse device state." alt="" coords="173,109,234,136"/>
 <area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="5,5,68,32"/>
+<area shape="rect" href="classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="93,5,183,32"/>
+<area shape="rect" href="classInputDeviceState.html" title="State of the input device (used primary for joysticks)" alt="" coords="207,5,330,32"/>
+<area shape="rect" href="classTVecN.html" title=" " alt="" coords="354,5,477,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -97,6 +102,10 @@ Collaboration diagram for Mouse:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a4dbb8c2ef97bf2478e3e740a901c94b0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMouse.html#a4dbb8c2ef97bf2478e3e740a901c94b0">~Mouse</a> () override=default</td></tr>
 <tr class="separator:a4dbb8c2ef97bf2478e3e740a901c94b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7011b3865d658d0274fde246bdb42ca7"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group__core.html#ga4937813326ab6fef744199ce518fa714">Point2f</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMouse.html#a7011b3865d658d0274fde246bdb42ca7">GetPosition</a> () const</td></tr>
+<tr class="separator:a7011b3865d658d0274fde246bdb42ca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f7e66256c20200576ded65e9eb9ca33"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group__core.html#gabafb7224601756f5f33606241b3ae93a">Size2f</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMouse.html#a2f7e66256c20200576ded65e9eb9ca33">GetDelta</a> () const</td></tr>
+<tr class="separator:a2f7e66256c20200576ded65e9eb9ca33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6283f3a1fa2402bec14706625f2eb34f"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classStringName.html">StringName</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMouse.html#a6283f3a1fa2402bec14706625f2eb34f">GetName</a> () const</td></tr>
 <tr class="separator:a6283f3a1fa2402bec14706625f2eb34f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace6b5673c29755a14bf9897de23f85cf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInputDeviceState.html">InputDeviceState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMouse.html#ace6b5673c29755a14bf9897de23f85cf">GetState</a> () const</td></tr>
@@ -119,6 +128,19 @@ Public Member Functions</h2></td></tr>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a87483dce5bf521b96750c1ab1101eaa7"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMouse.html#a87483dce5bf521b96750c1ab1101eaa7">MAX_BUTTONS</a> = 2</td></tr>
 <tr class="separator:a87483dce5bf521b96750c1ab1101eaa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a5dd03a9e0b94a2f957a40e6d6b840b23"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStringName.html">StringName</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMouse.html#a5dd03a9e0b94a2f957a40e6d6b840b23">mName</a></td></tr>
+<tr class="separator:a5dd03a9e0b94a2f957a40e6d6b840b23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75d161a8b696313e5dc11349c22fd18d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__core.html#ga4937813326ab6fef744199ce518fa714">Point2f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMouse.html#a75d161a8b696313e5dc11349c22fd18d">mPosition</a> {}</td></tr>
+<tr class="separator:a75d161a8b696313e5dc11349c22fd18d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae5d2b40e816ea2222e4b5d36b6c75f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__core.html#gabafb7224601756f5f33606241b3ae93a">Size2f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMouse.html#aae5d2b40e816ea2222e4b5d36b6c75f7">mDelta</a> {}</td></tr>
+<tr class="separator:aae5d2b40e816ea2222e4b5d36b6c75f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c42666d177ccd485d7b963963f638c0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInputDeviceState.html">InputDeviceState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMouse.html#a5c42666d177ccd485d7b963963f638c0">mState</a></td></tr>
+<tr class="separator:a5c42666d177ccd485d7b963963f638c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62de3c9d204e24ec34193178fe604b36"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classInputAction.html">InputAction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMouse.html#a62de3c9d204e24ec34193178fe604b36">mButtons</a></td></tr>
+<tr class="separator:a62de3c9d204e24ec34193178fe604b36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classMouse.html" title="Mouse device state.">Mouse</a> device state. </p>
@@ -175,6 +197,32 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a2f7e66256c20200576ded65e9eb9ca33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f7e66256c20200576ded65e9eb9ca33">&#9670;&nbsp;</a></span>GetDelta()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="group__core.html#gabafb7224601756f5f33606241b3ae93a">Size2f</a>&amp; Mouse::GetDelta </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classMouse.html" title="Mouse device state.">Mouse</a> prev-frame delta </dd></dl>
+
+</div>
+</div>
 <a id="a6283f3a1fa2402bec14706625f2eb34f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6283f3a1fa2402bec14706625f2eb34f">&#9670;&nbsp;</a></span>GetName()</h2>
 
@@ -198,6 +246,32 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>Name of this device </dd></dl>
+
+</div>
+</div>
+<a id="a7011b3865d658d0274fde246bdb42ca7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7011b3865d658d0274fde246bdb42ca7">&#9670;&nbsp;</a></span>GetPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="group__core.html#ga4937813326ab6fef744199ce518fa714">Point2f</a>&amp; Mouse::GetPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classMouse.html" title="Mouse device state.">Mouse</a> position </dd></dl>
 
 </div>
 </div>
@@ -244,6 +318,116 @@ Static Public Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a62de3c9d204e24ec34193178fe604b36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62de3c9d204e24ec34193178fe604b36">&#9670;&nbsp;</a></span>mButtons</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classInputAction.html">InputAction</a>&gt; Mouse::mButtons</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aae5d2b40e816ea2222e4b5d36b6c75f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae5d2b40e816ea2222e4b5d36b6c75f7">&#9670;&nbsp;</a></span>mDelta</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__core.html#gabafb7224601756f5f33606241b3ae93a">Size2f</a> Mouse::mDelta {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5dd03a9e0b94a2f957a40e6d6b840b23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5dd03a9e0b94a2f957a40e6d6b840b23">&#9670;&nbsp;</a></span>mName</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classStringName.html">StringName</a> Mouse::mName</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a75d161a8b696313e5dc11349c22fd18d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75d161a8b696313e5dc11349c22fd18d">&#9670;&nbsp;</a></span>mPosition</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__core.html#ga4937813326ab6fef744199ce518fa714">Point2f</a> Mouse::mPosition {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5c42666d177ccd485d7b963963f638c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c42666d177ccd485d7b963963f638c0">&#9670;&nbsp;</a></span>mState</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classInputDeviceState.html">InputDeviceState</a> Mouse::mState</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

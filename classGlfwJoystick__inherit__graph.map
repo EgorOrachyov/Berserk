@@ -1,0 +1,5 @@
+<map id="GlfwJoystick" name="GlfwJoystick">
+<area shape="rect" id="node1" title="Glfw device implementation." alt="" coords="5,155,103,181"/>
+<area shape="rect" id="node2" href="$classJoystick.html" title="Joystick (gamepad) device state." alt="" coords="19,80,89,107"/>
+<area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="23,5,85,32"/>
+</map>

@@ -1,4 +1,6 @@
 <map id="Joystick" name="Joystick">
-<area shape="rect" id="node1" title="Joystick (gamepad) device state." alt="" coords="5,80,76,107"/>
-<area shape="rect" id="node2" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="9,5,72,32"/>
+<area shape="rect" id="node1" title="Joystick (gamepad) device state." alt="" coords="103,109,173,136"/>
+<area shape="rect" id="node2" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="5,5,68,32"/>
+<area shape="rect" id="node3" href="$classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="93,5,183,32"/>
+<area shape="rect" id="node4" href="$classInputDeviceState.html" title="State of the input device (used primary for joysticks)" alt="" coords="207,5,330,32"/>
 </map>

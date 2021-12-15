@@ -64,6 +64,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classKeyboard-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Keyboard Class Reference<div class="ingroups"><a class="el" href="group__platform.html">Platform</a></div></div>  </div>
@@ -79,8 +80,9 @@ Inheritance diagram for Keyboard:</div>
 <div class="dyncontent">
 <div class="center"><img src="classKeyboard__inherit__graph.png" border="0" usemap="#aKeyboard_inherit__map" alt="Inheritance graph"/></div>
 <map name="aKeyboard_inherit__map" id="aKeyboard_inherit__map">
-<area shape="rect" title="Keyboard device state." alt="" coords="5,80,81,107"/>
-<area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="12,5,75,32"/>
+<area shape="rect" title="Keyboard device state." alt="" coords="19,80,95,107"/>
+<area shape="rect" href="classGlfwKeyboard.html" title="Glfw device implementation." alt="" coords="5,155,108,181"/>
+<area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="25,5,88,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -88,8 +90,10 @@ Collaboration diagram for Keyboard:</div>
 <div class="dyncontent">
 <div class="center"><img src="classKeyboard__coll__graph.png" border="0" usemap="#aKeyboard_coll__map" alt="Collaboration graph"/></div>
 <map name="aKeyboard_coll__map" id="aKeyboard_coll__map">
-<area shape="rect" title="Keyboard device state." alt="" coords="5,80,81,107"/>
-<area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="12,5,75,32"/>
+<area shape="rect" title="Keyboard device state." alt="" coords="100,95,176,121"/>
+<area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="5,5,68,32"/>
+<area shape="rect" href="classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="93,5,183,32"/>
+<area shape="rect" href="classInputDeviceState.html" title="State of the input device (used primary for joysticks)" alt="" coords="207,5,330,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -119,6 +123,15 @@ Public Member Functions</h2></td></tr>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a2171fd277233fe40d9a93cf811c3d325"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classKeyboard.html#a2171fd277233fe40d9a93cf811c3d325">MAX_KEYS</a> = 100</td></tr>
 <tr class="separator:a2171fd277233fe40d9a93cf811c3d325"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a3c1af57a0bc057d02409e5efe20d3941"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStringName.html">StringName</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classKeyboard.html#a3c1af57a0bc057d02409e5efe20d3941">mName</a></td></tr>
+<tr class="separator:a3c1af57a0bc057d02409e5efe20d3941"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71319a1b19bed6c412718a0db39e36e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInputDeviceState.html">InputDeviceState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classKeyboard.html#a71319a1b19bed6c412718a0db39e36e0">mState</a></td></tr>
+<tr class="separator:a71319a1b19bed6c412718a0db39e36e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae09b82359c4b2e904c62425bb39bbc83"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classInputAction.html">InputAction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classKeyboard.html#ae09b82359c4b2e904c62425bb39bbc83">mKeys</a></td></tr>
+<tr class="separator:ae09b82359c4b2e904c62425bb39bbc83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classKeyboard.html" title="Keyboard device state.">Keyboard</a> device state. </p>
@@ -244,6 +257,72 @@ Static Public Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae09b82359c4b2e904c62425bb39bbc83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae09b82359c4b2e904c62425bb39bbc83">&#9670;&nbsp;</a></span>mKeys</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classInputAction.html">InputAction</a>&gt; Keyboard::mKeys</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3c1af57a0bc057d02409e5efe20d3941"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c1af57a0bc057d02409e5efe20d3941">&#9670;&nbsp;</a></span>mName</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classStringName.html">StringName</a> Keyboard::mName</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a71319a1b19bed6c412718a0db39e36e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71319a1b19bed6c412718a0db39e36e0">&#9670;&nbsp;</a></span>mState</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classInputDeviceState.html">InputDeviceState</a> Keyboard::mState</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

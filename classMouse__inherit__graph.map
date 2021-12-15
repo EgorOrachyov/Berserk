@@ -1,4 +1,5 @@
 <map id="Mouse" name="Mouse">
-<area shape="rect" id="node1" title="Mouse device state." alt="" coords="6,80,67,107"/>
-<area shape="rect" id="node2" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="5,5,68,32"/>
+<area shape="rect" id="node1" title="Mouse device state." alt="" coords="19,80,80,107"/>
+<area shape="rect" id="node3" href="$classGlfwMouse.html" title="Glfw device implementation." alt="" coords="5,155,93,181"/>
+<area shape="rect" id="node2" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="18,5,81,32"/>
 </map>

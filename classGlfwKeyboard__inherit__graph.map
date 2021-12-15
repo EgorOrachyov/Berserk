@@ -1,0 +1,5 @@
+<map id="GlfwKeyboard" name="GlfwKeyboard">
+<area shape="rect" id="node1" title="Glfw device implementation." alt="" coords="5,155,108,181"/>
+<area shape="rect" id="node2" href="$classKeyboard.html" title="Keyboard device state." alt="" coords="19,80,95,107"/>
+<area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="25,5,88,32"/>
+</map>

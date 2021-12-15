@@ -1,0 +1,4 @@
+<map id="Input" name="Input">
+<area shape="rect" id="node1" title="Engine input manager." alt="" coords="19,5,70,32"/>
+<area shape="rect" id="node2" href="$classGlfwInput.html" title="Glfw input manager implementation." alt="" coords="5,80,84,107"/>
+</map>
