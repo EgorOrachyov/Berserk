@@ -1,0 +1,11 @@
+<map id="RHIRenderPass" name="RHIRenderPass">
+<area shape="rect" id="node1" title="Compiled render pass object." alt="" coords="623,107,739,133"/>
+<area shape="rect" id="node2" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="406,44,506,71"/>
+<area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="67,5,130,32"/>
+<area shape="rect" id="node4" href="$classRHIRenderPassDesc.html" title="Full render pass descriptor." alt="" coords="383,132,529,159"/>
+<area shape="rect" id="node5" href="$classRef.html" title=" " alt="" coords="43,56,154,83"/>
+<area shape="rect" id="node6" href="$classRef.html" title=" " alt="" coords="21,107,177,133"/>
+<area shape="rect" id="node7" href="$classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="53,157,144,184"/>
+<area shape="rect" id="node8" href="$structRHIViewport.html" title="Area of the render target to draw." alt="" coords="51,208,147,235"/>
+<area shape="rect" id="node9" href="$structRHIDepthStencilAttachment.html" title="Depth&#45;stencil render target attachment descriptor." alt="" coords="5,259,192,285"/>
+</map>

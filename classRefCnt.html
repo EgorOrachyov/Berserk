@@ -63,6 +63,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classRefCnt-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">RefCnt Class Reference<div class="ingroups"><a class="el" href="group__core.html">Core</a></div></div>  </div>
@@ -78,22 +79,35 @@ Inheritance diagram for RefCnt:</div>
 <div class="dyncontent">
 <div class="center"><img src="classRefCnt__inherit__graph.png" border="0" usemap="#aRefCnt_inherit__map" alt="Inheritance graph"/></div>
 <map name="aRefCnt_inherit__map" id="aRefCnt_inherit__map">
-<area shape="rect" title="Reference counted base object." alt="" coords="5,284,68,311"/>
-<area shape="rect" href="classData.html" title="Generic shared byte data storage." alt="" coords="129,107,179,133"/>
-<area shape="rect" href="classEvent.html" title="Base class for any engine event." alt="" coords="127,157,181,184"/>
-<area shape="rect" href="classJoystick.html" title="Joystick (gamepad) device state." alt="" coords="119,259,189,285"/>
-<area shape="rect" href="classKeyboard.html" title="Keyboard device state." alt="" coords="116,309,192,336"/>
-<area shape="rect" href="classMouse.html" title="Mouse device state." alt="" coords="123,360,185,387"/>
-<area shape="rect" href="classWindow.html" title="Platform specific OS window for rendering." alt="" coords="120,411,188,437"/>
-<area shape="rect" href="classEventDropInput.html" title="Drop input event." alt="" coords="240,5,351,32"/>
-<area shape="rect" href="classEventJoystick.html" title="Joystick input event." alt="" coords="244,56,347,83"/>
-<area shape="rect" href="classEventKeyboard.html" title="Keyboard input event." alt="" coords="241,107,350,133"/>
-<area shape="rect" href="classEventMouse.html" title="Mouse input event." alt="" coords="248,157,343,184"/>
-<area shape="rect" href="classEventWindow.html" title="Event dispatched when window state changed." alt="" coords="245,208,346,235"/>
-<area shape="rect" href="classGlfwJoystick.html" title="Glfw device implementation." alt="" coords="247,259,344,285"/>
-<area shape="rect" href="classGlfwKeyboard.html" title="Glfw device implementation." alt="" coords="244,309,347,336"/>
-<area shape="rect" href="classGlfwMouse.html" title="Glfw device implementation." alt="" coords="251,360,339,387"/>
-<area shape="rect" href="classGlfwWindow.html" title="Glfw window implementation." alt="" coords="248,411,343,437"/>
+<area shape="rect" title="Reference counted base object." alt="" coords="5,335,68,361"/>
+<area shape="rect" href="classData.html" title="Generic shared byte data storage." alt="" coords="149,107,198,133"/>
+<area shape="rect" href="classEvent.html" title="Base class for any engine event." alt="" coords="146,157,201,184"/>
+<area shape="rect" href="classJoystick.html" title="Joystick (gamepad) device state." alt="" coords="138,259,209,285"/>
+<area shape="rect" href="classKeyboard.html" title="Keyboard device state." alt="" coords="135,309,211,336"/>
+<area shape="rect" href="classMouse.html" title="Mouse device state." alt="" coords="143,360,204,387"/>
+<area shape="rect" href="classRHIResource.html" title="Base class for RHI resource." alt="" coords="123,537,223,564"/>
+<area shape="rect" href="classRHIShaderMeta.html" title="Reflection info about compiled RHI program." alt="" coords="116,588,231,615"/>
+<area shape="rect" href="classWindow.html" title="Platform specific OS window for rendering." alt="" coords="139,740,207,767"/>
+<area shape="rect" href="classEventDropInput.html" title="Drop input event." alt="" coords="297,5,407,32"/>
+<area shape="rect" href="classEventJoystick.html" title="Joystick input event." alt="" coords="301,56,403,83"/>
+<area shape="rect" href="classEventKeyboard.html" title="Keyboard input event." alt="" coords="297,107,407,133"/>
+<area shape="rect" href="classEventMouse.html" title="Mouse input event." alt="" coords="305,157,399,184"/>
+<area shape="rect" href="classEventWindow.html" title="Event dispatched when window state changed." alt="" coords="301,208,403,235"/>
+<area shape="rect" href="classGlfwJoystick.html" title="Glfw device implementation." alt="" coords="303,259,401,285"/>
+<area shape="rect" href="classGlfwKeyboard.html" title="Glfw device implementation." alt="" coords="301,309,403,336"/>
+<area shape="rect" href="classGlfwMouse.html" title="Glfw device implementation." alt="" coords="308,360,396,387"/>
+<area shape="rect" href="classRHIBuffer.html" title="RHI device buffer." alt="" coords="313,411,391,437"/>
+<area shape="rect" href="classRHIFramebuffer.html" title="Collection of render targets for drawing." alt="" coords="295,461,409,488"/>
+<area shape="rect" href="classRHIGraphicsPipeline.html" title="Graphics pipeline." alt="" coords="281,512,423,539"/>
+<area shape="rect" href="classRHIRenderPass.html" title="Compiled render pass object." alt="" coords="294,563,410,589"/>
+<area shape="rect" href="classRHISampler.html" title="RHI sampler object." alt="" coords="305,613,399,640"/>
+<area shape="rect" href="classRHIShader.html" title=" " alt="" coords="309,664,395,691"/>
+<area shape="rect" href="classRHITexture.html" title="RHI Texture primitive." alt="" coords="308,715,396,741"/>
+<area shape="rect" href="classRHIVertexDeclaration.html" title="Contains information about a vertex declaration." alt="" coords="279,765,425,792"/>
+<area shape="rect" href="classRHIIndexBuffer.html" title="RHI index buffer." alt="" coords="481,360,591,387"/>
+<area shape="rect" href="classRHIUniformBuffer.html" title="RHI uniform buffer." alt="" coords="473,411,599,437"/>
+<area shape="rect" href="classRHIVertexBuffer.html" title="RHI vertex buffer." alt="" coords="478,461,594,488"/>
+<area shape="rect" href="classGlfwWindow.html" title="Glfw window implementation." alt="" coords="305,816,399,843"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -109,6 +123,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aac5be668f86fac6da650edf7dca0a0ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a272fe11621124c7514cb60ab4877e146"><td class="memItemLeft" align="right" valign="top">std::int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRefCnt.html#a272fe11621124c7514cb60ab4877e146">RelRef</a> () const</td></tr>
 <tr class="separator:a272fe11621124c7514cb60ab4877e146"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:ada9f804b540fd2da0aef4a47b2f17bbc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRefCnt.html#ada9f804b540fd2da0aef4a47b2f17bbc">Destroy</a> () const</td></tr>
+<tr class="separator:ada9f804b540fd2da0aef4a47b2f17bbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Reference counted base object. </p>
@@ -160,6 +179,31 @@ Public Member Functions</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ada9f804b540fd2da0aef4a47b2f17bbc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada9f804b540fd2da0aef4a47b2f17bbc">&#9670;&nbsp;</a></span>Destroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void RefCnt::Destroy </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

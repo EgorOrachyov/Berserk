@@ -1,0 +1,8 @@
+<map id="RHITexture" name="RHITexture">
+<area shape="rect" id="node1" title="RHI Texture primitive." alt="" coords="77,184,165,211"/>
+<area shape="rect" id="node2" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="5,95,105,121"/>
+<area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="17,5,80,32"/>
+<area shape="rect" id="node4" href="$structRHITextureDesc.html" title="RHI Texture primitive descriptor." alt="" coords="135,95,253,121"/>
+<area shape="rect" id="node5" href="$classMask.html" title=" " alt="" coords="104,5,284,32"/>
+<area shape="rect" id="node6" href="$classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="309,5,399,32"/>
+</map>

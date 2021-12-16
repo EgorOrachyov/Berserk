@@ -1,0 +1,8 @@
+<map id="RHIBuffer" name="RHIBuffer">
+<area shape="rect" id="node1" title="RHI device buffer." alt="" coords="164,155,243,181"/>
+<area shape="rect" id="node4" href="$classRHIIndexBuffer.html" title="RHI index buffer." alt="" coords="5,229,116,256"/>
+<area shape="rect" id="node5" href="$classRHIUniformBuffer.html" title="RHI uniform buffer." alt="" coords="141,229,266,256"/>
+<area shape="rect" id="node6" href="$classRHIVertexBuffer.html" title="RHI vertex buffer." alt="" coords="291,229,407,256"/>
+<area shape="rect" id="node2" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="153,80,253,107"/>
+<area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="172,5,235,32"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="RHIRenderPass" name="RHIRenderPass">
+<area shape="rect" id="node1" title="Compiled render pass object." alt="" coords="5,155,121,181"/>
+<area shape="rect" id="node2" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="13,80,113,107"/>
+<area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="32,5,95,32"/>
+</map>

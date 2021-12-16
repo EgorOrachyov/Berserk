@@ -100,6 +100,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afea27f93c3d1e7cb2649c0f03e46ebc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacaf7eb0748156565e4b91bb5794a98d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classInput.html">Input</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#aacaf7eb0748156565e4b91bb5794a98d">GetInput</a> ()</td></tr>
 <tr class="separator:aacaf7eb0748156565e4b91bb5794a98d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbff564e320c8b3014bf50b03d44764c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classRHIDevice.html">RHIDevice</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#abbff564e320c8b3014bf50b03d44764c">GetRHIDevice</a> ()</td></tr>
+<tr class="separator:abbff564e320c8b3014bf50b03d44764c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9553211b94f84f3bf9b9a14a4098ded"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classThread.html">Thread</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#ad9553211b94f84f3bf9b9a14a4098ded">GetRHIThread</a> ()</td></tr>
+<tr class="separator:ad9553211b94f84f3bf9b9a14a4098ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6bf820382284c7698536028fded977f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> std::thread::id&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#ae6bf820382284c7698536028fded977f">GetGameThreadId</a> () const</td></tr>
 <tr class="separator:ae6bf820382284c7698536028fded977f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -274,6 +278,42 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="classEngine.html" title="Root manager class.">Engine</a> standard output </dd></dl>
+
+</div>
+</div>
+<a id="abbff564e320c8b3014bf50b03d44764c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbff564e320c8b3014bf50b03d44764c">&#9670;&nbsp;</a></span>GetRHIDevice()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classRHIDevice.html">RHIDevice</a> &amp; Engine::GetRHIDevice </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>RHI Device for low-level rendering </dd></dl>
+
+</div>
+</div>
+<a id="ad9553211b94f84f3bf9b9a14a4098ded"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9553211b94f84f3bf9b9a14a4098ded">&#9670;&nbsp;</a></span>GetRHIThread()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classThread.html">Thread</a> &amp; Engine::GetRHIThread </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>RHI thread (for safe cmd submission) </dd></dl>
 
 </div>
 </div>

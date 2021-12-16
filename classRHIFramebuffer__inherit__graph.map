@@ -1,0 +1,5 @@
+<map id="RHIFramebuffer" name="RHIFramebuffer">
+<area shape="rect" id="node1" title="Collection of render targets for drawing." alt="" coords="5,155,120,181"/>
+<area shape="rect" id="node2" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="13,80,113,107"/>
+<area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="31,5,94,32"/>
+</map>

@@ -1,8 +1,11 @@
 <map id="code/runtime/platform/InputDefs.hpp" name="code/runtime/platform/InputDefs.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="100,5,248,47"/>
-<area shape="rect" id="node2" href="$Config_8hpp.html" title=" " alt="" coords="5,169,116,196"/>
-<area shape="rect" id="node3" href="$Typedefs_8hpp.html" title=" " alt="" coords="110,95,238,121"/>
-<area shape="rect" id="node6" title=" " alt="" coords="263,95,317,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="141,169,215,196"/>
-<area shape="rect" id="node5" title=" " alt="" coords="240,169,308,196"/>
+<area shape="rect" id="node1" title=" " alt="" coords="163,5,311,47"/>
+<area shape="rect" id="node2" href="$Config_8hpp.html" title=" " alt="" coords="5,244,116,271"/>
+<area shape="rect" id="node3" href="$Typedefs_8hpp.html" title=" " alt="" coords="389,169,517,196"/>
+<area shape="rect" id="node6" href="$Mask_8hpp.html" title=" " alt="" coords="153,95,321,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="367,244,442,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="467,244,535,271"/>
+<area shape="rect" id="node7" title=" " alt="" coords="309,169,364,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="99,169,164,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="189,169,285,196"/>
 </map>

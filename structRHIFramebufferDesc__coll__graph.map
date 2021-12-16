@@ -1,0 +1,6 @@
+<map id="RHIFramebufferDesc" name="RHIFramebufferDesc">
+<area shape="rect" id="node1" title="RHI framebuffer descriptor." alt="" coords="12,184,156,211"/>
+<area shape="rect" id="node2" href="$classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="5,95,96,121"/>
+<area shape="rect" id="node3" href="$structRHIAttachmentDesc.html" title="Describes single render target attachment." alt="" coords="121,95,263,121"/>
+<area shape="rect" id="node4" href="$classRef.html" title=" " alt="" coords="127,5,257,32"/>
+</map>
