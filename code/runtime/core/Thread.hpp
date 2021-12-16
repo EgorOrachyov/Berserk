@@ -25,13 +25,18 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_REFCNT_HPP
-#define BERSERK_REFCNT_HPP
+#ifndef BERSERK_THREAD_HPP
+#define BERSERK_THREAD_HPP
 
 #include <core/Config.hpp>
+#include <core/Typedefs.hpp>
 
-#include <atomic>
-#include <cassert>
+#include <functional>
+#include <mutex>
+#include <thread>
+#include <vector>
+
+#include <ttas_spin_mutex.hpp>
 
 BRK_NS_BEGIN
 
@@ -41,100 +46,62 @@ BRK_NS_BEGIN
  */
 
 /**
- * @class RefCnt
- * @brief Reference counted base object
+ * @class Thread
+ * @brief Represents thread wrapper used to enqueue commands to execute
  *
- * Inherit from this class to have shared-ref logic for your class objects.
- * Use RefPtr to wrap and automate RefCnt objects references counting.
- *
- * @see Ref
+ * @tparam TArgs Args to call callbacks
  */
-class RefCnt {
+class Thread final {
 public:
-    virtual ~RefCnt() {
-#ifdef BERSERK_DEBUG
-        assert(mRefs.load() == 0);
-        mRefs.store(0);
-#endif
-    }
+    /** @brief Flag to enqueue callback */
+    enum class Flag {
+        /** @brief Execute before thread `main update` */
+        Before,
+        /** @brief Execute after thread `main update` */
+        After
+    };
 
-    bool IsUnique() const {
-        return GetRefs() <= 1;
-    }
+    BRK_API Thread() = default;
+    BRK_API ~Thread();
 
-    std::int32_t GetRefs() const {
-        return mRefs.load(std::memory_order_relaxed);
-    }
+    /** @brief Thread callback function type */
+    using Callable = std::function<void()>;
 
-    std::int32_t AddRef() const {
-        assert(GetRefs() >= 0);
-        return mRefs.fetch_add(1);
-    }
+    /** Enqueue command to execute on thread */
+    BRK_API void Enqueue(Callable callable, Flag flag);
 
-    std::int32_t RelRef() const {
-        assert(GetRefs() > 0);
-        auto refs = mRefs.fetch_sub(1);
+    /** Enqueue command to execute on thread before `update` */
+    BRK_API void EnqueueBefore(Callable callable) { Enqueue(std::move(callable), Flag::Before); }
 
-        if (refs == 1) {
-            // Was last reference
-            // Destroy object and release memory
-            Destroy();
-        }
+    /** Enqueue command to execute on thread after `update` */
+    BRK_API void EnqueueAfter(Callable callable) { Enqueue(std::move(callable), Flag::After); }
 
-        return refs;
-    }
+    /** @note Internal: must be called on thread */
+    BRK_API void Update();
 
-protected:
-    virtual void Destroy() const {
-        // Use default delete to destroy object
-        // and free used memory
-        delete this;
-    }
+    /** @note Internal: must be called on thread */
+    BRK_API void ExecuteBefore();
+
+    /** @note Internal: must be called on thread */
+    BRK_API void ExecuteAfter();
+
+    /** @return True if currently on this thread */
+    BRK_API bool OnThread() const;
 
 private:
-    // This type of object after creation always has no references
-    mutable std::atomic_int32_t mRefs{0};
+    /** For queueing */
+    std::vector<Callable> mQueueBefore;
+    std::vector<Callable> mQueueAfter;
+
+    /** For execution */
+    std::vector<Callable> mExecuteBefore;
+    std::vector<Callable> mExecuteAfter;
+
+    /** Id for checks before enqueuing */
+    std::thread::id mThreadId = std::this_thread::get_id();
+
+    mutable yamc::spin_ttas::mutex mMutex;
 };
-
-/**
- * Unsafe shared object reference
- *
- * @tparam T Type of object
- * @param object Object to reference
- * @return Object reference
- */
-template<typename T>
-static inline T *AddRef(T *object) {
-    assert(object);
-    object->AddRef();
-    return object;
-}
-
-/**
- * Safe shared object reference
- *
- * @tparam T Type of object
- * @param object Object to reference
- * @return Object reference
- */
-template<typename T>
-static inline T *SafeAddRef(T *object) {
-    if (object)
-        object->AddRef();
-    return object;
-}
-
-/**
- * Shared object release reference
- *
- * @tparam T Type of object
- * @param object Object to be unreferenced
- */
-template<typename T>
-static inline void Unref(T *object) {
-    if (object)
-        object->RelRef();
-}
 
 /**
  * @}
@@ -142,4 +109,4 @@ static inline void Unref(T *object) {
 
 BRK_NS_END
 
-#endif//BERSERK_REFCNT_HPP
+#endif//BERSERK_THREAD_HPP

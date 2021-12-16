@@ -6,6 +6,7 @@ set(BERSERK_CORE_HEADER
         core/EventDispatcher.hpp
         core/Memory.hpp
         core/Scheduler.hpp
+        core/Thread.hpp
         core/Typedefs.hpp
         core/event/Event.hpp
         core/event/EventDropInput.hpp
@@ -27,6 +28,7 @@ set(BERSERK_CORE_HEADER
         core/string/String16u.hpp
         core/string/StringName.hpp
         core/string/Unicode.hpp
+        core/templates/Mask.hpp
         core/templates/Ref.hpp
         core/templates/RefCnt.hpp
         core/templates/Singleton.hpp
@@ -38,6 +40,7 @@ set(BERSERK_CORE_SRC
         core/Engine.cpp
         core/EventDispatcher.cpp
         core/Scheduler.cpp
+        core/Thread.cpp
         core/event/EventDropInput.cpp
         core/event/EventJoystick.cpp
         core/event/EventKeyboard.cpp

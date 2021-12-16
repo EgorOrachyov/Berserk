@@ -73,10 +73,10 @@ int Application::Run(int argc, const char *const *argv) {
     // Pre-finalize call
     OnFinalize();
 
-    // Release platform window manager first
+    // Release platform window manager
     gWindowManager.reset();
 
-    // Release engine
+    // Release engine first
     gEngine.reset();
 
     return 0;

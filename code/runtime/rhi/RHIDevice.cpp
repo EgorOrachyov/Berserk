@@ -25,121 +25,28 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_REFCNT_HPP
-#define BERSERK_REFCNT_HPP
-
-#include <core/Config.hpp>
-
-#include <atomic>
-#include <cassert>
+#include <rhi/RHIDevice.hpp>
 
 BRK_NS_BEGIN
 
-/**
- * @addtogroup core
- * @{
- */
-
-/**
- * @class RefCnt
- * @brief Reference counted base object
- *
- * Inherit from this class to have shared-ref logic for your class objects.
- * Use RefPtr to wrap and automate RefCnt objects references counting.
- *
- * @see Ref
- */
-class RefCnt {
-public:
-    virtual ~RefCnt() {
-#ifdef BERSERK_DEBUG
-        assert(mRefs.load() == 0);
-        mRefs.store(0);
-#endif
-    }
-
-    bool IsUnique() const {
-        return GetRefs() <= 1;
-    }
-
-    std::int32_t GetRefs() const {
-        return mRefs.load(std::memory_order_relaxed);
-    }
-
-    std::int32_t AddRef() const {
-        assert(GetRefs() >= 0);
-        return mRefs.fetch_add(1);
-    }
-
-    std::int32_t RelRef() const {
-        assert(GetRefs() > 0);
-        auto refs = mRefs.fetch_sub(1);
-
-        if (refs == 1) {
-            // Was last reference
-            // Destroy object and release memory
-            Destroy();
-        }
-
-        return refs;
-    }
-
-protected:
-    virtual void Destroy() const {
-        // Use default delete to destroy object
-        // and free used memory
-        delete this;
-    }
-
-private:
-    // This type of object after creation always has no references
-    mutable std::atomic_int32_t mRefs{0};
-};
-
-/**
- * Unsafe shared object reference
- *
- * @tparam T Type of object
- * @param object Object to reference
- * @return Object reference
- */
-template<typename T>
-static inline T *AddRef(T *object) {
-    assert(object);
-    object->AddRef();
-    return object;
+const std::vector<RHITextureFormat> &RHIDevice::GetSupportedFormats() const {
+    return mSupportedTextureFormats;
 }
 
-/**
- * Safe shared object reference
- *
- * @tparam T Type of object
- * @param object Object to reference
- * @return Object reference
- */
-template<typename T>
-static inline T *SafeAddRef(T *object) {
-    if (object)
-        object->AddRef();
-    return object;
+const std::vector<RHIShaderLanguage> &RHIDevice::GetSupportedShaderLanguages() const {
+    return mSupportedShaderLanguages;
 }
 
-/**
- * Shared object release reference
- *
- * @tparam T Type of object
- * @param object Object to be unreferenced
- */
-template<typename T>
-static inline void Unref(T *object) {
-    if (object)
-        object->RelRef();
+RHIType RHIDevice::GetDriverType() const {
+    return mType;
 }
 
-/**
- * @}
- */
+const RHIDeviceCaps &RHIDevice::GetCaps() const {
+    return mCaps;
+}
+
+const Mat4x4f &RHIDevice::GetClipMatrix() const {
+    return mClipMatrix;
+}
 
 BRK_NS_END
-
-#endif//BERSERK_REFCNT_HPP

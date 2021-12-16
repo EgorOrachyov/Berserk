@@ -51,11 +51,11 @@ public:
         InputModifiers mask;
         auto umods = static_cast<uint32>(mods);
 
-        mask.set(static_cast<size_t>(InputModifier::Alt), umods & (uint32) GLFW_MOD_ALT);
-        mask.set(static_cast<size_t>(InputModifier::CapsLock), umods & (uint32) GLFW_MOD_CAPS_LOCK);
-        mask.set(static_cast<size_t>(InputModifier::Control), umods & (uint32) GLFW_MOD_CONTROL);
-        mask.set(static_cast<size_t>(InputModifier::NumLock), umods & (uint32) GLFW_MOD_NUM_LOCK);
-        mask.set(static_cast<size_t>(InputModifier::Shift), umods & (uint32) GLFW_MOD_SHIFT);
+        mask.Set(InputModifier::Alt, umods & (uint32) GLFW_MOD_ALT);
+        mask.Set(InputModifier::CapsLock, umods & (uint32) GLFW_MOD_CAPS_LOCK);
+        mask.Set(InputModifier::Control, umods & (uint32) GLFW_MOD_CONTROL);
+        mask.Set(InputModifier::NumLock, umods & (uint32) GLFW_MOD_NUM_LOCK);
+        mask.Set(InputModifier::Shift, umods & (uint32) GLFW_MOD_SHIFT);
 
         return mask;
     }

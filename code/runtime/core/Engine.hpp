@@ -31,10 +31,12 @@
 #include <core/Config.hpp>
 #include <core/EventDispatcher.hpp>
 #include <core/Scheduler.hpp>
+#include <core/Thread.hpp>
 #include <platform/FileSystem.hpp>
 #include <platform/Input.hpp>
 #include <platform/Output.hpp>
 #include <platform/WindowManager.hpp>
+#include <rhi/RHIDevice.hpp>
 
 #include <atomic>
 #include <chrono>
@@ -99,6 +101,12 @@ public:
     /** @return Engine input class */
     BRK_API Input &GetInput();
 
+    /** @return RHI Device for low-level rendering */
+    BRK_API RHIDevice &GetRHIDevice();
+
+    /** @return RHI thread (for safe cmd submission) */
+    BRK_API Thread &GetRHIThread();
+
     /** @return Game thread id */
     BRK_API std::thread::id GetGameThreadId() const;
 
@@ -132,6 +140,12 @@ private:
 
     /** Engine input manager */
     std::shared_ptr<Input> mInput;
+
+    /** RHI Device for low-level rendering */
+    std::shared_ptr<RHIDevice> mRHIDevice;
+
+    /** RHI thread (for safe cmd submission) */
+    std::shared_ptr<Thread> mRHIThread;
 
     /** Main game thread id */
     std::thread::id mGameThreadID;

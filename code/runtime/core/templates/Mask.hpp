@@ -25,13 +25,15 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_REFCNT_HPP
-#define BERSERK_REFCNT_HPP
+#ifndef BERSERK_MASK_HPP
+#define BERSERK_MASK_HPP
 
 #include <core/Config.hpp>
+#include <core/Typedefs.hpp>
 
-#include <atomic>
+#include <bitset>
 #include <cassert>
+#include <initializer_list>
 
 BRK_NS_BEGIN
 
@@ -41,100 +43,37 @@ BRK_NS_BEGIN
  */
 
 /**
- * @class RefCnt
- * @brief Reference counted base object
+ * @class Mask
+ * @brief Type-safe enum mask wrapper
  *
- * Inherit from this class to have shared-ref logic for your class objects.
- * Use RefPtr to wrap and automate RefCnt objects references counting.
- *
- * @see Ref
+ * @tparam T Enum type
+ * @tparam Size Enum values count
  */
-class RefCnt {
+template<typename T, size_t Size = sizeof(uint32) * 8>
+class Mask {
 public:
-    virtual ~RefCnt() {
-#ifdef BERSERK_DEBUG
-        assert(mRefs.load() == 0);
-        mRefs.store(0);
-#endif
-    }
-
-    bool IsUnique() const {
-        return GetRefs() <= 1;
-    }
-
-    std::int32_t GetRefs() const {
-        return mRefs.load(std::memory_order_relaxed);
-    }
-
-    std::int32_t AddRef() const {
-        assert(GetRefs() >= 0);
-        return mRefs.fetch_add(1);
-    }
-
-    std::int32_t RelRef() const {
-        assert(GetRefs() > 0);
-        auto refs = mRefs.fetch_sub(1);
-
-        if (refs == 1) {
-            // Was last reference
-            // Destroy object and release memory
-            Destroy();
+    Mask() = default;
+    Mask(const std::initializer_list<T> &list) {
+        for (auto v : list) {
+            Set(v);
         }
-
-        return refs;
     }
 
-protected:
-    virtual void Destroy() const {
-        // Use default delete to destroy object
-        // and free used memory
-        delete this;
+    Mask &Set(T v, bool val = true) {
+        assert(static_cast<size_t>(v) < Size);
+        auto index = static_cast<size_t>(v);
+        value.set(index, val);
+        return *this;
     }
 
-private:
-    // This type of object after creation always has no references
-    mutable std::atomic_int32_t mRefs{0};
+    bool Get(T v) const {
+        assert(static_cast<size_t>(v) < Size);
+        auto index = static_cast<size_t>(v);
+        return value[index];
+    }
+
+    std::bitset<Size> value;
 };
-
-/**
- * Unsafe shared object reference
- *
- * @tparam T Type of object
- * @param object Object to reference
- * @return Object reference
- */
-template<typename T>
-static inline T *AddRef(T *object) {
-    assert(object);
-    object->AddRef();
-    return object;
-}
-
-/**
- * Safe shared object reference
- *
- * @tparam T Type of object
- * @param object Object to reference
- * @return Object reference
- */
-template<typename T>
-static inline T *SafeAddRef(T *object) {
-    if (object)
-        object->AddRef();
-    return object;
-}
-
-/**
- * Shared object release reference
- *
- * @tparam T Type of object
- * @param object Object to be unreferenced
- */
-template<typename T>
-static inline void Unref(T *object) {
-    if (object)
-        object->RelRef();
-}
 
 /**
  * @}
@@ -142,4 +81,4 @@ static inline void Unref(T *object) {
 
 BRK_NS_END
 
-#endif//BERSERK_REFCNT_HPP
+#endif//BERSERK_MASK_HPP

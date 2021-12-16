@@ -25,116 +25,65 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_REFCNT_HPP
-#define BERSERK_REFCNT_HPP
+#ifndef BERSERK_RHISAMPLER_HPP
+#define BERSERK_RHISAMPLER_HPP
 
 #include <core/Config.hpp>
-
-#include <atomic>
-#include <cassert>
+#include <core/Typedefs.hpp>
+#include <rhi/RHIResource.hpp>
 
 BRK_NS_BEGIN
 
 /**
- * @addtogroup core
+ * @addtogroup rhi
  * @{
  */
 
 /**
- * @class RefCnt
- * @brief Reference counted base object
- *
- * Inherit from this class to have shared-ref logic for your class objects.
- * Use RefPtr to wrap and automate RefCnt objects references counting.
- *
- * @see Ref
+ * @class RHISamplerDesc
+ * @brief RHI sample descriptor
  */
-class RefCnt {
-public:
-    virtual ~RefCnt() {
-#ifdef BERSERK_DEBUG
-        assert(mRefs.load() == 0);
-        mRefs.store(0);
-#endif
+struct RHISamplerDesc {
+    float minLod;
+    float maxLod;
+    float maxAnisotropy;
+    bool useAnisotropy;
+    RHISamplerMinFilter minFilter : 4;
+    RHISamplerMagFilter magFilter : 4;
+    RHISamplerRepeatMode u : 4;
+    RHISamplerRepeatMode v : 4;
+    RHISamplerRepeatMode w : 4;
+    RHISamplerBorderColor color : 4;
+
+    RHISamplerDesc() {
+        minLod = 0;
+        maxLod = RHILimits::MAX_TEXTURE_MIPMAPS;
+        maxAnisotropy = 1.0f;
+        useAnisotropy = false;
+        minFilter = RHISamplerMinFilter::Nearest;
+        magFilter = RHISamplerMagFilter::Nearest;
+        u = RHISamplerRepeatMode::Repeat;
+        v = RHISamplerRepeatMode::Repeat;
+        w = RHISamplerRepeatMode::Repeat;
+        color = RHISamplerBorderColor::Black;
     }
-
-    bool IsUnique() const {
-        return GetRefs() <= 1;
-    }
-
-    std::int32_t GetRefs() const {
-        return mRefs.load(std::memory_order_relaxed);
-    }
-
-    std::int32_t AddRef() const {
-        assert(GetRefs() >= 0);
-        return mRefs.fetch_add(1);
-    }
-
-    std::int32_t RelRef() const {
-        assert(GetRefs() > 0);
-        auto refs = mRefs.fetch_sub(1);
-
-        if (refs == 1) {
-            // Was last reference
-            // Destroy object and release memory
-            Destroy();
-        }
-
-        return refs;
-    }
-
-protected:
-    virtual void Destroy() const {
-        // Use default delete to destroy object
-        // and free used memory
-        delete this;
-    }
-
-private:
-    // This type of object after creation always has no references
-    mutable std::atomic_int32_t mRefs{0};
 };
 
 /**
- * Unsafe shared object reference
- *
- * @tparam T Type of object
- * @param object Object to reference
- * @return Object reference
+ * @class RHISampler
+ * @brief RHI sampler object
  */
-template<typename T>
-static inline T *AddRef(T *object) {
-    assert(object);
-    object->AddRef();
-    return object;
-}
+class RHISampler : public RHIResource {
+public:
+    BRK_API ~RHISampler() override = default;
 
-/**
- * Safe shared object reference
- *
- * @tparam T Type of object
- * @param object Object to reference
- * @return Object reference
- */
-template<typename T>
-static inline T *SafeAddRef(T *object) {
-    if (object)
-        object->AddRef();
-    return object;
-}
+    /** @return Sampler desc state */
+    const RHISamplerDesc &GetDesc() const { return mState; }
 
-/**
- * Shared object release reference
- *
- * @tparam T Type of object
- * @param object Object to be unreferenced
- */
-template<typename T>
-static inline void Unref(T *object) {
-    if (object)
-        object->RelRef();
-}
+protected:
+    /** Sampler desc state */
+    RHISamplerDesc mState;
+};
 
 /**
  * @}
@@ -142,4 +91,4 @@ static inline void Unref(T *object) {
 
 BRK_NS_END
 
-#endif//BERSERK_REFCNT_HPP
+#endif//BERSERK_RHISAMPLER_HPP

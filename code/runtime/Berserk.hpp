@@ -44,6 +44,7 @@
 #include <core/Engine.hpp>
 #include <core/EventDispatcher.hpp>
 #include <core/Scheduler.hpp>
+#include <core/Thread.hpp>
 #include <core/Typedefs.hpp>
 #include <core/event/Event.hpp>
 #include <core/event/EventDropInput.hpp>
@@ -77,5 +78,31 @@
 #include <platform/Output.hpp>
 #include <platform/Window.hpp>
 #include <platform/WindowManager.hpp>
+
+/**
+ * @defgroup rhi
+ * @brief Rendering hardware interface
+ *
+ * Provides unified interface for the rendering hardware, required
+ * for lower level rendering. Abstracts such primitives, as texture,
+ * sample, shader, framebuffer, render pass, pipeline etc.
+ *
+ * Interface is designed as verbose API with minimum number of
+ * global state variables, requires explicit pre-creation of rendering objects.
+ *
+ * Intended for implementation by OpenGL and Vulkan APIs.
+ */
+
+#include <rhi/RHIBuffer.hpp>
+#include <rhi/RHIDefs.hpp>
+#include <rhi/RHIDevice.hpp>
+#include <rhi/RHIFramebuffer.hpp>
+#include <rhi/RHIGraphicsPipeline.hpp>
+#include <rhi/RHIRenderPass.hpp>
+#include <rhi/RHIResource.hpp>
+#include <rhi/RHISampler.hpp>
+#include <rhi/RHIShader.hpp>
+#include <rhi/RHITexture.hpp>
+#include <rhi/RHIVertexDeclaration.hpp>
 
 #endif//BERSERK_BERSERK_HPP

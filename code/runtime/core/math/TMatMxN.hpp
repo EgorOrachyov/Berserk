@@ -319,11 +319,6 @@ public:
     TVecN<T, M> GetColumn(uint32 index) const {
         assert(index < N);
 
-        if (index >= N) {
-            BERSERK_CORE_LOG_ERROR("Index out of bounds");
-            return {};
-        }
-
         TVecN<T, M> result;
         for (uint32 i = 0; i < M; i++) {
             result.values[i] = values[i * N + index];

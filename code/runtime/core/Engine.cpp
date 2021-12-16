@@ -33,11 +33,11 @@ BRK_NS_BEGIN
 
 Engine::~Engine() {
     // Release in reverse order
-    mInput.reset();
-    mWindowManager.reset();
     mEventDispatcher.reset();
     mScheduler.reset();
     mFileSystem.reset();
+    mInput.reset();
+    mWindowManager.reset();
     mOutput.reset();
 
     // Remove global instance
@@ -74,6 +74,14 @@ WindowManager &Engine::GetWindowManager() {
 
 Input &Engine::GetInput() {
     return *mInput;
+}
+
+RHIDevice &Engine::GetRHIDevice() {
+    return *mRHIDevice;
+}
+
+Thread &Engine::GetRHIThread() {
+    return *mRHIThread;
 }
 
 std::thread::id Engine::GetGameThreadId() const {

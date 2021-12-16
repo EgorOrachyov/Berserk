@@ -46,15 +46,18 @@ endfunction()
 
 include(core/CMakeLists.txt)
 include(platform/CMakeLists.txt)
+include(rhi/CMakeLists.txt)
 
 set(BERSERK_RUNTIME_HEADER
         Berserk.hpp
         ${BERSERK_CORE_HEADER}
-        ${BERSERK_PLATFORM_HEADER})
+        ${BERSERK_PLATFORM_HEADER}
+        ${BERSERK_RHI_HEADER})
 
 set(BERSERK_RUNTIME_SRC
         ${BERSERK_CORE_SRC}
-        ${BERSERK_PLATFORM_SRC})
+        ${BERSERK_PLATFORM_SRC}
+        ${BERSERK_RHI_SRC})
 
 if (BERSERK_TARGET_WINDOWS)
     list(APPEND BERSERK_RUNTIME_SRC ${BERSERK_PLATFORM_WINDOWS_SRC})
@@ -85,5 +88,12 @@ if (BERSERK_DYNAMIC_BUILD)
     list(APPEND BERSERK_RUNTIME_DEFINES_PRIVATE BERSERK_EXPORTS)
     add_library(berserk_runtime_dynamic SHARED ${BERSERK_RUNTIME_HEADER} ${BERSERK_RUNTIME_SRC})
     berserk_configure_target(berserk_runtime_dynamic)
-    berserk_target_copy_to(berserk_runtime_dynamic berserk_runtime_dynamic POST_BUILD code/runtime tests)
+
+    if (BERSERK_BUILD_TESTS)
+        berserk_target_copy_to(berserk_runtime_dynamic berserk_runtime_dynamic POST_BUILD code/runtime tests)
+    endif ()
+
+    if (BERSERK_BUILD_EXAMPLE)
+        berserk_target_copy_to(berserk_runtime_dynamic berserk_runtime_dynamic POST_BUILD code/runtime example)
+    endif ()
 endif ()

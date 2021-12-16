@@ -30,8 +30,7 @@
 
 #include <core/Config.hpp>
 #include <core/Typedefs.hpp>
-
-#include <bitset>
+#include <core/templates/Mask.hpp>
 
 BRK_NS_BEGIN
 
@@ -87,7 +86,7 @@ enum class InputModifier : uint32 {
  * @class InputModifiers
  * @brief Input modifies mask (as a set of bits)
  */
-using InputModifiers = std::bitset<10>;
+using InputModifiers = Mask<InputModifier, 5>;
 
 /**
  * @class InputMouseButton

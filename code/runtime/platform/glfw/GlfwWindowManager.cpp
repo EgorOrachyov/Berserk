@@ -78,13 +78,15 @@ GlfwWindowManager::GlfwWindowManager(bool vsync, bool clientApi) {
 }
 
 GlfwWindowManager::~GlfwWindowManager() {
-#ifdef BERSERK_DEBUG
+#if defined(BERSERK_DEBUG) || defined(BERSERK_RELEASE)
     for (const auto &entry : mWindows)
-        BRK_INFO("Release window name=" << entry.first);
+        BRK_INFO("Release window name=" << entry.first << " refs=" << entry.second->GetRefs());
 #endif//BERSERK_DEBUG
 
     // Clear all windows
+    mPrimaryWindow.Reset();
     mWindows.clear();
+    mWindowsByHND.clear();
 
     // Finally, terminate glfw
     glfwTerminate();

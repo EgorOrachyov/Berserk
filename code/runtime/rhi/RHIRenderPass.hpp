@@ -25,116 +25,95 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_REFCNT_HPP
-#define BERSERK_REFCNT_HPP
+#ifndef BERSERK_RHIRENDERPASS_HPP
+#define BERSERK_RHIRENDERPASS_HPP
 
 #include <core/Config.hpp>
+#include <core/Typedefs.hpp>
+#include <platform/Window.hpp>
+#include <rhi/RHIFramebuffer.hpp>
+#include <rhi/RHIResource.hpp>
 
-#include <atomic>
-#include <cassert>
+#include <vector>
 
 BRK_NS_BEGIN
 
 /**
- * @addtogroup core
+ * @addtogroup rhi
  * @{
  */
 
 /**
- * @class RefCnt
- * @brief Reference counted base object
- *
- * Inherit from this class to have shared-ref logic for your class objects.
- * Use RefPtr to wrap and automate RefCnt objects references counting.
- *
- * @see Ref
+ * @class RHIColorAttachment
+ * @brief Single render target color attachment descriptor
  */
-class RefCnt {
-public:
-    virtual ~RefCnt() {
-#ifdef BERSERK_DEBUG
-        assert(mRefs.load() == 0);
-        mRefs.store(0);
-#endif
-    }
-
-    bool IsUnique() const {
-        return GetRefs() <= 1;
-    }
-
-    std::int32_t GetRefs() const {
-        return mRefs.load(std::memory_order_relaxed);
-    }
-
-    std::int32_t AddRef() const {
-        assert(GetRefs() >= 0);
-        return mRefs.fetch_add(1);
-    }
-
-    std::int32_t RelRef() const {
-        assert(GetRefs() > 0);
-        auto refs = mRefs.fetch_sub(1);
-
-        if (refs == 1) {
-            // Was last reference
-            // Destroy object and release memory
-            Destroy();
-        }
-
-        return refs;
-    }
-
-protected:
-    virtual void Destroy() const {
-        // Use default delete to destroy object
-        // and free used memory
-        delete this;
-    }
-
-private:
-    // This type of object after creation always has no references
-    mutable std::atomic_int32_t mRefs{0};
+struct RHIColorAttachment {
+    Vec4f clearColor{};
+    RHIRenderTargetOption option = RHIRenderTargetOption::DiscardDiscard;
 };
 
 /**
- * Unsafe shared object reference
- *
- * @tparam T Type of object
- * @param object Object to reference
- * @return Object reference
+ * @class RHIDepthStencilAttachment
+ * @brief Depth-stencil render target attachment descriptor
  */
-template<typename T>
-static inline T *AddRef(T *object) {
-    assert(object);
-    object->AddRef();
-    return object;
-}
+struct RHIDepthStencilAttachment {
+    float depthClear = 1.0f;
+    uint32 stencilClear = 0;
+    RHIRenderTargetOption depthOption = RHIRenderTargetOption::DiscardDiscard;
+    RHIRenderTargetOption stencilOption = RHIRenderTargetOption::DiscardDiscard;
+};
 
 /**
- * Safe shared object reference
- *
- * @tparam T Type of object
- * @param object Object to reference
- * @return Object reference
+ * @class RHIViewport
+ * @brief Area of the render target to draw
  */
-template<typename T>
-static inline T *SafeAddRef(T *object) {
-    if (object)
-        object->AddRef();
-    return object;
-}
+struct RHIViewport {
+    int32 left = 0;
+    int32 bottom = 0;
+    uint32 width = 0;
+    uint32 height = 0;
+};
 
 /**
- * Shared object release reference
- *
- * @tparam T Type of object
- * @param object Object to be unreferenced
+ * @class RHIRenderPassDesc
+ * @brief Full render pass descriptor
  */
-template<typename T>
-static inline void Unref(T *object) {
-    if (object)
-        object->RelRef();
-}
+class RHIRenderPassDesc {
+public:
+    /** Action to perform on each color attachment before/after pass */
+    std::vector<RHIColorAttachment> colorAttachments;
+
+    /** Action to perform on each depth/stencil attachment before/after pass */
+    RHIDepthStencilAttachment depthStencilAttachment;
+
+    /** Region to draw into */
+    RHIViewport viewport;
+
+    /** Name of the render pass for debugging */
+    StringName name;
+
+    /** For offscreen rendering */
+    Ref<RHIFramebuffer> framebuffer;
+
+    /** For window rendering */
+    Ref<Window> window;
+};
+
+/**
+ * @class RHIRenderPass
+ * @brief Compiled render pass object
+ */
+class RHIRenderPass : public RHIResource {
+public:
+    BRK_API ~RHIRenderPass() override = default;
+
+    /** @return Full render pass description */
+    const RHIRenderPassDesc &GetDesc() const { return mDesc; }
+
+protected:
+    /** Full render pass description */
+    RHIRenderPassDesc mDesc;
+};
 
 /**
  * @}
@@ -142,4 +121,4 @@ static inline void Unref(T *object) {
 
 BRK_NS_END
 
-#endif//BERSERK_REFCNT_HPP
+#endif//BERSERK_RHIRENDERPASS_HPP

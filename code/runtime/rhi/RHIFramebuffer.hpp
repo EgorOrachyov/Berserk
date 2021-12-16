@@ -25,116 +25,74 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_REFCNT_HPP
-#define BERSERK_REFCNT_HPP
+#ifndef BERSERK_RHIFRAMEBUFFER_HPP
+#define BERSERK_RHIFRAMEBUFFER_HPP
 
 #include <core/Config.hpp>
+#include <core/Typedefs.hpp>
+#include <core/string/StringName.hpp>
+#include <rhi/RHIResource.hpp>
+#include <rhi/RHITexture.hpp>
 
-#include <atomic>
-#include <cassert>
+#include <vector>
 
 BRK_NS_BEGIN
 
 /**
- * @addtogroup core
+ * @addtogroup rhi
  * @{
  */
 
 /**
- * @class RefCnt
- * @brief Reference counted base object
- *
- * Inherit from this class to have shared-ref logic for your class objects.
- * Use RefPtr to wrap and automate RefCnt objects references counting.
- *
- * @see Ref
+ * @class RHIAttachmentDesc
+ * @brief Describes single render target attachment
  */
-class RefCnt {
-public:
-    virtual ~RefCnt() {
-#ifdef BERSERK_DEBUG
-        assert(mRefs.load() == 0);
-        mRefs.store(0);
-#endif
-    }
-
-    bool IsUnique() const {
-        return GetRefs() <= 1;
-    }
-
-    std::int32_t GetRefs() const {
-        return mRefs.load(std::memory_order_relaxed);
-    }
-
-    std::int32_t AddRef() const {
-        assert(GetRefs() >= 0);
-        return mRefs.fetch_add(1);
-    }
-
-    std::int32_t RelRef() const {
-        assert(GetRefs() > 0);
-        auto refs = mRefs.fetch_sub(1);
-
-        if (refs == 1) {
-            // Was last reference
-            // Destroy object and release memory
-            Destroy();
-        }
-
-        return refs;
-    }
-
-protected:
-    virtual void Destroy() const {
-        // Use default delete to destroy object
-        // and free used memory
-        delete this;
-    }
-
-private:
-    // This type of object after creation always has no references
-    mutable std::atomic_int32_t mRefs{0};
+struct RHIAttachmentDesc {
+    Ref<RHITexture> target;
+    uint32 arraySlice = 0;
+    uint32 face = 0;
+    uint32 mipLevel = 0;
 };
 
 /**
- * Unsafe shared object reference
- *
- * @tparam T Type of object
- * @param object Object to reference
- * @return Object reference
+ * @class RHIFramebufferDesc
+ * @brief RHI framebuffer descriptor
  */
-template<typename T>
-static inline T *AddRef(T *object) {
-    assert(object);
-    object->AddRef();
-    return object;
-}
+struct RHIFramebufferDesc {
+    StringName name;
+    uint32 width;
+    uint32 height;
+    RHIAttachmentDesc depthStencilTarget;
+    std::vector<RHIAttachmentDesc> colorTargets;
+};
 
 /**
- * Safe shared object reference
- *
- * @tparam T Type of object
- * @param object Object to reference
- * @return Object reference
+ * @class RHIFramebuffer
+ * @brief Collection of render targets for drawing
  */
-template<typename T>
-static inline T *SafeAddRef(T *object) {
-    if (object)
-        object->AddRef();
-    return object;
-}
+class RHIFramebuffer : public RHIResource {
+public:
+    BRK_API ~RHIFramebuffer() override = default;
 
-/**
- * Shared object release reference
- *
- * @tparam T Type of object
- * @param object Object to be unreferenced
- */
-template<typename T>
-static inline void Unref(T *object) {
-    if (object)
-        object->RelRef();
-}
+    /** @return Framebuffer width in pixels */
+    uint32 GetWidth() const { return mDesc.width; }
+
+    /** @return Framebuffer height in pixels */
+    uint32 GetHeight() const { return mDesc.height; }
+
+    /** @return Number of color attachments in this framebuffer */
+    size_t GetColorAttachmentsCount() const { return mDesc.colorTargets.size(); }
+
+    /** @return Framebuffer debug name (displayed in the vk debugger) */
+    const StringName &GetName() const { return mDesc.name; }
+
+    /** @return Render target desc */
+    const RHIFramebufferDesc &GetDesc() const { return mDesc; }
+
+protected:
+    /** Render target desc */
+    RHIFramebufferDesc mDesc;
+};
 
 /**
  * @}
@@ -142,4 +100,4 @@ static inline void Unref(T *object) {
 
 BRK_NS_END
 
-#endif//BERSERK_REFCNT_HPP
+#endif//BERSERK_RHIFRAMEBUFFER_HPP
