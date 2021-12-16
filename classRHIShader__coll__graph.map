@@ -1,5 +1,5 @@
 <map id="RHIShader" name="RHIShader">
-<area shape="rect" id="node1" title=" " alt="" coords="72,171,159,197"/>
+<area shape="rect" id="node1" title="Compiled and linked native shader." alt="" coords="72,171,159,197"/>
 <area shape="rect" id="node2" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="5,81,105,108"/>
 <area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="24,5,87,32"/>
 <area shape="rect" id="node4" href="$classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="130,81,221,108"/>
