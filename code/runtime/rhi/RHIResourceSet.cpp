@@ -25,66 +25,67 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <core/Thread.hpp>
-#include <core/io/Logger.hpp>
+#include <rhi/RHIResourceSet.hpp>
 
 #include <algorithm>
-#include <cassert>
 
 BRK_NS_BEGIN
 
-Thread::~Thread() {
-    Update();
-    ExecuteBefore();
-    ExecuteAfter();
-
-    assert(mQueueBefore.empty());
-    assert(mQueueAfter.empty());
-    assert(mExecuteBefore.empty());
-    assert(mExecuteAfter.empty());
+void RHIResourceSetDesc::AddTexture(Ref<RHITexture> texture, uint32 location) {
+    TextureBinding binding;
+    binding.location = location;
+    binding.texture = std::move(texture);
+    mTextures.push_back(std::move(binding));
 }
 
-void Thread::Enqueue(Thread::Callable callable, Thread::Flag flag) {
-    std::lock_guard<yamc::spin_ttas::mutex> lock(mMutex);
-
-    if (flag == Flag::Before)
-        mQueueBefore.push_back(std::move(callable));
-    else if (flag == Flag::Update)
-        mQueueUpdate.push_back(std::move(callable));
-    else if (flag == Flag::After)
-        mQueueAfter.push_back(std::move(callable));
-    else
-        BRK_ERROR("Unknown thread flag");
+void RHIResourceSetDesc::AddSampler(Ref<RHISampler> sampler, uint32 location) {
+    SamplerBinding binding;
+    binding.location = location;
+    binding.sampler = std::move(sampler);
+    mSamplers.push_back(std::move(binding));
 }
 
-void Thread::Update() {
-    assert(OnThread());
-    std::lock_guard<yamc::spin_ttas::mutex> lock(mMutex);
-    std::swap(mQueueBefore, mExecuteBefore);
-    std::swap(mQueueUpdate, mExecuteUpdate);
-    std::swap(mQueueAfter, mExecuteAfter);
+void RHIResourceSetDesc::AddBuffer(Ref<RHIUniformBuffer> buffer, uint32 location) {
+    BufferBinding binding;
+    binding.location = location;
+    binding.buffer = std::move(buffer);
+    mBuffers.push_back(std::move(binding));
 }
 
-void Thread::ExecuteBefore() {
-    assert(OnThread());
-    std::for_each(mExecuteBefore.begin(), mExecuteBefore.end(), [](Callable &callable) { callable(); });
-    mExecuteBefore.clear();
+bool RHIResourceSetDesc::SetTexture(Ref<RHITexture> texture, uint32 location) {
+    auto query = std::find_if(mTextures.begin(), mTextures.end(), [=](const TextureBinding &b) { return b.location == location; });
+    if (query != mTextures.end()) {
+        query->texture = std::move(texture);
+        return true;
+    }
+    AddTexture(std::move(texture), location);
+    return false;
 }
 
-void Thread::ExecuteUpdate() {
-    assert(OnThread());
-    std::for_each(mExecuteUpdate.begin(), mExecuteUpdate.end(), [](Callable &callable) { callable(); });
-    mExecuteUpdate.clear();
+bool RHIResourceSetDesc::SetSampler(Ref<RHISampler> sampler, uint32 location) {
+    auto query = std::find_if(mSamplers.begin(), mSamplers.end(), [=](const SamplerBinding &b) { return b.location == location; });
+    if (query != mSamplers.end()) {
+        query->sampler = std::move(sampler);
+        return true;
+    }
+    AddSampler(std::move(sampler), location);
+    return false;
 }
 
-void Thread::ExecuteAfter() {
-    assert(OnThread());
-    std::for_each(mExecuteAfter.begin(), mExecuteAfter.end(), [](Callable &callable) { callable(); });
-    mExecuteAfter.clear();
+bool RHIResourceSetDesc::SetBuffer(Ref<RHIUniformBuffer> buffer, uint32 location) {
+    auto query = std::find_if(mBuffers.begin(), mBuffers.end(), [=](const BufferBinding &b) { return b.location == location; });
+    if (query != mBuffers.end()) {
+        query->buffer = std::move(buffer);
+        return true;
+    }
+    AddBuffer(std::move(buffer), location);
+    return false;
 }
 
-bool Thread::OnThread() const {
-    return std::this_thread::get_id() == mThreadId;
+void RHIResourceSetDesc::Clear() {
+    mTextures.clear();
+    mSamplers.clear();
+    mBuffers.clear();
 }
 
 BRK_NS_END

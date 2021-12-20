@@ -49,11 +49,11 @@ BRK_NS_BEGIN
  */
 class GlfwInput final : public Input {
 public:
-    GlfwInput();
-    ~GlfwInput() override = default;
-    Ref<Mouse> GetMouse() override;
-    Ref<Keyboard> GetKeyboard() override;
-    Ref<Joystick> GetJoystick() override;
+    BRK_API GlfwInput();
+    BRK_API ~GlfwInput() override = default;
+    BRK_API Ref<Mouse> GetMouse() override;
+    BRK_API Ref<Keyboard> GetKeyboard() override;
+    BRK_API Ref<Joystick> GetJoystick() override;
 
 private:
     friend class GlfwWindowManager;

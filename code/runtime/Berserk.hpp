@@ -94,12 +94,14 @@
  */
 
 #include <rhi/RHIBuffer.hpp>
+#include <rhi/RHICommandList.hpp>
 #include <rhi/RHIDefs.hpp>
 #include <rhi/RHIDevice.hpp>
 #include <rhi/RHIFramebuffer.hpp>
 #include <rhi/RHIGraphicsPipeline.hpp>
 #include <rhi/RHIRenderPass.hpp>
 #include <rhi/RHIResource.hpp>
+#include <rhi/RHIResourceSet.hpp>
 #include <rhi/RHISampler.hpp>
 #include <rhi/RHIShader.hpp>
 #include <rhi/RHITexture.hpp>

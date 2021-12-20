@@ -45,8 +45,8 @@ BRK_NS_BEGIN
  */
 class GlfwMouse final : public Mouse {
 public:
-    GlfwMouse();
-    ~GlfwMouse() override = default;
+    BRK_API GlfwMouse();
+    BRK_API ~GlfwMouse() override = default;
 
     void UpdatePosition(const Point2f &pos);
     void UpdateButton(InputMouseButton button, InputAction action);
@@ -58,8 +58,8 @@ public:
  */
 class GlfwKeyboard final : public Keyboard {
 public:
-    GlfwKeyboard();
-    ~GlfwKeyboard() override = default;
+    BRK_API GlfwKeyboard();
+    BRK_API ~GlfwKeyboard() override = default;
 
     void UpdateKey(InputKeyboardKey key, InputAction action);
 };
@@ -70,8 +70,8 @@ public:
  */
 class GlfwJoystick final : public Joystick {
 public:
-    explicit GlfwJoystick(int32 HND);
-    ~GlfwJoystick() override = default;
+    BRK_API explicit GlfwJoystick(int32 HND);
+    BRK_API ~GlfwJoystick() override = default;
 
     void Update();
     void UpdateState(InputDeviceState state);

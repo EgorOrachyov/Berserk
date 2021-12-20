@@ -30,6 +30,7 @@
 
 #include <core/Config.hpp>
 #include <core/Typedefs.hpp>
+#include <core/string/StringName.hpp>
 #include <core/templates/Mask.hpp>
 #include <rhi/RHIResource.hpp>
 

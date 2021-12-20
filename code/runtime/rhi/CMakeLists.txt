@@ -1,11 +1,13 @@
 set(BERSERK_RHI_HEADER
         rhi/RHIBuffer.hpp
+        rhi/RHICommandList.hpp
         rhi/RHIDefs.hpp
         rhi/RHIDevice.hpp
         rhi/RHIFramebuffer.hpp
         rhi/RHIGraphicsPipeline.hpp
         rhi/RHIRenderPass.hpp
         rhi/RHIResource.hpp
+        rhi/RHIResourceSet.hpp
         rhi/RHISampler.hpp
         rhi/RHIShader.hpp
         rhi/RHITexture.hpp
@@ -14,4 +16,5 @@ set(BERSERK_RHI_HEADER
 
 set(BERSERK_RHI_SRC
         rhi/RHIDevice.cpp
+        rhi/RHIResourceSet.cpp
         )

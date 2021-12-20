@@ -25,92 +25,88 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_THREAD_HPP
-#define BERSERK_THREAD_HPP
+#ifndef BERSERK_RHIRESOURCESET_HPP
+#define BERSERK_RHIRESOURCESET_HPP
 
 #include <core/Config.hpp>
+#include <core/Data.hpp>
 #include <core/Typedefs.hpp>
+#include <rhi/RHIBuffer.hpp>
+#include <rhi/RHIResource.hpp>
+#include <rhi/RHISampler.hpp>
+#include <rhi/RHITexture.hpp>
 
-#include <functional>
-#include <mutex>
-#include <thread>
 #include <vector>
-
-#include <ttas_spin_mutex.hpp>
 
 BRK_NS_BEGIN
 
 /**
- * @addtogroup core
+ * @addtogroup rhi
  * @{
  */
 
 /**
- * @class Thread
- * @brief Represents thread wrapper used to enqueue commands to execute
- *
- * @tparam TArgs Args to call callbacks
+ * @class RHIResourceSetDesc
+ * @brief Describes single set of GPU resource for shader
  */
-class Thread final {
+class RHIResourceSetDesc {
 public:
-    /** @brief Flag to enqueue callback */
-    enum class Flag {
-        /** @brief Execute before thread `main update` */
-        Before,
-        /** @brief Execute middle thread `main update` */
-        Update,
-        /** @brief Execute after thread `main update` */
-        After
+    struct TextureBinding {
+        Ref<RHITexture> texture{};
+        uint32 location{};
     };
 
-    BRK_API Thread() = default;
-    BRK_API ~Thread();
+    struct SamplerBinding {
+        Ref<RHISampler> sampler{};
+        uint32 location{};
+    };
 
-    /** @brief Thread callback function type */
-    using Callable = std::function<void()>;
+    struct BufferBinding {
+        Ref<RHIUniformBuffer> buffer{};
+        uint32 location{};
+    };
 
-    /** Enqueue command to execute on thread */
-    BRK_API void Enqueue(Callable callable, Flag flag);
+    BRK_API RHIResourceSetDesc() = default;
+    BRK_API ~RHIResourceSetDesc() = default;
 
-    /** Enqueue command to execute on thread before `update` */
-    BRK_API void EnqueueBefore(Callable callable) { Enqueue(std::move(callable), Flag::Before); }
+    /** Add texture binding to the set */
+    BRK_API void AddTexture(Ref<RHITexture> texture, uint32 location);
+    /** Add sampler binding to the set */
+    BRK_API void AddSampler(Ref<RHISampler> sampler, uint32 location);
+    /** Add buffer binding to the set */
+    BRK_API void AddBuffer(Ref<RHIUniformBuffer> buffer, uint32 location);
 
-    /** Enqueue command to execute on thread in `update` */
-    BRK_API void EnqueueUpdate(Callable callable) { Enqueue(std::move(callable), Flag::Update); }
 
-    /** Enqueue command to execute on thread after `update` */
-    BRK_API void EnqueueAfter(Callable callable) { Enqueue(std::move(callable), Flag::After); }
+    /** Update (or add new) previously set texture binding in the set */
+    BRK_API bool SetTexture(Ref<RHITexture> texture, uint32 location);
+    /** Update (or add new) previously set sampler binding in the set */
+    BRK_API bool SetSampler(Ref<RHISampler> sampler, uint32 location);
+    /** Update (or add new) previously set buffer binding in the set */
+    BRK_API bool SetBuffer(Ref<RHIUniformBuffer> buffer, uint32 location);
 
-    /** @note Internal: must be called on thread */
-    BRK_API void Update();
+    /** Clear all bindings */
+    BRK_API void Clear();
 
-    /** @note Internal: must be called on thread */
-    BRK_API void ExecuteBefore();
-
-    /** @note Internal: must be called on thread */
-    BRK_API void ExecuteUpdate();
-
-    /** @note Internal: must be called on thread */
-    BRK_API void ExecuteAfter();
-
-    /** @return True if currently on this thread */
-    BRK_API bool OnThread() const;
+    /** @return Texture bindings */
+    BRK_API const std::vector<TextureBinding> &GetTextures() const { return mTextures; }
+    /** @return Sampler bindings */
+    BRK_API const std::vector<SamplerBinding> &GetSamplers() const { return mSamplers; };
+    /** @return Buffer bindings */
+    BRK_API const std::vector<BufferBinding> &GetBuffers() const { return mBuffers; };
 
 private:
-    /** For queueing */
-    std::vector<Callable> mQueueBefore;
-    std::vector<Callable> mQueueUpdate;
-    std::vector<Callable> mQueueAfter;
+    std::vector<TextureBinding> mTextures;
+    std::vector<SamplerBinding> mSamplers;
+    std::vector<BufferBinding> mBuffers;
+};
 
-    /** For execution */
-    std::vector<Callable> mExecuteBefore;
-    std::vector<Callable> mExecuteUpdate;
-    std::vector<Callable> mExecuteAfter;
-
-    /** Id for checks before enqueuing */
-    std::thread::id mThreadId = std::this_thread::get_id();
-
-    mutable yamc::spin_ttas::mutex mMutex;
+/**
+ * @class RHIResourceSet
+ * @brief Set of resource ready to be bound to the pipeline
+ */
+class RHIResourceSet : public RHIResource {
+public:
+    BRK_API ~RHIResourceSet() override = default;
 };
 
 /**
@@ -119,4 +115,4 @@ private:
 
 BRK_NS_END
 
-#endif//BERSERK_THREAD_HPP
+#endif//BERSERK_RHIRESOURCESET_HPP
