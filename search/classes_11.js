@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['window_1220',['Window',['../classWindow.html',1,'']]],
-  ['windowmanager_1221',['WindowManager',['../classWindowManager.html',1,'']]]
+  ['unicode_1274',['Unicode',['../classUnicode.html',1,'']]]
 ];

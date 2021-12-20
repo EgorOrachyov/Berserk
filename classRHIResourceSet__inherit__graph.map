@@ -1,0 +1,5 @@
+<map id="RHIResourceSet" name="RHIResourceSet">
+<area shape="rect" id="node1" title="Set of resource ready to be bound to the pipeline." alt="" coords="5,155,125,181"/>
+<area shape="rect" id="node2" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="15,80,115,107"/>
+<area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="34,5,97,32"/>
+</map>
