@@ -1,0 +1,6 @@
+<map id="GLDevice" name="GLDevice">
+<area shape="rect" id="node1" title="GL device implementation." alt="" coords="121,171,201,197"/>
+<area shape="rect" id="node2" href="$classRHIDevice.html" title="RHI device." alt="" coords="118,95,203,121"/>
+<area shape="rect" id="node3" href="$classTMatMxN.html" title=" " alt="" coords="5,5,159,32"/>
+<area shape="rect" id="node4" href="$structRHIDeviceCaps.html" title="RHI device capabilities." alt="" coords="183,5,298,32"/>
+</map>

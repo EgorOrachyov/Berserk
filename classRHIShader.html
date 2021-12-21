@@ -81,6 +81,7 @@ Inheritance diagram for RHIShader:</div>
 <div class="center"><img src="classRHIShader__inherit__graph.png" border="0" usemap="#aRHIShader_inherit__map" alt="Inheritance graph"/></div>
 <map name="aRHIShader_inherit__map" id="aRHIShader_inherit__map">
 <area shape="rect" title="Compiled and linked native shader." alt="" coords="12,155,99,181"/>
+<area shape="rect" href="classGLShader.html" title="GL Shader (compiled and linked) native program." alt="" coords="15,229,96,256"/>
 <area shape="rect" href="classRHIResource.html" title="Base class for RHI resource." alt="" coords="5,80,105,107"/>
 <area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="24,5,87,32"/>
 </map>
@@ -114,8 +115,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2175201e229bb3678a418abb27e6229a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80db740723cd6f38a2081534df804138"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classString.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHIShader.html#a80db740723cd6f38a2081534df804138">GetCompilerMessage</a> () const =0</td></tr>
 <tr class="separator:a80db740723cd6f38a2081534df804138"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c6f68d2ae8e2e89dd30ae6350452f6f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIShaderMeta.html">RHIShaderMeta</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHIShader.html#a6c6f68d2ae8e2e89dd30ae6350452f6f">GetProgramMeta</a> () const =0</td></tr>
-<tr class="separator:a6c6f68d2ae8e2e89dd30ae6350452f6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76d0906315d47bb20587a8ddd038813a"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classRef.html">Ref</a>&lt; const <a class="el" href="classRHIShaderMeta.html">RHIShaderMeta</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHIShader.html#a76d0906315d47bb20587a8ddd038813a">GetShaderMeta</a> () const =0</td></tr>
+<tr class="separator:a76d0906315d47bb20587a8ddd038813a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0aae86dc63f50976a37ae1880453eb1f"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classStringName.html">StringName</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHIShader.html#a0aae86dc63f50976a37ae1880453eb1f">GetShaderName</a> () const</td></tr>
 <tr class="separator:a0aae86dc63f50976a37ae1880453eb1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac150ba9a99e6547c324944946f88805"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__rhi.html#gaf8c98a3f2cef867026ae99b59eeebf94">RHIShaderLanguage</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHIShader.html#aac150ba9a99e6547c324944946f88805">GetLanguage</a> () const</td></tr>
@@ -148,9 +149,9 @@ Protected Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_methods_classRefCnt"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classRefCnt')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classRefCnt.html">RefCnt</a></td></tr>
-<tr class="memitem:ada9f804b540fd2da0aef4a47b2f17bbc inherit pro_methods_classRefCnt"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRefCnt.html#ada9f804b540fd2da0aef4a47b2f17bbc">Destroy</a> () const</td></tr>
-<tr class="separator:ada9f804b540fd2da0aef4a47b2f17bbc inherit pro_methods_classRefCnt"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classRHIResource"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classRHIResource')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classRHIResource.html">RHIResource</a></td></tr>
+<tr class="memitem:ad2f286f3b9ea25a51dafab554d499368 inherit pro_methods_classRHIResource"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHIResource.html#ad2f286f3b9ea25a51dafab554d499368">Destroy</a> () const override</td></tr>
+<tr class="separator:ad2f286f3b9ea25a51dafab554d499368 inherit pro_methods_classRHIResource"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Compiled and linked native shader. </p>
@@ -242,6 +243,8 @@ Additional Inherited Members</h2></td></tr>
 It is safe to call this function from any thread.</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>Compilation status of the program </dd></dl>
 
+<p>Implemented in <a class="el" href="classGLShader.html#a595645d005090d53bcb46d2b9d7b61d2">GLShader</a>.</p>
+
 </div>
 </div>
 <a id="a80db740723cd6f38a2081534df804138"></a>
@@ -269,6 +272,8 @@ It is safe to call this function from any thread.</dd></dl>
 <p>Get compiler message about this program compilation. If compilation finished with an error returns error description, otherwise nothing.</p>
 <dl class="section note"><dt>Note</dt><dd>It is safe to call this function from any thread.</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>Error message about this program compilation </dd></dl>
+
+<p>Implemented in <a class="el" href="classGLShader.html#add87e8ac2255bec64971791fd3305296">GLShader</a>.</p>
 
 </div>
 </div>
@@ -298,8 +303,8 @@ It is safe to call this function from any thread.</dd></dl>
 
 </div>
 </div>
-<a id="a6c6f68d2ae8e2e89dd30ae6350452f6f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6c6f68d2ae8e2e89dd30ae6350452f6f">&#9670;&nbsp;</a></span>GetProgramMeta()</h2>
+<a id="a76d0906315d47bb20587a8ddd038813a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76d0906315d47bb20587a8ddd038813a">&#9670;&nbsp;</a></span>GetShaderMeta()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -308,7 +313,7 @@ It is safe to call this function from any thread.</dd></dl>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classRef.html">Ref</a>&lt;<a class="el" href="classRHIShaderMeta.html">RHIShaderMeta</a>&gt; RHIShader::GetProgramMeta </td>
+          <td class="memname">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classRef.html">Ref</a>&lt;const <a class="el" href="classRHIShaderMeta.html">RHIShaderMeta</a>&gt; RHIShader::GetShaderMeta </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -325,6 +330,8 @@ It is safe to call this function from any thread.</dd></dl>
 <dd>
 It is safe to call this function from any thread.</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>Reference to program meta info if present </dd></dl>
+
+<p>Implemented in <a class="el" href="classGLShader.html#afe59b12a9d375b7e13070840cd556c0e">GLShader</a>.</p>
 
 </div>
 </div>

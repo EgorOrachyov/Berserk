@@ -1,0 +1,6 @@
+<map id="GLRenderPass" name="GLRenderPass">
+<area shape="rect" id="node1" title="GL render pass state object." alt="" coords="8,229,119,256"/>
+<area shape="rect" id="node2" href="$classRHIRenderPass.html" title="Compiled render pass object." alt="" coords="5,155,121,181"/>
+<area shape="rect" id="node3" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="13,80,113,107"/>
+<area shape="rect" id="node4" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="32,5,95,32"/>
+</map>

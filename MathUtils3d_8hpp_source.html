@@ -101,7 +101,7 @@ $(function() {
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="TMatMxN_8hpp.html">core/math/TMatMxN.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<a class="code" href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<a class="code" href="namespaceBRK__NS__BEGIN.html">BRK_NS_BEGIN</a></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
 <div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classMathUtils3d.html">   44</a></span>&#160;<span class="keyword">class </span><a class="code" href="classMathUtils3d.html">MathUtils3d</a> {</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">public</span>:</div>
@@ -112,7 +112,7 @@ $(function() {
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        t[2] = v[2];</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        t[3] = 1.0f;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">return</span> m * t;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classTVecN.html">TVecN&lt;float, 3&gt;</a>(m * t);</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    }</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
 <div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classMathUtils3d.html#a4f626d36b53d922a1d74a8874bc0d7b7">   57</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="classTMatMxN.html">Mat4x4f</a> <a class="code" href="classMathUtils3d.html#a4f626d36b53d922a1d74a8874bc0d7b7">IdentityMatrix</a>() {</div>
@@ -149,8 +149,8 @@ $(function() {
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    }</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
 <div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="classMathUtils3d.html#a2cba8610fae400e6be00862f4c93f750">   94</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="classTMatMxN.html">Mat4x4f</a> <a class="code" href="classMathUtils3d.html#a2cba8610fae400e6be00862f4c93f750">RotateX</a>(<span class="keywordtype">float</span> angleRad) {</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keyword">auto</span> s = Utils::Sin(angleRad);</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keyword">auto</span> c = Utils::Cos(angleRad);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keyword">auto</span> s = <a class="code" href="classMathUtils.html#aeca6c8d28ad3df767f56439208b005a9">MathUtils::Sin</a>(angleRad);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keyword">auto</span> c = <a class="code" href="classMathUtils.html#aaa72d79163cd78e1e3d7893e0e15f460">MathUtils::Cos</a>(angleRad);</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordflow">return</span> {1, 0, 0, 0,</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                0, c, -s, 0,</div>
@@ -159,8 +159,8 @@ $(function() {
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    }</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
 <div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="classMathUtils3d.html#a0aa51a1a461280a2d7f0792a1d28f4f7">  105</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="classTMatMxN.html">Mat4x4f</a> <a class="code" href="classMathUtils3d.html#a0aa51a1a461280a2d7f0792a1d28f4f7">RotateY</a>(<span class="keywordtype">float</span> angleRad) {</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keyword">auto</span> s = Utils::Sin(angleRad);</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keyword">auto</span> c = Utils::Cos(angleRad);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keyword">auto</span> s = <a class="code" href="classMathUtils.html#aeca6c8d28ad3df767f56439208b005a9">MathUtils::Sin</a>(angleRad);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keyword">auto</span> c = <a class="code" href="classMathUtils.html#aaa72d79163cd78e1e3d7893e0e15f460">MathUtils::Cos</a>(angleRad);</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="keywordflow">return</span> {c, 0, s, 0,</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                0, 1, 0, 0,</div>
@@ -169,8 +169,8 @@ $(function() {
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    }</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
 <div class="line"><a name="l00116"></a><span class="lineno"><a class="line" href="classMathUtils3d.html#ac5d2d50b00b4e18070fa9790fb1015cd">  116</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="classTMatMxN.html">Mat4x4f</a> <a class="code" href="classMathUtils3d.html#ac5d2d50b00b4e18070fa9790fb1015cd">RotateZ</a>(<span class="keywordtype">float</span> angleRad) {</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keyword">auto</span> s = Utils::Sin(angleRad);</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keyword">auto</span> c = Utils::Cos(angleRad);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keyword">auto</span> s = <a class="code" href="classMathUtils.html#aeca6c8d28ad3df767f56439208b005a9">MathUtils::Sin</a>(angleRad);</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keyword">auto</span> c = <a class="code" href="classMathUtils.html#aaa72d79163cd78e1e3d7893e0e15f460">MathUtils::Cos</a>(angleRad);</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <span class="keywordflow">return</span> {c, -s, 0, 0,</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                s, c, 0, 0,</div>
@@ -180,8 +180,8 @@ $(function() {
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
 <div class="line"><a name="l00127"></a><span class="lineno"><a class="line" href="classMathUtils3d.html#a8fa0e953e57fa15dc1ed82d260f5369d">  127</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="classTMatMxN.html">Mat4x4f</a> <a class="code" href="classMathUtils3d.html#a8fa0e953e57fa15dc1ed82d260f5369d">Rotate</a>(<span class="keyword">const</span> <a class="code" href="classTVecN.html">Vec3f</a> &amp;axis, <span class="keywordtype">float</span> angleRad) {</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keyword">auto</span> Ax = axis.<a class="code" href="classTVecN.html#a9fc35364e05faa1c4eefa0bec7edbcf5">Normalized</a>();</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keyword">auto</span> s = Utils::Sin(angleRad);</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        <span class="keyword">auto</span> c = Utils::Cos(angleRad);</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keyword">auto</span> s = <a class="code" href="classMathUtils.html#aeca6c8d28ad3df767f56439208b005a9">MathUtils::Sin</a>(angleRad);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        <span class="keyword">auto</span> c = <a class="code" href="classMathUtils.html#aaa72d79163cd78e1e3d7893e0e15f460">MathUtils::Cos</a>(angleRad);</div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        <span class="keyword">auto</span> oneMinC = 1 - c;</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordflow">return</span> {</div>
@@ -219,7 +219,7 @@ $(function() {
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    }</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
 <div class="line"><a name="l00199"></a><span class="lineno"><a class="line" href="classMathUtils3d.html#a29a84e72e6d9fdcb96d12dbf311d3190">  199</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="classTMatMxN.html">Mat4x4f</a> <a class="code" href="classMathUtils3d.html#a29a84e72e6d9fdcb96d12dbf311d3190">Perspective</a>(<span class="keywordtype">float</span> fov, <span class="keywordtype">float</span> aspect, <span class="keywordtype">float</span> near, <span class="keywordtype">float</span> far) {</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordtype">float</span> ctg_angle = 1.0f / Utils::Tan(fov / 2.0f);</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordtype">float</span> ctg_angle = 1.0f / <a class="code" href="classMathUtils.html#a813af24ea2592532a8c83194ba2452f3">MathUtils::Tan</a>(fov / 2.0f);</div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; </div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        <span class="keywordflow">return</span> {ctg_angle / aspect, 0.0f, 0.0f, 0.0f,</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                0.0f, ctg_angle, 0.0f, 0.0f,</div>
@@ -233,13 +233,12 @@ $(function() {
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;                0.0f, 0.0f, 2.0f / (far - near), (far + near) / (near - far),</div>
 <div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                0.0f, 0.0f, 0.0f, 1.0f};</div>
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    }</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;}</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;};</div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160; </div>
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<a class="code" href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div>
 <div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
 <div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_UTILS3d_H</span></div>
 <div class="ttc" id="aConfig_8hpp_html_a206fc1c8e28399b1f48e8215d5584500"><div class="ttname"><a href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div><div class="ttdeci">#define BRK_NS_END</div><div class="ttdef"><b>Definition:</b> Config.hpp:48</div></div>
-<div class="ttc" id="aConfig_8hpp_html_a879e3b805923a7033431eed6bb5eddc1"><div class="ttname"><a href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a></div><div class="ttdeci">#define BRK_NS_BEGIN</div><div class="ttdef"><b>Definition:</b> Config.hpp:47</div></div>
 <div class="ttc" id="aTMatMxN_8hpp_html"><div class="ttname"><a href="TMatMxN_8hpp.html">TMatMxN.hpp</a></div></div>
 <div class="ttc" id="aclassMathUtils3d_html"><div class="ttname"><a href="classMathUtils3d.html">MathUtils3d</a></div><div class="ttdoc">3d space math utils</div><div class="ttdef"><b>Definition:</b> MathUtils3d.hpp:44</div></div>
 <div class="ttc" id="aclassMathUtils3d_html_a0aa51a1a461280a2d7f0792a1d28f4f7"><div class="ttname"><a href="classMathUtils3d.html#a0aa51a1a461280a2d7f0792a1d28f4f7">MathUtils3d::RotateY</a></div><div class="ttdeci">static Mat4x4f RotateY(float angleRad)</div><div class="ttdoc">Clockwise around axis rotation.</div><div class="ttdef"><b>Definition:</b> MathUtils3d.hpp:105</div></div>
@@ -255,6 +254,9 @@ $(function() {
 <div class="ttc" id="aclassMathUtils3d_html_ab1c5c3d4e91edcd22e7ad57ae3ba809e"><div class="ttname"><a href="classMathUtils3d.html#ab1c5c3d4e91edcd22e7ad57ae3ba809e">MathUtils3d::Translate</a></div><div class="ttdeci">static Mat4x4f Translate(const Vec3f &amp;t)</div><div class="ttdoc">Translation in the direction of vec t.</div><div class="ttdef"><b>Definition:</b> MathUtils3d.hpp:86</div></div>
 <div class="ttc" id="aclassMathUtils3d_html_ac5d2d50b00b4e18070fa9790fb1015cd"><div class="ttname"><a href="classMathUtils3d.html#ac5d2d50b00b4e18070fa9790fb1015cd">MathUtils3d::RotateZ</a></div><div class="ttdeci">static Mat4x4f RotateZ(float angleRad)</div><div class="ttdoc">Clockwise around axis rotation.</div><div class="ttdef"><b>Definition:</b> MathUtils3d.hpp:116</div></div>
 <div class="ttc" id="aclassMathUtils3d_html_ad58ce107e54df2759d44a2260e28a1ea"><div class="ttname"><a href="classMathUtils3d.html#ad58ce107e54df2759d44a2260e28a1ea">MathUtils3d::Multiply</a></div><div class="ttdeci">static TVecN&lt; float, 3 &gt; Multiply(const Mat4x4f &amp;m, const TVecN&lt; float, 3 &gt; &amp;v)</div><div class="ttdef"><b>Definition:</b> MathUtils3d.hpp:46</div></div>
+<div class="ttc" id="aclassMathUtils_html_a813af24ea2592532a8c83194ba2452f3"><div class="ttname"><a href="classMathUtils.html#a813af24ea2592532a8c83194ba2452f3">MathUtils::Tan</a></div><div class="ttdeci">static float Tan(float a)</div><div class="ttdef"><b>Definition:</b> MathUtils.hpp:94</div></div>
+<div class="ttc" id="aclassMathUtils_html_aaa72d79163cd78e1e3d7893e0e15f460"><div class="ttname"><a href="classMathUtils.html#aaa72d79163cd78e1e3d7893e0e15f460">MathUtils::Cos</a></div><div class="ttdeci">static float Cos(float a)</div><div class="ttdef"><b>Definition:</b> MathUtils.hpp:91</div></div>
+<div class="ttc" id="aclassMathUtils_html_aeca6c8d28ad3df767f56439208b005a9"><div class="ttname"><a href="classMathUtils.html#aeca6c8d28ad3df767f56439208b005a9">MathUtils::Sin</a></div><div class="ttdeci">static float Sin(float a)</div><div class="ttdef"><b>Definition:</b> MathUtils.hpp:88</div></div>
 <div class="ttc" id="aclassTMatMxN_html"><div class="ttname"><a href="classTMatMxN.html">TMatMxN&lt; float, 4, 4 &gt;</a></div></div>
 <div class="ttc" id="aclassTMatMxN_html_a9035112966674abdf45a7b9a37452f92"><div class="ttname"><a href="classTMatMxN.html#a9035112966674abdf45a7b9a37452f92">TMatMxN::values</a></div><div class="ttdeci">T values[M *N]</div><div class="ttdef"><b>Definition:</b> TMatMxN.hpp:426</div></div>
 <div class="ttc" id="aclassTVecN_html"><div class="ttname"><a href="classTVecN.html">TVecN&lt; float, 3 &gt;</a></div></div>
@@ -265,6 +267,7 @@ $(function() {
 <div class="ttc" id="agroup__platform_html_gga1111d135f2af893795d4dab37b5fa827a02129bb861061d1a052c592e2dc6b383"><div class="ttname"><a href="group__platform.html#gga1111d135f2af893795d4dab37b5fa827a02129bb861061d1a052c592e2dc6b383">InputKeyboardKey::X</a></div><div class="ttdeci">@ X</div></div>
 <div class="ttc" id="agroup__platform_html_gga1111d135f2af893795d4dab37b5fa827a21c2e59531c8710156d34a3c30ac81d5"><div class="ttname"><a href="group__platform.html#gga1111d135f2af893795d4dab37b5fa827a21c2e59531c8710156d34a3c30ac81d5">InputKeyboardKey::Z</a></div><div class="ttdeci">@ Z</div></div>
 <div class="ttc" id="agroup__platform_html_gga1111d135f2af893795d4dab37b5fa827a57cec4137b614c87cb4e24a3d003a3e0"><div class="ttname"><a href="group__platform.html#gga1111d135f2af893795d4dab37b5fa827a57cec4137b614c87cb4e24a3d003a3e0">InputKeyboardKey::Y</a></div><div class="ttdeci">@ Y</div></div>
+<div class="ttc" id="anamespaceBRK__NS__BEGIN_html"><div class="ttname"><a href="namespaceBRK__NS__BEGIN.html">BRK_NS_BEGIN</a></div><div class="ttdef"><b>Definition:</b> GLDevice.cpp:45</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

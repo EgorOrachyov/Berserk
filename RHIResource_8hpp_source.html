@@ -105,27 +105,31 @@ $(function() {
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="RefCnt_8hpp.html">core/templates/RefCnt.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="RHIDefs_8hpp.html">rhi/RHIDefs.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<a class="code" href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<a class="code" href="namespaceBRK__NS__BEGIN.html">BRK_NS_BEGIN</a></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classRHIResource.html">   52</a></span>&#160;<span class="keyword">class </span><a class="code" href="classRHIResource.html">RHIResource</a> : <span class="keyword">public</span> <a class="code" href="classRefCnt.html">RefCnt</a> {</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classRHIResource.html#aeef95619b3f2ff4080b5c12e7b37d917">   54</a></span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="code" href="classRHIResource.html#aeef95619b3f2ff4080b5c12e7b37d917">~RHIResource</a>() <span class="keyword">override</span> = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;};</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<a class="code" href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_RHIRESOURCE_HPP</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classRHIResource.html">   55</a></span>&#160;<span class="keyword">class </span><a class="code" href="classRHIResource.html">RHIResource</a> : <span class="keyword">public</span> <a class="code" href="classRefCnt.html">RefCnt</a> {</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classRHIResource.html#aeef95619b3f2ff4080b5c12e7b37d917">   57</a></span>&#160;    <a class="code" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="code" href="classRHIResource.html#aeef95619b3f2ff4080b5c12e7b37d917">~RHIResource</a>() <span class="keyword">override</span> = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classRHIResource.html#ad2f286f3b9ea25a51dafab554d499368">Destroy</a>() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;};</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<a class="code" href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_RHIRESOURCE_HPP</span></div>
 <div class="ttc" id="aConfig_8hpp_html"><div class="ttname"><a href="Config_8hpp.html">Config.hpp</a></div></div>
 <div class="ttc" id="aConfig_8hpp_html_a206fc1c8e28399b1f48e8215d5584500"><div class="ttname"><a href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div><div class="ttdeci">#define BRK_NS_END</div><div class="ttdef"><b>Definition:</b> Config.hpp:48</div></div>
 <div class="ttc" id="aConfig_8hpp_html_a3a924191d1ccbaaa2df0885c249353f4"><div class="ttname"><a href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a></div><div class="ttdeci">#define BRK_API</div><div class="ttdef"><b>Definition:</b> Config.hpp:32</div></div>
-<div class="ttc" id="aConfig_8hpp_html_a879e3b805923a7033431eed6bb5eddc1"><div class="ttname"><a href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a></div><div class="ttdeci">#define BRK_NS_BEGIN</div><div class="ttdef"><b>Definition:</b> Config.hpp:47</div></div>
 <div class="ttc" id="aRHIDefs_8hpp_html"><div class="ttname"><a href="RHIDefs_8hpp.html">RHIDefs.hpp</a></div></div>
 <div class="ttc" id="aRefCnt_8hpp_html"><div class="ttname"><a href="RefCnt_8hpp.html">RefCnt.hpp</a></div></div>
 <div class="ttc" id="aRef_8hpp_html"><div class="ttname"><a href="Ref_8hpp.html">Ref.hpp</a></div></div>
 <div class="ttc" id="aTypedefs_8hpp_html"><div class="ttname"><a href="Typedefs_8hpp.html">Typedefs.hpp</a></div></div>
-<div class="ttc" id="aclassRHIResource_html"><div class="ttname"><a href="classRHIResource.html">RHIResource</a></div><div class="ttdoc">Base class for RHI resource.</div><div class="ttdef"><b>Definition:</b> RHIResource.hpp:52</div></div>
+<div class="ttc" id="aclassRHIResource_html"><div class="ttname"><a href="classRHIResource.html">RHIResource</a></div><div class="ttdoc">Base class for RHI resource.</div><div class="ttdef"><b>Definition:</b> RHIResource.hpp:55</div></div>
+<div class="ttc" id="aclassRHIResource_html_ad2f286f3b9ea25a51dafab554d499368"><div class="ttname"><a href="classRHIResource.html#ad2f286f3b9ea25a51dafab554d499368">RHIResource::Destroy</a></div><div class="ttdeci">void Destroy() const override</div><div class="ttdef"><b>Definition:</b> RHIResource.cpp:33</div></div>
 <div class="ttc" id="aclassRHIResource_html_aeef95619b3f2ff4080b5c12e7b37d917"><div class="ttname"><a href="classRHIResource.html#aeef95619b3f2ff4080b5c12e7b37d917">RHIResource::~RHIResource</a></div><div class="ttdeci">BRK_API ~RHIResource() override=default</div></div>
 <div class="ttc" id="aclassRefCnt_html"><div class="ttname"><a href="classRefCnt.html">RefCnt</a></div><div class="ttdoc">Reference counted base object.</div><div class="ttdef"><b>Definition:</b> RefCnt.hpp:52</div></div>
+<div class="ttc" id="anamespaceBRK__NS__BEGIN_html"><div class="ttname"><a href="namespaceBRK__NS__BEGIN.html">BRK_NS_BEGIN</a></div><div class="ttdef"><b>Definition:</b> GLDevice.cpp:45</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

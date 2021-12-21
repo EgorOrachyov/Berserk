@@ -62,6 +62,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classGlfwWindowManager-members.html">List of all members</a>  </div>
@@ -93,6 +94,13 @@ Collaboration diagram for GlfwWindowManager:</div>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a8b25adac5fade8643e17384ad9f4fdcb"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlfwWindowManager.html#a8b25adac5fade8643e17384ad9f4fdcb">MakeContextCurrentFunc</a> = std::function&lt; void(const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classWindow.html">Window</a> &gt; &amp;)&gt;</td></tr>
+<tr class="separator:a8b25adac5fade8643e17384ad9f4fdcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca1256e5a7c63927a82246072a3672a6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlfwWindowManager.html#aca1256e5a7c63927a82246072a3672a6">SwapBuffersFunc</a> = std::function&lt; void(const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classWindow.html">Window</a> &gt; &amp;)&gt;</td></tr>
+<tr class="separator:aca1256e5a7c63927a82246072a3672a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:afcc36586910e5c20a5d04de8ebcd807f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlfwWindowManager.html#afcc36586910e5c20a5d04de8ebcd807f">GlfwWindowManager</a> (bool vsync, bool clientApi)</td></tr>
@@ -104,6 +112,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a567b0f7093e3d5841f45eccea4c2576a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4e5152c1aec374df74ef8f74888b9f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classWindow.html">Window</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlfwWindowManager.html#aa4e5152c1aec374df74ef8f74888b9f1">GetPrimaryWindow</a> () override</td></tr>
 <tr class="separator:aa4e5152c1aec374df74ef8f74888b9f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a814d3edd536dda96991a4d16e4332a5a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classGlfwWindowManager.html#a8b25adac5fade8643e17384ad9f4fdcb">MakeContextCurrentFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlfwWindowManager.html#a814d3edd536dda96991a4d16e4332a5a">GetMakeContextCurrentFunc</a> ()</td></tr>
+<tr class="separator:a814d3edd536dda96991a4d16e4332a5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09824cdddc52f6b6e4177cb782d4e220"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classGlfwWindowManager.html#aca1256e5a7c63927a82246072a3672a6">SwapBuffersFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlfwWindowManager.html#a09824cdddc52f6b6e4177cb782d4e220">GetSwapBuffersFunc</a> ()</td></tr>
+<tr class="separator:a09824cdddc52f6b6e4177cb782d4e220"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classWindowManager"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classWindowManager')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classWindowManager.html">WindowManager</a></td></tr>
 <tr class="memitem:ac8e4cb97af0de96f2bd2e3b7b68d97ce inherit pub_methods_classWindowManager"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWindowManager.html#ac8e4cb97af0de96f2bd2e3b7b68d97ce">~WindowManager</a> ()=default</td></tr>
 <tr class="separator:ac8e4cb97af0de96f2bd2e3b7b68d97ce inherit pub_methods_classWindowManager"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -115,7 +127,36 @@ Friends</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Glfw window manager implementation. </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a8b25adac5fade8643e17384ad9f4fdcb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b25adac5fade8643e17384ad9f4fdcb">&#9670;&nbsp;</a></span>MakeContextCurrentFunc</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classGlfwWindowManager.html#a8b25adac5fade8643e17384ad9f4fdcb">GlfwWindowManager::MakeContextCurrentFunc</a> =  std::function&lt;void(const <a class="el" href="classRef.html">Ref</a>&lt;<a class="el" href="classWindow.html">Window</a>&gt; &amp;)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aca1256e5a7c63927a82246072a3672a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca1256e5a7c63927a82246072a3672a6">&#9670;&nbsp;</a></span>SwapBuffersFunc</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classGlfwWindowManager.html#aca1256e5a7c63927a82246072a3672a6">GlfwWindowManager::SwapBuffersFunc</a> =  std::function&lt;void(const <a class="el" href="classRef.html">Ref</a>&lt;<a class="el" href="classWindow.html">Window</a>&gt; &amp;)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="afcc36586910e5c20a5d04de8ebcd807f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afcc36586910e5c20a5d04de8ebcd807f">&#9670;&nbsp;</a></span>GlfwWindowManager()</h2>
 
@@ -227,6 +268,23 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="a814d3edd536dda96991a4d16e4332a5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a814d3edd536dda96991a4d16e4332a5a">&#9670;&nbsp;</a></span>GetMakeContextCurrentFunc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classGlfwWindowManager.html#a8b25adac5fade8643e17384ad9f4fdcb">GlfwWindowManager::MakeContextCurrentFunc</a> GlfwWindowManager::GetMakeContextCurrentFunc </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aa4e5152c1aec374df74ef8f74888b9f1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa4e5152c1aec374df74ef8f74888b9f1">&#9670;&nbsp;</a></span>GetPrimaryWindow()</h2>
 
@@ -252,6 +310,23 @@ Friends</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>Returns primary window of the engine </dd></dl>
 
 <p>Implements <a class="el" href="classWindowManager.html#a6b63ed61b678eefd1226cf26355c34cc">WindowManager</a>.</p>
+
+</div>
+</div>
+<a id="a09824cdddc52f6b6e4177cb782d4e220"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09824cdddc52f6b6e4177cb782d4e220">&#9670;&nbsp;</a></span>GetSwapBuffersFunc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classGlfwWindowManager.html#aca1256e5a7c63927a82246072a3672a6">GlfwWindowManager::SwapBuffersFunc</a> GlfwWindowManager::GetSwapBuffersFunc </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>

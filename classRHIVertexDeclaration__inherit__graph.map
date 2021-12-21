@@ -1,5 +1,6 @@
 <map id="RHIVertexDeclaration" name="RHIVertexDeclaration">
 <area shape="rect" id="node1" title="Contains information about a vertex declaration." alt="" coords="5,155,152,181"/>
+<area shape="rect" id="node4" href="$classGLVertexDeclaration.html" title="GL vertex declaration implementation." alt="" coords="7,229,150,256"/>
 <area shape="rect" id="node2" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="29,80,129,107"/>
 <area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="47,5,110,32"/>
 </map>

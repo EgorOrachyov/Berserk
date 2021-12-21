@@ -1,0 +1,10 @@
+<map id="GLFramebuffer" name="GLFramebuffer">
+<area shape="rect" id="node1" title="GL framebuffer implementation." alt="" coords="73,349,182,376"/>
+<area shape="rect" id="node2" href="$classRHIFramebuffer.html" title="Collection of render targets for drawing." alt="" coords="70,273,185,300"/>
+<area shape="rect" id="node3" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="5,184,105,211"/>
+<area shape="rect" id="node4" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="24,95,87,121"/>
+<area shape="rect" id="node5" href="$structRHIFramebufferDesc.html" title="RHI framebuffer descriptor." alt="" coords="130,184,274,211"/>
+<area shape="rect" id="node6" href="$classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="134,95,225,121"/>
+<area shape="rect" id="node7" href="$structRHIAttachmentDesc.html" title="Describes single render target attachment." alt="" coords="249,95,392,121"/>
+<area shape="rect" id="node8" href="$classRef.html" title=" " alt="" coords="255,5,386,32"/>
+</map>

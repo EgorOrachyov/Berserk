@@ -81,6 +81,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a426da13c4e5ee9082bf2264a024a0229"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classApplication.html#a426da13c4e5ee9082bf2264a024a0229">Run</a> (int argc, const char *const *argv)</td></tr>
 <tr class="memdesc:a426da13c4e5ee9082bf2264a024a0229"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classApplication.html" title="Game application main class.">Application</a> entry point.  <a href="classApplication.html#a426da13c4e5ee9082bf2264a024a0229">More...</a><br /></td></tr>
 <tr class="separator:a426da13c4e5ee9082bf2264a024a0229"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6585c7b03d005a405b2ed2c4edd3a41"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classApplication.html#ad6585c7b03d005a405b2ed2c4edd3a41">OnWindowCreate</a> ()</td></tr>
+<tr class="memdesc:ad6585c7b03d005a405b2ed2c4edd3a41"><td class="mdescLeft">&#160;</td><td class="mdescRight">On application primary window creation.  <a href="classApplication.html#ad6585c7b03d005a405b2ed2c4edd3a41">More...</a><br /></td></tr>
+<tr class="separator:ad6585c7b03d005a405b2ed2c4edd3a41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3f42c91a02dfde25c04b1d0e0ba7e28"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classApplication.html#ad3f42c91a02dfde25c04b1d0e0ba7e28">OnInitialize</a> ()</td></tr>
 <tr class="memdesc:ad3f42c91a02dfde25c04b1d0e0ba7e28"><td class="mdescLeft">&#160;</td><td class="mdescRight">On application initialize callback.  <a href="classApplication.html#ad3f42c91a02dfde25c04b1d0e0ba7e28">More...</a><br /></td></tr>
 <tr class="separator:ad3f42c91a02dfde25c04b1d0e0ba7e28"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -97,7 +100,7 @@ Public Member Functions</h2></td></tr>
 <div class="line"> <span class="keywordflow">return</span> app.<a class="code" href="classApplication.html#a426da13c4e5ee9082bf2264a024a0229">Run</a>(argc, argv);</div>
 <div class="line">}</div>
 <div class="ttc" id="aclassApplication_html"><div class="ttname"><a href="classApplication.html">Application</a></div><div class="ttdoc">Game application main class.</div><div class="ttdef"><b>Definition:</b> Application.hpp:63</div></div>
-<div class="ttc" id="aclassApplication_html_a426da13c4e5ee9082bf2264a024a0229"><div class="ttname"><a href="classApplication.html#a426da13c4e5ee9082bf2264a024a0229">Application::Run</a></div><div class="ttdeci">BRK_API int Run(int argc, const char *const *argv)</div><div class="ttdoc">Application entry point.</div><div class="ttdef"><b>Definition:</b> Application.cpp:36</div></div>
+<div class="ttc" id="aclassApplication_html_a426da13c4e5ee9082bf2264a024a0229"><div class="ttname"><a href="classApplication.html#a426da13c4e5ee9082bf2264a024a0229">Application::Run</a></div><div class="ttdeci">BRK_API int Run(int argc, const char *const *argv)</div><div class="ttdoc">Application entry point.</div><div class="ttdef"><b>Definition:</b> Application.cpp:38</div></div>
 </div><!-- fragment --> </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad6e64db8c3694917a5f8b751c2204f86"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad6e64db8c3694917a5f8b751c2204f86">&#9670;&nbsp;</a></span>~Application()</h2>
@@ -178,6 +181,34 @@ Public Member Functions</h2></td></tr>
 
 <p>On application initialize callback. </p>
 <p>Called once, when the engine systems fully initialized. Override this method in our application game to add custom init logic to the engine and application. </p>
+
+</div>
+</div>
+<a id="ad6585c7b03d005a405b2ed2c4edd3a41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6585c7b03d005a405b2ed2c4edd3a41">&#9670;&nbsp;</a></span>OnWindowCreate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void Application::OnWindowCreate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>On application primary window creation. </p>
+<p>Called once, when the engine is ready to create primary window, but not yet set up rendering and RHI device layer. Override this method to create your primary application window. </p>
 
 </div>
 </div>

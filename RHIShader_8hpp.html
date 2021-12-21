@@ -76,6 +76,7 @@ $(function() {
 <code>#include &lt;<a class="el" href="Typedefs_8hpp_source.html">core/Typedefs.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="StringName_8hpp_source.html">core/string/StringName.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="RHIResource_8hpp_source.html">rhi/RHIResource.hpp</a>&gt;</code><br />
+<code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;unordered_map&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -83,27 +84,27 @@ Include dependency graph for RHIShader.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="RHIShader_8hpp__incl.png" border="0" usemap="#acode_2runtime_2rhi_2RHIShader_8hpp" alt=""/></div>
 <map name="acode_2runtime_2rhi_2RHIShader_8hpp" id="acode_2runtime_2rhi_2RHIShader_8hpp">
-<area shape="rect" title=" " alt="" coords="815,5,1022,32"/>
-<area shape="rect" href="Config_8hpp.html" title=" " alt="" coords="483,304,594,331"/>
-<area shape="rect" href="Data_8hpp.html" title=" " alt="" coords="190,80,293,107"/>
-<area shape="rect" href="Typedefs_8hpp.html" title=" " alt="" coords="801,229,929,256"/>
-<area shape="rect" href="StringName_8hpp.html" title=" " alt="" coords="829,80,1009,107"/>
-<area shape="rect" title=" " alt="" coords="1275,155,1386,181"/>
-<area shape="rect" href="RHIResource_8hpp.html" title=" " alt="" coords="474,80,617,107"/>
-<area shape="rect" title=" " alt="" coords="1461,80,1520,107"/>
-<area shape="rect" href="Ref_8hpp.html" title=" " alt="" coords="279,155,435,181"/>
-<area shape="rect" title=" " alt="" coords="23,155,102,181"/>
-<area shape="rect" title=" " alt="" coords="876,304,951,331"/>
-<area shape="rect" title=" " alt="" coords="783,304,851,331"/>
-<area shape="rect" href="RefCnt_8hpp.html" title=" " alt="" coords="260,229,436,256"/>
-<area shape="rect" title=" " alt="" coords="273,304,335,331"/>
-<area shape="rect" title=" " alt="" coords="359,304,425,331"/>
-<area shape="rect" href="String_8hpp.html" title=" " alt="" coords="1106,155,1251,181"/>
-<area shape="rect" title=" " alt="" coords="802,155,859,181"/>
-<area shape="rect" title=" " alt="" coords="884,155,953,181"/>
-<area shape="rect" title=" " alt="" coords="978,155,1030,181"/>
-<area shape="rect" title=" " alt="" coords="1086,229,1141,256"/>
-<area shape="rect" href="RHIDefs_8hpp.html" title=" " alt="" coords="561,155,676,181"/>
+<area shape="rect" title=" " alt="" coords="186,5,393,32"/>
+<area shape="rect" href="Config_8hpp.html" title=" " alt="" coords="382,304,493,331"/>
+<area shape="rect" href="Data_8hpp.html" title=" " alt="" coords="165,80,267,107"/>
+<area shape="rect" href="Typedefs_8hpp.html" title=" " alt="" coords="240,229,368,256"/>
+<area shape="rect" title=" " alt="" coords="49,155,127,181"/>
+<area shape="rect" href="StringName_8hpp.html" title=" " alt="" coords="759,80,939,107"/>
+<area shape="rect" title=" " alt="" coords="1302,155,1413,181"/>
+<area shape="rect" href="RHIResource_8hpp.html" title=" " alt="" coords="338,80,481,107"/>
+<area shape="rect" title=" " alt="" coords="1015,80,1073,107"/>
+<area shape="rect" href="Ref_8hpp.html" title=" " alt="" coords="494,155,650,181"/>
+<area shape="rect" title=" " alt="" coords="180,304,255,331"/>
+<area shape="rect" title=" " alt="" coords="279,304,347,331"/>
+<area shape="rect" href="RefCnt_8hpp.html" title=" " alt="" coords="904,229,1080,256"/>
+<area shape="rect" title=" " alt="" coords="917,304,979,331"/>
+<area shape="rect" title=" " alt="" coords="1003,304,1069,331"/>
+<area shape="rect" href="String_8hpp.html" title=" " alt="" coords="777,155,922,181"/>
+<area shape="rect" title=" " alt="" coords="998,155,1055,181"/>
+<area shape="rect" title=" " alt="" coords="1080,155,1149,181"/>
+<area shape="rect" title=" " alt="" coords="1174,155,1226,181"/>
+<area shape="rect" title=" " alt="" coords="825,229,879,256"/>
+<area shape="rect" href="RHIDefs_8hpp.html" title=" " alt="" coords="304,155,419,181"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -111,20 +112,31 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="RHIShader_8hpp__dep__incl.png" border="0" usemap="#acode_2runtime_2rhi_2RHIShader_8hppdep" alt=""/></div>
 <map name="acode_2runtime_2rhi_2RHIShader_8hppdep" id="acode_2runtime_2rhi_2RHIShader_8hppdep">
-<area shape="rect" title=" " alt="" coords="433,5,639,32"/>
-<area shape="rect" href="Berserk_8hpp.html" title=" " alt="" coords="755,505,925,531"/>
-<area shape="rect" href="RHIDevice_8hpp.html" title=" " alt="" coords="458,259,665,285"/>
-<area shape="rect" href="RHIGraphicsPipeline_8hpp.html" title=" " alt="" coords="600,80,795,121"/>
-<area shape="rect" href="Engine_8hpp.html" title=" " alt="" coords="586,333,779,360"/>
-<area shape="rect" href="RHIDevice_8cpp.html" title=" " alt="" coords="94,415,301,442"/>
-<area shape="rect" href="Engine_8cpp.html" title=" " alt="" coords="377,415,570,442"/>
-<area shape="rect" href="LoggerListenerOutput_8cpp.html" title=" " alt="" coords="595,408,771,449"/>
-<area shape="rect" href="Application_8hpp.html" title=" " alt="" coords="1451,408,1599,449"/>
-<area shape="rect" href="GlfwInput_8cpp.html" title=" " alt="" coords="795,408,943,449"/>
-<area shape="rect" href="GlfwInputDevices_8cpp.html" title=" " alt="" coords="968,408,1149,449"/>
-<area shape="rect" href="GlfwWindowManager_8cpp.html" title=" " alt="" coords="1174,408,1375,449"/>
-<area shape="rect" href="Application_8cpp.html" title=" " alt="" coords="1451,497,1599,539"/>
-<area shape="rect" href="RHICommandList_8hpp.html" title=" " alt="" coords="625,169,826,211"/>
+<area shape="rect" title=" " alt="" coords="695,5,902,32"/>
+<area shape="rect" href="Berserk_8hpp.html" title=" " alt="" coords="2639,534,2809,561"/>
+<area shape="rect" href="GLShader_8hpp.html" title=" " alt="" coords="176,259,333,300"/>
+<area shape="rect" href="RHIDevice_8hpp.html" title=" " alt="" coords="833,266,1039,293"/>
+<area shape="rect" href="RHIGraphicsPipeline_8hpp.html" title=" " alt="" coords="635,80,829,121"/>
+<area shape="rect" href="GLGraphicsPipeline_8cpp.html" title=" " alt="" coords="293,348,459,389"/>
+<area shape="rect" href="GLResourceSet_8hpp.html" title=" " alt="" coords="60,348,217,389"/>
+<area shape="rect" href="GLShader_8cpp.html" title=" " alt="" coords="368,437,525,479"/>
+<area shape="rect" href="GLDevice_8cpp.html" title=" " alt="" coords="187,437,344,479"/>
+<area shape="rect" href="GLResourceSet_8cpp.html" title=" " alt="" coords="5,437,163,479"/>
+<area shape="rect" href="Engine_8hpp.html" title=" " alt="" coords="1339,355,1533,382"/>
+<area shape="rect" href="RHIDevice_8cpp.html" title=" " alt="" coords="833,445,1039,471"/>
+<area shape="rect" href="GLDevice_8hpp.html" title=" " alt="" coords="625,348,783,389"/>
+<area shape="rect" href="Engine_8cpp.html" title=" " alt="" coords="1235,445,1429,471"/>
+<area shape="rect" href="LoggerListenerOutput_8cpp.html" title=" " alt="" coords="1453,437,1629,479"/>
+<area shape="rect" href="Application_8hpp.html" title=" " alt="" coords="1063,437,1211,479"/>
+<area shape="rect" href="GlfwInput_8cpp.html" title=" " alt="" coords="1654,437,1802,479"/>
+<area shape="rect" href="GlfwInputDevices_8cpp.html" title=" " alt="" coords="1827,437,2008,479"/>
+<area shape="rect" href="GlfwWindowManager_8cpp.html" title=" " alt="" coords="2033,437,2234,479"/>
+<area shape="rect" href="GLRenderPass_8cpp.html" title=" " alt="" coords="651,437,808,479"/>
+<area shape="rect" href="GLSampler_8cpp.html" title=" " alt="" coords="2259,437,2416,479"/>
+<area shape="rect" href="RHIResource_8cpp.html" title=" " alt="" coords="2440,445,2661,471"/>
+<area shape="rect" href="Application_8cpp.html" title=" " alt="" coords="802,527,950,568"/>
+<area shape="rect" href="GLGraphicsPipeline_8hpp.html" title=" " alt="" coords="358,259,525,300"/>
+<area shape="rect" href="RHICommandList_8hpp.html" title=" " alt="" coords="905,169,1106,211"/>
 </map>
 </div>
 </div>
@@ -151,7 +163,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Single shader stage.  <a href="structRHIShaderStageDesc.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRHIShaderDesc.html">RHIShaderDesc</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shader descriptor.  <a href="structRHIShaderDesc.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shader creation descriptor. Allows create from byteCode.  <a href="structRHIShaderDesc.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHIShader.html">RHIShader</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compiled and linked native shader.  <a href="classRHIShader.html#details">More...</a><br /></td></tr>

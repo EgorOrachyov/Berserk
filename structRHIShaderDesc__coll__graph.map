@@ -1,4 +1,5 @@
 <map id="RHIShaderDesc" name="RHIShaderDesc">
-<area shape="rect" id="node1" title="Shader descriptor." alt="" coords="5,95,121,121"/>
-<area shape="rect" id="node2" href="$classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="18,5,109,32"/>
+<area shape="rect" id="node1" title="Shader creation descriptor. Allows create from byteCode." alt="" coords="50,95,166,121"/>
+<area shape="rect" id="node2" href="$classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="5,5,96,32"/>
+<area shape="rect" id="node3" href="$classRef.html" title=" " alt="" coords="120,5,211,32"/>
 </map>

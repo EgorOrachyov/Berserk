@@ -1,0 +1,9 @@
+<map id="GLTexture" name="GLTexture">
+<area shape="rect" id="node1" title="GL texture resource implementation." alt="" coords="79,260,162,287"/>
+<area shape="rect" id="node2" href="$classRHITexture.html" title="RHI Texture primitive." alt="" coords="77,184,165,211"/>
+<area shape="rect" id="node3" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="5,95,105,121"/>
+<area shape="rect" id="node4" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="17,5,80,32"/>
+<area shape="rect" id="node5" href="$structRHITextureDesc.html" title="RHI Texture primitive descriptor." alt="" coords="135,95,253,121"/>
+<area shape="rect" id="node6" href="$classMask.html" title=" " alt="" coords="104,5,284,32"/>
+<area shape="rect" id="node7" href="$classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="309,5,399,32"/>
+</map>

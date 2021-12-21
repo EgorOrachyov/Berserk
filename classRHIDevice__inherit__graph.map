@@ -1,0 +1,4 @@
+<map id="RHIDevice" name="RHIDevice">
+<area shape="rect" id="node1" title="RHI device." alt="" coords="5,5,91,32"/>
+<area shape="rect" id="node2" href="$classGLDevice.html" title="GL device implementation." alt="" coords="8,80,88,107"/>
+</map>

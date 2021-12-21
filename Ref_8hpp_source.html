@@ -101,7 +101,7 @@ $(function() {
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="RefCnt_8hpp.html">core/templates/RefCnt.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<a class="code" href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<a class="code" href="namespaceBRK__NS__BEGIN.html">BRK_NS_BEGIN</a></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classRef.html">   46</a></span>&#160;<span class="keyword">class </span><a class="code" href="classRef.html">Ref</a> {</div>
@@ -205,15 +205,19 @@ $(function() {
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classRef.html">Ref&lt;G&gt;</a>(<span class="keyword">dynamic_cast&lt;</span><a class="code" href="group__platform.html#gga1111d135f2af893795d4dab37b5fa827adfcf28d0734569a6a693bc8194de62bf">G</a> *<span class="keyword">&gt;</span>(mObject));</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    }</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <a class="code" href="group__platform.html#gga1111d135f2af893795d4dab37b5fa827ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a> *mObject = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;};</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<a class="code" href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_REF_HPP</span></div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> G&gt;</div>
+<div class="line"><a name="l00149"></a><span class="lineno"><a class="line" href="classRef.html#a8c66d8f3295cf9018404e7da03085d11">  149</a></span>&#160;    [[nodiscard]] <a class="code" href="classRef.html">Ref&lt;G&gt;</a> <a class="code" href="classRef.html#a8c66d8f3295cf9018404e7da03085d11">ForceCast</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classRef.html">Ref&lt;G&gt;</a>((<a class="code" href="group__platform.html#gga1111d135f2af893795d4dab37b5fa827adfcf28d0734569a6a693bc8194de62bf">G</a>*) mObject);</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    }</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <a class="code" href="group__platform.html#gga1111d135f2af893795d4dab37b5fa827ab9ece18c950afbfa6b0fdbfa4ff731d3">T</a> *mObject = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;};</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<a class="code" href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="preprocessor">#endif</span><span class="comment">//BERSERK_REF_HPP</span></div>
 <div class="ttc" id="aConfig_8hpp_html_a206fc1c8e28399b1f48e8215d5584500"><div class="ttname"><a href="Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500">BRK_NS_END</a></div><div class="ttdeci">#define BRK_NS_END</div><div class="ttdef"><b>Definition:</b> Config.hpp:48</div></div>
-<div class="ttc" id="aConfig_8hpp_html_a879e3b805923a7033431eed6bb5eddc1"><div class="ttname"><a href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a></div><div class="ttdeci">#define BRK_NS_BEGIN</div><div class="ttdef"><b>Definition:</b> Config.hpp:47</div></div>
 <div class="ttc" id="aRefCnt_8hpp_html"><div class="ttname"><a href="RefCnt_8hpp.html">RefCnt.hpp</a></div></div>
 <div class="ttc" id="aclassRef_html"><div class="ttname"><a href="classRef.html">Ref</a></div><div class="ttdoc">Automates reference counting and behaves as shared smart pointer.</div><div class="ttdef"><b>Definition:</b> Ref.hpp:46</div></div>
 <div class="ttc" id="aclassRef_html_a102bc6d09903d7768b36a5bc1ba02044"><div class="ttname"><a href="classRef.html#a102bc6d09903d7768b36a5bc1ba02044">Ref::Get</a></div><div class="ttdeci">T * Get() const</div><div class="ttdef"><b>Definition:</b> Ref.hpp:129</div></div>
@@ -227,6 +231,7 @@ $(function() {
 <div class="ttc" id="aclassRef_html_a5ef6a48ce938cc1513eb6c787ffa4d0a"><div class="ttname"><a href="classRef.html#a5ef6a48ce938cc1513eb6c787ffa4d0a">Ref::Cast</a></div><div class="ttdeci">Ref&lt; G &gt; Cast() const</div><div class="ttdef"><b>Definition:</b> Ref.hpp:144</div></div>
 <div class="ttc" id="aclassRef_html_a607d75703495e2c67a6aa33b6d943ab5"><div class="ttname"><a href="classRef.html#a607d75703495e2c67a6aa33b6d943ab5">Ref::~Ref</a></div><div class="ttdeci">~Ref()</div><div class="ttdef"><b>Definition:</b> Ref.hpp:65</div></div>
 <div class="ttc" id="aclassRef_html_a80070fc1e77a7deb2ca841363018119f"><div class="ttname"><a href="classRef.html#a80070fc1e77a7deb2ca841363018119f">Ref::Release</a></div><div class="ttdeci">T * Release()</div><div class="ttdef"><b>Definition:</b> Ref.hpp:123</div></div>
+<div class="ttc" id="aclassRef_html_a8c66d8f3295cf9018404e7da03085d11"><div class="ttname"><a href="classRef.html#a8c66d8f3295cf9018404e7da03085d11">Ref::ForceCast</a></div><div class="ttdeci">Ref&lt; G &gt; ForceCast() const</div><div class="ttdef"><b>Definition:</b> Ref.hpp:149</div></div>
 <div class="ttc" id="aclassRef_html_aa235250e5017a45060d36ece0a5b3b8a"><div class="ttname"><a href="classRef.html#aa235250e5017a45060d36ece0a5b3b8a">Ref::As</a></div><div class="ttdeci">Ref&lt; G &gt; As() const</div><div class="ttdef"><b>Definition:</b> Ref.hpp:139</div></div>
 <div class="ttc" id="aclassRef_html_aab342c4aa66d1a2975e3849300962baa"><div class="ttname"><a href="classRef.html#aab342c4aa66d1a2975e3849300962baa">Ref::Ref</a></div><div class="ttdeci">Ref(T *object)</div><div class="ttdef"><b>Definition:</b> Ref.hpp:50</div></div>
 <div class="ttc" id="aclassRef_html_ab0cd9cc7e34153703f360697252b84a0"><div class="ttname"><a href="classRef.html#ab0cd9cc7e34153703f360697252b84a0">Ref::operator=</a></div><div class="ttdeci">Ref&lt; T &gt; &amp; operator=(Ref &amp;&amp;other) noexcept</div><div class="ttdef"><b>Definition:</b> Ref.hpp:76</div></div>
@@ -238,6 +243,7 @@ $(function() {
 <div class="ttc" id="aclassRef_html_af38fa57fa5a1d3a6aac6e80d73e972c9"><div class="ttname"><a href="classRef.html#af38fa57fa5a1d3a6aac6e80d73e972c9">Ref::operator*</a></div><div class="ttdeci">T &amp; operator*() const</div><div class="ttdef"><b>Definition:</b> Ref.hpp:103</div></div>
 <div class="ttc" id="agroup__platform_html_gga1111d135f2af893795d4dab37b5fa827ab9ece18c950afbfa6b0fdbfa4ff731d3"><div class="ttname"><a href="group__platform.html#gga1111d135f2af893795d4dab37b5fa827ab9ece18c950afbfa6b0fdbfa4ff731d3">InputKeyboardKey::T</a></div><div class="ttdeci">@ T</div></div>
 <div class="ttc" id="agroup__platform_html_gga1111d135f2af893795d4dab37b5fa827adfcf28d0734569a6a693bc8194de62bf"><div class="ttname"><a href="group__platform.html#gga1111d135f2af893795d4dab37b5fa827adfcf28d0734569a6a693bc8194de62bf">InputKeyboardKey::G</a></div><div class="ttdeci">@ G</div></div>
+<div class="ttc" id="anamespaceBRK__NS__BEGIN_html"><div class="ttname"><a href="namespaceBRK__NS__BEGIN.html">BRK_NS_BEGIN</a></div><div class="ttdef"><b>Definition:</b> GLDevice.cpp:45</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

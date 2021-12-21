@@ -69,7 +69,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Shader descriptor.  
+<p>Shader creation descriptor. Allows create from byteCode.  
  <a href="structRHIShaderDesc.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="RHIShader_8hpp_source.html">RHIShader.hpp</a>&gt;</code></p>
@@ -78,23 +78,56 @@ Collaboration diagram for RHIShaderDesc:</div>
 <div class="dyncontent">
 <div class="center"><img src="structRHIShaderDesc__coll__graph.png" border="0" usemap="#aRHIShaderDesc_coll__map" alt="Collaboration graph"/></div>
 <map name="aRHIShaderDesc_coll__map" id="aRHIShaderDesc_coll__map">
-<area shape="rect" title="Shader descriptor." alt="" coords="5,95,121,121"/>
-<area shape="rect" href="classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="18,5,109,32"/>
+<area shape="rect" title="Shader creation descriptor. Allows create from byteCode." alt="" coords="50,95,166,121"/>
+<area shape="rect" href="classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="5,5,96,32"/>
+<area shape="rect" href="classRef.html" title=" " alt="" coords="120,5,211,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:a4e99698d03c22c8193300bf9aa1d6588"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classData.html">Data</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRHIShaderDesc.html#a4e99698d03c22c8193300bf9aa1d6588">byteCode</a></td></tr>
+<tr class="separator:a4e99698d03c22c8193300bf9aa1d6588"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9176450956a983e8388ebf8c62005bc4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStringName.html">StringName</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRHIShaderDesc.html#a9176450956a983e8388ebf8c62005bc4">name</a></td></tr>
 <tr class="separator:a9176450956a983e8388ebf8c62005bc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67c5d0bf98bc192e21bd5ea3bfbd67b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__rhi.html#gaf8c98a3f2cef867026ae99b59eeebf94">RHIShaderLanguage</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRHIShaderDesc.html#a67c5d0bf98bc192e21bd5ea3bfbd67b9">language</a></td></tr>
 <tr class="separator:a67c5d0bf98bc192e21bd5ea3bfbd67b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74d9a841d525c0106820d56c9473896d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structRHIShaderDesc.html">RHIShaderDesc</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRHIShaderDesc.html#a74d9a841d525c0106820d56c9473896d">stages</a></td></tr>
-<tr class="separator:a74d9a841d525c0106820d56c9473896d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79f5da27671f71002e5402eefe9f4717"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structRHIShaderStageDesc.html">RHIShaderStageDesc</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRHIShaderDesc.html#a79f5da27671f71002e5402eefe9f4717">stages</a></td></tr>
+<tr class="separator:a79f5da27671f71002e5402eefe9f4717"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af271d1087c4263210911df44592a176d"><td class="memItemLeft" align="right" valign="top">std::function&lt; void(<a class="el" href="classRef.html">Ref</a>&lt; class <a class="el" href="classRHIShader.html">RHIShader</a> &gt;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRHIShaderDesc.html#af271d1087c4263210911df44592a176d">callback</a></td></tr>
+<tr class="separator:af271d1087c4263210911df44592a176d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Shader descriptor. </p>
+<div class="textblock"><p>Shader creation descriptor. Allows create from byteCode. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="a4e99698d03c22c8193300bf9aa1d6588"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e99698d03c22c8193300bf9aa1d6588">&#9670;&nbsp;</a></span>byteCode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classRef.html">Ref</a>&lt;<a class="el" href="classData.html">Data</a>&gt; RHIShaderDesc::byteCode</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af271d1087c4263210911df44592a176d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af271d1087c4263210911df44592a176d">&#9670;&nbsp;</a></span>callback</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::function&lt;void(<a class="el" href="classRef.html">Ref</a>&lt;class <a class="el" href="classRHIShader.html">RHIShader</a>&gt;)&gt; RHIShaderDesc::callback</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a67c5d0bf98bc192e21bd5ea3bfbd67b9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a67c5d0bf98bc192e21bd5ea3bfbd67b9">&#9670;&nbsp;</a></span>language</h2>
 
@@ -123,14 +156,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a74d9a841d525c0106820d56c9473896d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a74d9a841d525c0106820d56c9473896d">&#9670;&nbsp;</a></span>stages</h2>
+<a id="a79f5da27671f71002e5402eefe9f4717"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79f5da27671f71002e5402eefe9f4717">&#9670;&nbsp;</a></span>stages</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="structRHIShaderDesc.html">RHIShaderDesc</a>&gt; RHIShaderDesc::stages</td>
+          <td class="memname">std::vector&lt;<a class="el" href="structRHIShaderStageDesc.html">RHIShaderStageDesc</a>&gt; RHIShaderDesc::stages</td>
         </tr>
       </table>
 </div><div class="memdoc">

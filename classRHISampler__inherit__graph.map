@@ -1,5 +1,6 @@
 <map id="RHISampler" name="RHISampler">
 <area shape="rect" id="node1" title="RHI sampler object." alt="" coords="9,155,102,181"/>
+<area shape="rect" id="node4" href="$classGLSampler.html" title="GL sampler implementation." alt="" coords="11,229,99,256"/>
 <area shape="rect" id="node2" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="5,80,105,107"/>
 <area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="24,5,87,32"/>
 </map>
