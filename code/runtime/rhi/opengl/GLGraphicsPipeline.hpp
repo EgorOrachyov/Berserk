@@ -25,40 +25,29 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIRESOURCE_HPP
-#define BERSERK_RHIRESOURCE_HPP
+#ifndef BERSERK_GLGRAPHICSPIPELINE_HPP
+#define BERSERK_GLGRAPHICSPIPELINE_HPP
 
-#include <core/Config.hpp>
-#include <core/Typedefs.hpp>
-#include <core/templates/Ref.hpp>
-#include <core/templates/RefCnt.hpp>
-#include <rhi/RHIDefs.hpp>
+#include <rhi/RHIGraphicsPipeline.hpp>
+#include <rhi/opengl/GLDefs.hpp>
 
 BRK_NS_BEGIN
 
 /**
- * @addtogroup rhi
+ * @addtogroup opengl
  * @{
  */
 
 /**
- * @class RHIResource
- * @brief Base class for RHI resource
- *
- * Base class for any RHI resource, created by driver and exposed to the user.
- * Uses automated reference counting, required for safe resource life-time
- * tracking and passing among several system threads.
- *
- * Resource utilise rhi thread command buffer, so it creation/destruction
- * is deferred and executed only on rhi thread as a command.
+ * @class GLGraphicsPipeline
+ * @brief GL graphics pipeline state
  */
-class RHIResource : public RefCnt {
+class GLGraphicsPipeline final : public RHIGraphicsPipeline {
 public:
-    BRK_API ~RHIResource() override = default;
+    BRK_API explicit GLGraphicsPipeline(const RHIGraphicsPipelineDesc &desc);
+    BRK_API ~GLGraphicsPipeline() override = default;
 
-protected:
-    /** Internal: Destroy resource on rhi thread */
-    void Destroy() const override;
+    BRK_API void Bind(const struct GLRenderPassStateVars &state);
 };
 
 /**
@@ -67,4 +56,4 @@ protected:
 
 BRK_NS_END
 
-#endif//BERSERK_RHIRESOURCE_HPP
+#endif//BERSERK_GLGRAPHICSPIPELINE_HPP

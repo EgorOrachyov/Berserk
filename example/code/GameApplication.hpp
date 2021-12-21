@@ -33,6 +33,7 @@
 class GameApplication final : public berserk::Application {
 public:
     ~GameApplication() override = default;
+    void OnWindowCreate() override;
     void OnInitialize() override;
     void OnFinalize() override;
 };

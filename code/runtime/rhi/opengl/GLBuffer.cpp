@@ -25,46 +25,96 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIRESOURCE_HPP
-#define BERSERK_RHIRESOURCE_HPP
-
-#include <core/Config.hpp>
-#include <core/Typedefs.hpp>
-#include <core/templates/Ref.hpp>
-#include <core/templates/RefCnt.hpp>
-#include <rhi/RHIDefs.hpp>
+#include <rhi/opengl/GLBuffer.hpp>
 
 BRK_NS_BEGIN
 
-/**
- * @addtogroup rhi
- * @{
- */
+void GLBuffer::Initialize(GLenum type, uint32 size, RHIBufferUsage usage) {
+    mType = type;
 
-/**
- * @class RHIResource
- * @brief Base class for RHI resource
- *
- * Base class for any RHI resource, created by driver and exposed to the user.
- * Uses automated reference counting, required for safe resource life-time
- * tracking and passing among several system threads.
- *
- * Resource utilise rhi thread command buffer, so it creation/destruction
- * is deferred and executed only on rhi thread as a command.
- */
-class RHIResource : public RefCnt {
-public:
-    BRK_API ~RHIResource() override = default;
+    glGenBuffers(1, &mHandle);
+    BRK_GL_CATCH_ERR();
 
-protected:
-    /** Internal: Destroy resource on rhi thread */
-    void Destroy() const override;
-};
+    glBindBuffer(mType, mHandle);
+    BRK_GL_CATCH_ERR();
 
-/**
- * @}
- */
+    glBufferData(mType, size, nullptr, GLDefs::GetBufferUsage(usage));
+    BRK_GL_CATCH_ERR();
+
+    glBindBuffer(mType, GL_NONE);
+    BRK_GL_CATCH_ERR();
+}
+
+void GLBuffer::Finalize() {
+    if (mHandle) {
+        glDeleteBuffers(1, &mHandle);
+        BRK_GL_CATCH_ERR();
+
+        mHandle = 0;
+    }
+}
+
+void GLBuffer::Update(uint32 size, uint32 byteOffset, uint32 byteSize, const void *memory) {
+    assert(mHandle);
+    assert(byteSize > 0);
+    assert(byteOffset + byteSize <= size);
+    assert(memory);
+
+    glBindBuffer(mType, mHandle);
+    BRK_GL_CATCH_ERR();
+
+    glBufferSubData(mType, byteOffset, byteSize, memory);
+    BRK_GL_CATCH_ERR();
+
+    glBindBuffer(mType, GL_NONE);
+    BRK_GL_CATCH_ERR();
+}
+
+GLVertexBuffer::GLVertexBuffer(const RHIBufferDesc &desc) {
+    mBufferUsage = desc.bufferUsage;
+    mSize = desc.size;
+}
+
+GLVertexBuffer::~GLVertexBuffer() {
+    GLBuffer::Finalize();
+}
+
+void GLVertexBuffer::Initialize() {
+    GLBuffer::Initialize(GL_ARRAY_BUFFER, mSize, mBufferUsage);
+}
+
+GLIndexBuffer::GLIndexBuffer(const RHIBufferDesc &desc) {
+    mBufferUsage = desc.bufferUsage;
+    mSize = desc.size;
+}
+
+GLIndexBuffer::~GLIndexBuffer() {
+    GLBuffer::Finalize();
+}
+
+void GLIndexBuffer::Initialize() {
+    GLBuffer::Initialize(GL_ELEMENT_ARRAY_BUFFER, mSize, mBufferUsage);
+}
+
+GLUniformBuffer::GLUniformBuffer(const RHIBufferDesc &desc) {
+    mBufferUsage = desc.bufferUsage;
+    mSize = desc.size;
+}
+
+GLUniformBuffer::~GLUniformBuffer() {
+    GLBuffer::Finalize();
+}
+
+void GLUniformBuffer::Initialize() {
+    GLBuffer::Initialize(GL_UNIFORM_BUFFER, mSize, mBufferUsage);
+}
+
+void GLUniformBuffer::Bind(uint32 location, uint32 offset, uint32 range) {
+    assert(offset + range <= mSize);
+    assert(range > 0);
+
+    glBindBufferRange(GL_UNIFORM_BUFFER, location, GetHandle(), offset, range);
+    BRK_GL_CATCH_ERR();
+}
 
 BRK_NS_END
-
-#endif//BERSERK_RHIRESOURCE_HPP

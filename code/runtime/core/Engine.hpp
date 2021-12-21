@@ -120,6 +120,8 @@ private:
     void Configure();
     void SetWindowManager(std::shared_ptr<WindowManager> windowManager);
     void SetInput(std::shared_ptr<Input> input);
+    void SetRHIDevice(std::shared_ptr<RHIDevice> device);
+    void SetRHIThread(std::shared_ptr<Thread> thread);
     void Update(float dt);
 
 private:

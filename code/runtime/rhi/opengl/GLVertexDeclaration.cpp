@@ -25,46 +25,12 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIRESOURCE_HPP
-#define BERSERK_RHIRESOURCE_HPP
-
-#include <core/Config.hpp>
-#include <core/Typedefs.hpp>
-#include <core/templates/Ref.hpp>
-#include <core/templates/RefCnt.hpp>
-#include <rhi/RHIDefs.hpp>
+#include <rhi/opengl/GLVertexDeclaration.hpp>
 
 BRK_NS_BEGIN
 
-/**
- * @addtogroup rhi
- * @{
- */
-
-/**
- * @class RHIResource
- * @brief Base class for RHI resource
- *
- * Base class for any RHI resource, created by driver and exposed to the user.
- * Uses automated reference counting, required for safe resource life-time
- * tracking and passing among several system threads.
- *
- * Resource utilise rhi thread command buffer, so it creation/destruction
- * is deferred and executed only on rhi thread as a command.
- */
-class RHIResource : public RefCnt {
-public:
-    BRK_API ~RHIResource() override = default;
-
-protected:
-    /** Internal: Destroy resource on rhi thread */
-    void Destroy() const override;
-};
-
-/**
- * @}
- */
+GLVertexDeclaration::GLVertexDeclaration(const RHIVertexDeclarationDesc &desc) {
+    mAttributes = desc;
+}
 
 BRK_NS_END
-
-#endif//BERSERK_RHIRESOURCE_HPP

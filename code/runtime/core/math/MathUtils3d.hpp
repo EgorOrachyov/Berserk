@@ -50,7 +50,7 @@ public:
         t[2] = v[2];
         t[3] = 1.0f;
 
-        return m * t;
+        return TVecN<float, 3>(m * t);
     }
 
     /** @brief Identity matrix e */
@@ -92,8 +92,8 @@ public:
 
     /** @brief Clockwise around axis rotation */
     static Mat4x4f RotateX(float angleRad) {
-        auto s = Utils::Sin(angleRad);
-        auto c = Utils::Cos(angleRad);
+        auto s = MathUtils::Sin(angleRad);
+        auto c = MathUtils::Cos(angleRad);
 
         return {1, 0, 0, 0,
                 0, c, -s, 0,
@@ -103,8 +103,8 @@ public:
 
     /** @brief Clockwise around axis rotation */
     static Mat4x4f RotateY(float angleRad) {
-        auto s = Utils::Sin(angleRad);
-        auto c = Utils::Cos(angleRad);
+        auto s = MathUtils::Sin(angleRad);
+        auto c = MathUtils::Cos(angleRad);
 
         return {c, 0, s, 0,
                 0, 1, 0, 0,
@@ -114,8 +114,8 @@ public:
 
     /** @brief Clockwise around axis rotation */
     static Mat4x4f RotateZ(float angleRad) {
-        auto s = Utils::Sin(angleRad);
-        auto c = Utils::Cos(angleRad);
+        auto s = MathUtils::Sin(angleRad);
+        auto c = MathUtils::Cos(angleRad);
 
         return {c, -s, 0, 0,
                 s, c, 0, 0,
@@ -126,8 +126,8 @@ public:
     /** @brief Clockwise rotation around an arbitrary axis */
     static Mat4x4f Rotate(const Vec3f &axis, float angleRad) {
         auto Ax = axis.Normalized();
-        auto s = Utils::Sin(angleRad);
-        auto c = Utils::Cos(angleRad);
+        auto s = MathUtils::Sin(angleRad);
+        auto c = MathUtils::Cos(angleRad);
         auto oneMinC = 1 - c;
 
         return {
@@ -197,7 +197,7 @@ public:
      * @return Perspective matrix
      */
     static Mat4x4f Perspective(float fov, float aspect, float near, float far) {
-        float ctg_angle = 1.0f / Utils::Tan(fov / 2.0f);
+        float ctg_angle = 1.0f / MathUtils::Tan(fov / 2.0f);
 
         return {ctg_angle / aspect, 0.0f, 0.0f, 0.0f,
                 0.0f, ctg_angle, 0.0f, 0.0f,
@@ -222,7 +222,7 @@ public:
                 0.0f, 0.0f, 2.0f / (far - near), (far + near) / (near - far),
                 0.0f, 0.0f, 0.0f, 1.0f};
     }
-}
+};
 
 /**
  * @}

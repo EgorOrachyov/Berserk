@@ -25,6 +25,8 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
+#include <rhi/opengl/GLDevice.hpp>
+
 #include <platform/Application.hpp>
 #include <platform/glfw/GlfwInput.hpp>
 #include <platform/glfw/GlfwWindowManager.hpp>
@@ -48,6 +50,15 @@ int Application::Run(int argc, const char *const *argv) {
     gEngine->SetWindowManager(gWindowManager);
     gEngine->SetInput(gWindowManager->mInput);
 
+    // Create primary window
+    OnWindowCreate();
+
+    // Initialize rendering device and thread
+    auto gRhiDevice = GLDevice::Make(gWindowManager->GetMakeContextCurrentFunc(), gWindowManager->GetSwapBuffersFunc());
+    auto gRhiThread = std::make_shared<Thread>();
+    gEngine->SetRHIDevice(gRhiDevice);
+    gEngine->SetRHIThread(gRhiThread);
+
     // Post init call
     OnInitialize();
 
@@ -61,8 +72,33 @@ int Application::Run(int argc, const char *const *argv) {
         auto newTime = clock::now();
         auto dt = static_cast<double>(std::chrono::duration_cast<ns>(newTime - time).count()) / 1.0e9;
 
-        // Update engine and game
+        // Swap queued messages
+        gRhiThread->Update();
+
+        // Execute before logic (resources setup etc.)
+        gRhiThread->ExecuteBefore();
+        // Execute update logic (queued resource update etc.)
+        gRhiThread->ExecuteUpdate();
+
+        // Update engine, rendering and game
         gEngine->Update(static_cast<float>(dt));
+
+        // todo: will be removed <------------
+        static auto window = gWindowManager->GetPrimaryWindow();
+        static auto makeCurrent = gWindowManager->GetMakeContextCurrentFunc();
+        static auto swapBuffers = gWindowManager->GetSwapBuffersFunc();
+        static float factor = 0.0f;
+
+        makeCurrent(window);
+        auto dtf = static_cast<float>(dt);
+        factor = (factor + dtf) > 1.0f ? (factor + dtf) - 1.0f : factor + dtf;
+        glClearColor(1.0f * factor, 1.0f * (1.0f - factor * factor), 0.4f * factor, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        swapBuffers(window);
+        // todo: will be removed <------------
+
+        // Execute after logic (resources destruction etc.)
+        gRhiThread->ExecuteAfter();
 
         // Poll platform events
         gWindowManager->PollEvents();
@@ -72,6 +108,10 @@ int Application::Run(int argc, const char *const *argv) {
 
     // Pre-finalize call
     OnFinalize();
+
+    // Release RHI related stuff
+    gRhiThread.reset();
+    gRhiDevice.reset();
 
     // Release platform window manager
     gWindowManager.reset();

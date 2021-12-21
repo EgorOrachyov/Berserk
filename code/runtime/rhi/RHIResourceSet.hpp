@@ -54,35 +54,39 @@ public:
     struct TextureBinding {
         Ref<RHITexture> texture{};
         uint32 location{};
+        uint32 arrayIndex{};
     };
 
     struct SamplerBinding {
         Ref<RHISampler> sampler{};
         uint32 location{};
+        uint32 arrayIndex{};
     };
 
     struct BufferBinding {
         Ref<RHIUniformBuffer> buffer{};
         uint32 location{};
+        uint32 offset{};
+        uint32 range{};
     };
 
     BRK_API RHIResourceSetDesc() = default;
     BRK_API ~RHIResourceSetDesc() = default;
 
     /** Add texture binding to the set */
-    BRK_API void AddTexture(Ref<RHITexture> texture, uint32 location);
+    BRK_API void AddTexture(Ref<RHITexture> texture, uint32 location, uint32 arrayIndex = 0);
     /** Add sampler binding to the set */
-    BRK_API void AddSampler(Ref<RHISampler> sampler, uint32 location);
+    BRK_API void AddSampler(Ref<RHISampler> sampler, uint32 location, uint32 arrayIndex = 0);
     /** Add buffer binding to the set */
-    BRK_API void AddBuffer(Ref<RHIUniformBuffer> buffer, uint32 location);
+    BRK_API void AddBuffer(Ref<RHIUniformBuffer> buffer, uint32 location, uint32 offset, uint32 range);
 
 
     /** Update (or add new) previously set texture binding in the set */
-    BRK_API bool SetTexture(Ref<RHITexture> texture, uint32 location);
+    BRK_API bool SetTexture(Ref<RHITexture> texture, uint32 location, uint32 arrayIndex = 0);
     /** Update (or add new) previously set sampler binding in the set */
-    BRK_API bool SetSampler(Ref<RHISampler> sampler, uint32 location);
+    BRK_API bool SetSampler(Ref<RHISampler> sampler, uint32 location, uint32 arrayIndex = 0);
     /** Update (or add new) previously set buffer binding in the set */
-    BRK_API bool SetBuffer(Ref<RHIUniformBuffer> buffer, uint32 location);
+    BRK_API bool SetBuffer(Ref<RHIUniformBuffer> buffer, uint32 location, uint32 offset, uint32 range);
 
     /** Clear all bindings */
     BRK_API void Clear();

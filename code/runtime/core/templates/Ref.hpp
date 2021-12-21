@@ -145,6 +145,11 @@ public:
         return Ref<G>(dynamic_cast<G *>(mObject));
     }
 
+    template<class G>
+    [[nodiscard]] Ref<G> ForceCast() const {
+        return Ref<G>((G *) mObject);
+    }
+
 private:
     T *mObject = nullptr;
 };

@@ -27,16 +27,22 @@
 
 #include <GameApplication.hpp>
 
+void GameApplication::OnWindowCreate() {
+    BRK_INFO("Initialize game window");
+
+    auto &engine = berserk::Engine::Instance();
+    auto &windowManager = engine.GetWindowManager();
+
+    // Create primary window
+    auto window = windowManager.CreateWindow(berserk::StringName("MAIN"), {1280, 720}, "Example window");
+}
+
 void GameApplication::OnInitialize() {
     BRK_INFO("Initialize game application");
 
     auto &engine = berserk::Engine::Instance();
     auto &scheduler = engine.GetScheduler();
     auto &dispatcher = engine.GetEventDispatcher();
-    auto &windowManager = engine.GetWindowManager();
-
-    // Create primary window
-    auto window = windowManager.CreateWindow(berserk::StringName("MAIN"), {1280, 720}, "Example window");
 
     // Capture window events
     dispatcher.Subscribe(berserk::EventWindow::GetEventTypeStatic(), [](const berserk::Event &_event) {

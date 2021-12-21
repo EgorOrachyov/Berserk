@@ -25,72 +25,66 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_GLFWWINDOWMANAGER_HPP
-#define BERSERK_GLFWWINDOWMANAGER_HPP
+#ifndef BERSERK_GLRESOURCESET_HPP
+#define BERSERK_GLRESOURCESET_HPP
 
-#include <core/event/EventWindow.hpp>
-#include <platform/WindowManager.hpp>
+#include <rhi/RHIResourceSet.hpp>
+#include <rhi/opengl/GLDefs.hpp>
+#include <rhi/opengl/GLShader.hpp>
 
-#include <functional>
-#include <memory>
 #include <unordered_map>
-
-#include <GLFW/glfw3.h>
 
 BRK_NS_BEGIN
 
 /**
- * @addtogroup platform
+ * @addtogroup opengl
  * @{
  */
 
 /**
- * @class GlfwWindowManager
- * @brief Glfw window manager implementation
+ * @class GLResourceBindingState
+ * @brief Auxiliary class used to bind textures and samplers to pipeline
  */
-class GlfwWindowManager final : public WindowManager {
+class GLResourceBindingState {
 public:
-    using MakeContextCurrentFunc = std::function<void(const Ref<Window> &)>;
-    using SwapBuffersFunc = std::function<void(const Ref<Window> &)>;
-
-    BRK_API GlfwWindowManager(bool vsync, bool clientApi);
-    BRK_API ~GlfwWindowManager() override;
-    BRK_API Ref<Window> CreateWindow(const StringName &name, const Size2i &size, const String &title) override;
-    BRK_API Ref<Window> GetPrimaryWindow() override;
-
-    BRK_API MakeContextCurrentFunc GetMakeContextCurrentFunc();
-    BRK_API SwapBuffersFunc GetSwapBuffersFunc();
+    BRK_API uint32 GetSlot(uint32 location);
+    BRK_API void Clear();
 
 private:
-    friend class Application;
-    BRK_API void PollEvents();
-    BRK_API void DispatchEvent(const Ref<Window> &window, EventWindow::Type type);
-    BRK_API Ref<Window> GetWindow(GLFWwindow *HND);
+    static const uint32 UNUSED_SLOT = 0xffffffff;
+    struct Slot {
+        uint32 index = UNUSED_SLOT;
+    };
 
 private:
-    // Glfw Specifics
-    static void WindowCloseCallback(GLFWwindow *HND);
-    static void WindowResizedCallback(GLFWwindow *HND, int32 width, int32 height);
-    static void WindowContentScaleCallback(GLFWwindow *HND, float xScale, float yScale);
-    static void FramebufferSizeCallback(GLFWwindow *HND, int32 width, int32 height);
-    static void IconifyCallback(GLFWwindow *HND, int32 iconify);
-    static void MaximizeCallback(GLFWwindow *HND, int32 maximize);
-    static void PositionCallback(GLFWwindow *HND, int32 posX, int32 posY);
-    static void FocusCallback(GLFWwindow *HND, int32 focus);
-    static void ErrorCallback(int32 errorCode, const char *description);
+    std::unordered_map<uint32, Slot> mBoundSlots;
+    uint32 mNextSlot = 0;
+};
+
+/**
+ * @class GLResourceSet
+ * @brief GL set of pipeline resources
+ */
+class GLResourceSet final : public RHIResourceSet {
+public:
+    using TextureBinding = RHIResourceSetDesc::TextureBinding;
+    using SamplerBinding = RHIResourceSetDesc::SamplerBinding;
+    using BufferBinding = RHIResourceSetDesc::BufferBinding;
+
+    BRK_API explicit GLResourceSet(const RHIResourceSetDesc &desc);
+    BRK_API ~GLResourceSet() override = default;
+
+    BRK_API void Update(const RHIResourceSetDesc &desc);
+    BRK_API void Bind(GLResourceBindingState &state, const Ref<GLShader> &shader) const;
+
+    const std::vector<TextureBinding> &GetTextures() const { return mTextures; }
+    const std::vector<SamplerBinding> &GetSamplers() const { return mSamplers; }
+    const std::vector<BufferBinding> &GetBuffers() const { return mBuffers; }
 
 private:
-    /** Input manager */
-    std::shared_ptr<class GlfwInput> mInput;
-    /** Primary window of application */
-    Ref<Window> mPrimaryWindow;
-    /** All application windows */
-    std::unordered_map<StringName, Ref<Window>> mWindows;
-    /** Aux hnd map */
-    std::unordered_map<GLFWwindow *, Ref<Window>> mWindowsByHND;
-    /** Use client-api (gl); otherwise no - for vulkan and directx */
-    bool mClientApi = true;
-    bool mVsync = true;
+    std::vector<TextureBinding> mTextures;
+    std::vector<SamplerBinding> mSamplers;
+    std::vector<BufferBinding> mBuffers;
 };
 
 /**
@@ -99,4 +93,4 @@ private:
 
 BRK_NS_END
 
-#endif//BERSERK_GLFWWINDOWMANAGER_HPP
+#endif//BERSERK_GLRESOURCESET_HPP

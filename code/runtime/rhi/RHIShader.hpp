@@ -34,6 +34,7 @@
 #include <core/string/StringName.hpp>
 #include <rhi/RHIResource.hpp>
 
+#include <functional>
 #include <unordered_map>
 #include <vector>
 
@@ -101,12 +102,14 @@ struct RHIShaderStageDesc {
 
 /**
  * @class RHIShaderDesc
- * @brief Shader descriptor
+ * @brief Shader creation descriptor. Allows create from byteCode
  */
 struct RHIShaderDesc {
+    Ref<Data> byteCode;
     StringName name;
     RHIShaderLanguage language;
-    std::vector<RHIShaderDesc> stages;
+    std::vector<RHIShaderStageDesc> stages;
+    std::function<void(Ref<class RHIShader>)> callback;
 };
 
 /**
@@ -155,7 +158,7 @@ public:
      *
      * @return Reference to program meta info if present
      */
-    BRK_API virtual Ref<RHIShaderMeta> GetProgramMeta() const = 0;
+    BRK_API virtual Ref<const RHIShaderMeta> GetShaderMeta() const = 0;
 
     /** @return Shader name for debugging */
     const StringName &GetShaderName() const { return mName; }

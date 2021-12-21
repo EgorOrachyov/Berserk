@@ -52,6 +52,7 @@
 #include <core/event/EventKeyboard.hpp>
 #include <core/event/EventMouse.hpp>
 #include <core/event/EventWindow.hpp>
+#include <core/image/ImageUtil.hpp>
 #include <core/io/Logger.hpp>
 #include <core/string/String.hpp>
 #include <core/string/String16u.hpp>

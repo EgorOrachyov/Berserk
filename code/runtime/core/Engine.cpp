@@ -35,9 +35,11 @@ Engine::~Engine() {
     // Release in reverse order
     mEventDispatcher.reset();
     mScheduler.reset();
-    mFileSystem.reset();
+    mRHIThread.reset();
+    mRHIDevice.reset();
     mInput.reset();
     mWindowManager.reset();
+    mFileSystem.reset();
     mOutput.reset();
 
     // Remove global instance
@@ -123,6 +125,14 @@ void Engine::SetWindowManager(std::shared_ptr<WindowManager> windowManager) {
 
 void Engine::SetInput(std::shared_ptr<Input> input) {
     mInput = std::move(input);
+}
+
+void Engine::SetRHIDevice(std::shared_ptr<RHIDevice> device) {
+    mRHIDevice = std::move(device);
+}
+
+void Engine::SetRHIThread(std::shared_ptr<Thread> thread) {
+    mRHIThread = std::move(thread);
 }
 
 void Engine::Update(float dt) {

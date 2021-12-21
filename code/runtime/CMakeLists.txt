@@ -20,7 +20,7 @@ function(berserk_configure_target target)
         target_link_libraries(${target} PRIVATE glfw)
     endif ()
 
-    if (BERSERK_WITH_OPENGL)
+    if (BERSERK_WITH_GLEW)
         target_link_libraries(${target} PRIVATE libglew_static)
     endif ()
 
@@ -67,12 +67,16 @@ if (BERSERK_TARGET_LINUX)
     list(APPEND BERSERK_RUNTIME_SRC ${BERSERK_PLATFORM_LINUX_SRC})
 endif ()
 
+if (BERSERK_TARGET_MACOS)
+    list(APPEND BERSERK_RUNTIME_SRC ${BERSERK_PLATFORM_MACOS_SRC})
+endif ()
+
 if (BERSERK_WITH_GLFW)
     list(APPEND BERSERK_RUNTIME_SRC ${BERSERK_PLATFORM_GLFW_SRC})
 endif ()
 
-if (BERSERK_TARGET_MACOS)
-    list(APPEND BERSERK_RUNTIME_SRC ${BERSERK_PLATFORM_MACOS_SRC})
+if (BERSERK_WITH_OPENGL)
+    list(APPEND BERSERK_RUNTIME_SRC ${BERSERK_RHI_OPENGL_SRC})
 endif ()
 
 if (BERSERK_STATIC_BUILD)

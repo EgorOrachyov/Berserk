@@ -80,6 +80,15 @@ public:
     BRK_API int Run(int argc, const char *const *argv);
 
     /**
+     * @brief On application primary window creation
+     *
+     * Called once, when the engine is ready to create
+     * primary window, but not yet set up rendering and RHI device layer.
+     * Override this method to create your primary application window.
+     */
+    BRK_API virtual void OnWindowCreate(){};
+
+    /**
      * @brief On application initialize callback
      *
      * Called once, when the engine systems fully initialized.

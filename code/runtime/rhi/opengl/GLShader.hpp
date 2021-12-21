@@ -25,72 +25,47 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_GLFWWINDOWMANAGER_HPP
-#define BERSERK_GLFWWINDOWMANAGER_HPP
+#ifndef BERSERK_GLSHADER_HPP
+#define BERSERK_GLSHADER_HPP
 
-#include <core/event/EventWindow.hpp>
-#include <platform/WindowManager.hpp>
-
-#include <functional>
-#include <memory>
-#include <unordered_map>
-
-#include <GLFW/glfw3.h>
+#include <rhi/RHIShader.hpp>
+#include <rhi/opengl/GLDefs.hpp>
 
 BRK_NS_BEGIN
 
 /**
- * @addtogroup platform
+ * @addtogroup opengl
  * @{
  */
 
 /**
- * @class GlfwWindowManager
- * @brief Glfw window manager implementation
+ * @class GLShader
+ * @brief GL Shader (compiled and linked) native program
  */
-class GlfwWindowManager final : public WindowManager {
+class GLShader final : public RHIShader {
 public:
-    using MakeContextCurrentFunc = std::function<void(const Ref<Window> &)>;
-    using SwapBuffersFunc = std::function<void(const Ref<Window> &)>;
+    BRK_API explicit GLShader(const RHIShaderDesc &desc);
+    BRK_API ~GLShader() override;
 
-    BRK_API GlfwWindowManager(bool vsync, bool clientApi);
-    BRK_API ~GlfwWindowManager() override;
-    BRK_API Ref<Window> CreateWindow(const StringName &name, const Size2i &size, const String &title) override;
-    BRK_API Ref<Window> GetPrimaryWindow() override;
+    BRK_API Status GetCompilationStatus() const override;
+    BRK_API String GetCompilerMessage() const override;
+    BRK_API Ref<const RHIShaderMeta> GetShaderMeta() const override;
 
-    BRK_API MakeContextCurrentFunc GetMakeContextCurrentFunc();
-    BRK_API SwapBuffersFunc GetSwapBuffersFunc();
+    BRK_API void Initialize();
+    BRK_API bool ValidateStages() const;
+    BRK_API void InitializeMeta();
+    BRK_API void BindUniformBlock(uint32 binding) const;
+    BRK_API void Use() const;
 
-private:
-    friend class Application;
-    BRK_API void PollEvents();
-    BRK_API void DispatchEvent(const Ref<Window> &window, EventWindow::Type type);
-    BRK_API Ref<Window> GetWindow(GLFWwindow *HND);
+    GLuint GetHandle() const { return mHandle; }
 
 private:
-    // Glfw Specifics
-    static void WindowCloseCallback(GLFWwindow *HND);
-    static void WindowResizedCallback(GLFWwindow *HND, int32 width, int32 height);
-    static void WindowContentScaleCallback(GLFWwindow *HND, float xScale, float yScale);
-    static void FramebufferSizeCallback(GLFWwindow *HND, int32 width, int32 height);
-    static void IconifyCallback(GLFWwindow *HND, int32 iconify);
-    static void MaximizeCallback(GLFWwindow *HND, int32 maximize);
-    static void PositionCallback(GLFWwindow *HND, int32 posX, int32 posY);
-    static void FocusCallback(GLFWwindow *HND, int32 focus);
-    static void ErrorCallback(int32 errorCode, const char *description);
-
-private:
-    /** Input manager */
-    std::shared_ptr<class GlfwInput> mInput;
-    /** Primary window of application */
-    Ref<Window> mPrimaryWindow;
-    /** All application windows */
-    std::unordered_map<StringName, Ref<Window>> mWindows;
-    /** Aux hnd map */
-    std::unordered_map<GLFWwindow *, Ref<Window>> mWindowsByHND;
-    /** Use client-api (gl); otherwise no - for vulkan and directx */
-    bool mClientApi = true;
-    bool mVsync = true;
+    GLuint mHandle = 0;
+    String mCompilerMessage;
+    Ref<RHIShaderMeta> mMeta{};
+    Ref<Data> mByteCode{};
+    std::atomic<Status> mCompilationStatus{Status::PendingCompilation};
+    std::function<void(Ref<class RHIShader>)> mCallback;
 };
 
 /**
@@ -99,4 +74,4 @@ private:
 
 BRK_NS_END
 
-#endif//BERSERK_GLFWWINDOWMANAGER_HPP
+#endif//BERSERK_GLSHADER_HPP

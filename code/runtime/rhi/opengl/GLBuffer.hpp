@@ -25,40 +25,70 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIRESOURCE_HPP
-#define BERSERK_RHIRESOURCE_HPP
+#ifndef BERSERK_GLBUFFER_HPP
+#define BERSERK_GLBUFFER_HPP
 
-#include <core/Config.hpp>
-#include <core/Typedefs.hpp>
-#include <core/templates/Ref.hpp>
-#include <core/templates/RefCnt.hpp>
-#include <rhi/RHIDefs.hpp>
+#include <rhi/RHIBuffer.hpp>
+#include <rhi/opengl/GLDefs.hpp>
 
 BRK_NS_BEGIN
 
 /**
- * @addtogroup rhi
+ * @addtogroup opengl
  * @{
  */
 
 /**
- * @class RHIResource
- * @brief Base class for RHI resource
- *
- * Base class for any RHI resource, created by driver and exposed to the user.
- * Uses automated reference counting, required for safe resource life-time
- * tracking and passing among several system threads.
- *
- * Resource utilise rhi thread command buffer, so it creation/destruction
- * is deferred and executed only on rhi thread as a command.
+ * @class GLBuffer
+ * @brief Base for GL buffer implementation
  */
-class RHIResource : public RefCnt {
-public:
-    BRK_API ~RHIResource() override = default;
-
+class GLBuffer {
 protected:
-    /** Internal: Destroy resource on rhi thread */
-    void Destroy() const override;
+    void Initialize(GLenum type, uint32 size, RHIBufferUsage usage);
+    void Finalize();
+    void Update(uint32 size, uint32 byteOffset, uint32 byteSize, const void *memory);
+    GLuint GetHandle() const { return mHandle; }
+
+private:
+    GLuint mHandle = 0;
+    GLenum mType = GL_INVALID_ENUM;
+};
+
+/**
+ * @class GLVertexBuffer
+ * @brief GL vertex buffer implementation
+ */
+class GLVertexBuffer final : public RHIVertexBuffer, public GLBuffer {
+public:
+    BRK_API explicit GLVertexBuffer(const RHIBufferDesc &desc);
+    BRK_API ~GLVertexBuffer() override;
+
+    BRK_API void Initialize();
+};
+
+/**
+ * @class GLIndexBuffer
+ * @brief GL index buffer implementation
+ */
+class GLIndexBuffer final : public RHIIndexBuffer, public GLBuffer {
+public:
+    BRK_API explicit GLIndexBuffer(const RHIBufferDesc &desc);
+    BRK_API ~GLIndexBuffer() override;
+
+    BRK_API void Initialize();
+};
+
+/**
+ * @class GLUniformBuffer
+ * @brief GL uniform buffer implementation
+ */
+class GLUniformBuffer final : public RHIUniformBuffer, public GLBuffer {
+public:
+    BRK_API explicit GLUniformBuffer(const RHIBufferDesc &desc);
+    BRK_API ~GLUniformBuffer() override;
+
+    BRK_API void Initialize();
+    BRK_API void Bind(uint32 location, uint32 offset, uint32 range);
 };
 
 /**
@@ -67,4 +97,4 @@ protected:
 
 BRK_NS_END
 
-#endif//BERSERK_RHIRESOURCE_HPP
+#endif//BERSERK_GLBUFFER_HPP

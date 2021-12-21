@@ -16,5 +16,32 @@ set(BERSERK_RHI_HEADER
 
 set(BERSERK_RHI_SRC
         rhi/RHIDevice.cpp
+        rhi/RHIResource.cpp
         rhi/RHIResourceSet.cpp
+        )
+
+set(BERSERK_RHI_OPENGL_SRC
+        rhi/opengl/GLBuffer.cpp
+        rhi/opengl/GLBuffer.hpp
+        rhi/opengl/GLCommandList.cpp
+        rhi/opengl/GLCommandList.hpp
+        rhi/opengl/GLDefs.hpp
+        rhi/opengl/GLDevice.cpp
+        rhi/opengl/GLDevice.hpp
+        rhi/opengl/GLFramebuffer.cpp
+        rhi/opengl/GLFramebuffer.hpp
+        rhi/opengl/GLGraphicsPipeline.cpp
+        rhi/opengl/GLGraphicsPipeline.hpp
+        rhi/opengl/GLRenderPass.cpp
+        rhi/opengl/GLRenderPass.hpp
+        rhi/opengl/GLResourceSet.cpp
+        rhi/opengl/GLResourceSet.hpp
+        rhi/opengl/GLSampler.cpp
+        rhi/opengl/GLSampler.hpp
+        rhi/opengl/GLShader.cpp
+        rhi/opengl/GLShader.hpp
+        rhi/opengl/GLTexture.cpp
+        rhi/opengl/GLTexture.hpp
+        rhi/opengl/GLVertexDeclaration.cpp
+        rhi/opengl/GLVertexDeclaration.hpp
         )

@@ -25,46 +25,55 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIRESOURCE_HPP
-#define BERSERK_RHIRESOURCE_HPP
+#include <rhi/opengl/GLBuffer.hpp>
+#include <rhi/opengl/GLResourceSet.hpp>
+#include <rhi/opengl/GLSampler.hpp>
+#include <rhi/opengl/GLTexture.hpp>
 
-#include <core/Config.hpp>
-#include <core/Typedefs.hpp>
-#include <core/templates/Ref.hpp>
-#include <core/templates/RefCnt.hpp>
-#include <rhi/RHIDefs.hpp>
+#include <cassert>
 
 BRK_NS_BEGIN
 
-/**
- * @addtogroup rhi
- * @{
- */
+uint32 GLResourceBindingState::GetSlot(uint32 location) {
+    auto &slot = mBoundSlots[location];
+    if (slot.index == UNUSED_SLOT) slot.index = mNextSlot++;
+    return slot.index;
+}
 
-/**
- * @class RHIResource
- * @brief Base class for RHI resource
- *
- * Base class for any RHI resource, created by driver and exposed to the user.
- * Uses automated reference counting, required for safe resource life-time
- * tracking and passing among several system threads.
- *
- * Resource utilise rhi thread command buffer, so it creation/destruction
- * is deferred and executed only on rhi thread as a command.
- */
-class RHIResource : public RefCnt {
-public:
-    BRK_API ~RHIResource() override = default;
+void GLResourceBindingState::Clear() {
+    mBoundSlots.clear();
+    mNextSlot = 0;
+}
 
-protected:
-    /** Internal: Destroy resource on rhi thread */
-    void Destroy() const override;
-};
+GLResourceSet::GLResourceSet(const RHIResourceSetDesc &desc) {
+    Update(desc);
+}
 
-/**
- * @}
- */
+void GLResourceSet::Update(const RHIResourceSetDesc &desc) {
+    mTextures = desc.GetTextures();
+    mSamplers = desc.GetSamplers();
+    mBuffers = desc.GetBuffers();
+}
+
+void GLResourceSet::Bind(GLResourceBindingState &state, const Ref<GLShader> &shader) const {
+    for (const auto &bind : mTextures) {
+        assert(bind.texture.IsNotNull());
+        assert(bind.texture->UsageShaderSampling());
+        uint32 location = bind.location + bind.arrayIndex;
+        uint32 slot = state.GetSlot(location);
+        bind.texture.ForceCast<GLTexture>()->Bind(location, slot);
+    }
+    for (const auto &bind : mSamplers) {
+        assert(bind.sampler.IsNotNull());
+        uint32 location = bind.location + bind.arrayIndex;
+        uint32 slot = state.GetSlot(location);
+        bind.sampler.ForceCast<GLSampler>()->Bind(slot);
+    }
+    for (const auto &bind : mBuffers) {
+        assert(bind.buffer.IsNotNull());
+        bind.buffer.ForceCast<GLUniformBuffer>()->Bind(bind.location, bind.offset, bind.range);
+        shader->BindUniformBlock(bind.location);
+    }
+}
 
 BRK_NS_END
-
-#endif//BERSERK_RHIRESOURCE_HPP

@@ -25,46 +25,27 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIRESOURCE_HPP
-#define BERSERK_RHIRESOURCE_HPP
+#include <core/image/ImageUtil.hpp>
 
-#include <core/Config.hpp>
-#include <core/Typedefs.hpp>
-#include <core/templates/Ref.hpp>
-#include <core/templates/RefCnt.hpp>
-#include <rhi/RHIDefs.hpp>
+#include <cassert>
 
 BRK_NS_BEGIN
 
-/**
- * @addtogroup rhi
- * @{
- */
+uint32 ImageUtil::GetMaxMipsCount(uint32 width, uint32 height, uint32 depth) {
+    uint32 maxDim = MathUtils::Max(width, MathUtils::Max(height, depth));
+    assert(maxDim > 0);
 
-/**
- * @class RHIResource
- * @brief Base class for RHI resource
- *
- * Base class for any RHI resource, created by driver and exposed to the user.
- * Uses automated reference counting, required for safe resource life-time
- * tracking and passing among several system threads.
- *
- * Resource utilise rhi thread command buffer, so it creation/destruction
- * is deferred and executed only on rhi thread as a command.
- */
-class RHIResource : public RefCnt {
-public:
-    BRK_API ~RHIResource() override = default;
+    return static_cast<uint32>(MathUtils::Floor(MathUtils::Log2((float) maxDim))) + 1;
+}
 
-protected:
-    /** Internal: Destroy resource on rhi thread */
-    void Destroy() const override;
-};
+Size2u ImageUtil::GetMipSize(uint32 level, uint32 width, uint32 height) {
+    while (level > 0) {
+        if (width > 0) width /= 2;
+        if (height > 0) height /= 2;
+        level -= 1;
+    }
 
-/**
- * @}
- */
+    return {width, height};
+}
 
 BRK_NS_END
-
-#endif//BERSERK_RHIRESOURCE_HPP

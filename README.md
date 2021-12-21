@@ -122,8 +122,8 @@ Berserk
 │       ├── core - primary core module
 │       ├── platform - platform specific code
 │       ├── rhi - rendering hardware interface
-│       ├── vulkan - rhi implementation backend for Vulkan rendering 
-│       ├── opengl - rhi implementation backend for OpenGL rendering
+│       │   ├── vulkan - rhi implementation backend for Vulkan rendering 
+│       │   └── opengl - rhi implementation backend for OpenGL rendering
 │       ├── render - high-level rendering system
 │       ├── physics - physics system
 │       ├── audio - audio system

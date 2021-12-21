@@ -25,72 +25,67 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_GLFWWINDOWMANAGER_HPP
-#define BERSERK_GLFWWINDOWMANAGER_HPP
+#ifndef BERSERK_GLDEVICE_HPP
+#define BERSERK_GLDEVICE_HPP
 
-#include <core/event/EventWindow.hpp>
-#include <platform/WindowManager.hpp>
+#include <core/Thread.hpp>
+#include <rhi/RHIDevice.hpp>
+#include <rhi/opengl/GLDefs.hpp>
 
 #include <functional>
-#include <memory>
-#include <unordered_map>
-
-#include <GLFW/glfw3.h>
 
 BRK_NS_BEGIN
 
 /**
- * @addtogroup platform
+ * @addtogroup opengl
  * @{
  */
 
 /**
- * @class GlfwWindowManager
- * @brief Glfw window manager implementation
+ * @class GLDevice
+ * @brief GL device implementation
  */
-class GlfwWindowManager final : public WindowManager {
+class GLDevice final : public RHIDevice {
 public:
     using MakeContextCurrentFunc = std::function<void(const Ref<Window> &)>;
     using SwapBuffersFunc = std::function<void(const Ref<Window> &)>;
 
-    BRK_API GlfwWindowManager(bool vsync, bool clientApi);
-    BRK_API ~GlfwWindowManager() override;
-    BRK_API Ref<Window> CreateWindow(const StringName &name, const Size2i &size, const String &title) override;
-    BRK_API Ref<Window> GetPrimaryWindow() override;
+    BRK_API explicit GLDevice(MakeContextCurrentFunc makeCurrentFunc, SwapBuffersFunc swapBuffersFunc);
+    BRK_API ~GLDevice() override;
 
-    BRK_API MakeContextCurrentFunc GetMakeContextCurrentFunc();
-    BRK_API SwapBuffersFunc GetSwapBuffersFunc();
+    BRK_API Ref<RHIVertexDeclaration> CreateVertexDeclaration(const RHIVertexDeclarationDesc &desc) override;
+    BRK_API Ref<RHIVertexBuffer> CreateVertexBuffer(const RHIBufferDesc &desc) override;
+    BRK_API Ref<RHIIndexBuffer> CreateIndexBuffer(const RHIBufferDesc &desc) override;
+    BRK_API Ref<RHIUniformBuffer> CreateUniformBuffer(const RHIBufferDesc &desc) override;
+    BRK_API Ref<RHISampler> CreateSampler(const RHISamplerDesc &desc) override;
+    BRK_API Ref<RHITexture> CreateTexture(const RHITextureDesc &desc) override;
+    BRK_API Ref<RHIResourceSet> CreateResourceSet(const RHIResourceSetDesc &desc) override;
+    BRK_API Ref<RHIFramebuffer> CreateFramebuffer(const RHIFramebufferDesc &desc) override;
+    BRK_API Ref<RHIShader> CreateShader(const RHIShaderDesc &desc) override;
+    BRK_API Ref<RHIRenderPass> CreateRenderPass(const RHIRenderPassDesc &desc) override;
+    BRK_API Ref<RHIGraphicsPipeline> CreateGraphicsPipeline(const RHIGraphicsPipelineDesc &desc) override;
+    BRK_API Ref<RHICommandList> GetCoreCommandList() override;
+
+    BRK_API MakeContextCurrentFunc &GetContextFunc();
+    BRK_API SwapBuffersFunc &GetSwapFunc();
+
+    /**
+     * @brief Create GL RHI device
+     *
+     * Attempts to load and initialize GL functions
+     * and create GL RHI device.
+     *
+     * @param makeCurrentFunc Function to bind context of the window
+     * @param swapBuffersFunc Function to swap buffers to present window image
+     *
+     * @return Created device; null if failed
+     */
+    BRK_API static std::shared_ptr<GLDevice> Make(MakeContextCurrentFunc makeCurrentFunc, SwapBuffersFunc swapBuffersFunc);
 
 private:
-    friend class Application;
-    BRK_API void PollEvents();
-    BRK_API void DispatchEvent(const Ref<Window> &window, EventWindow::Type type);
-    BRK_API Ref<Window> GetWindow(GLFWwindow *HND);
-
-private:
-    // Glfw Specifics
-    static void WindowCloseCallback(GLFWwindow *HND);
-    static void WindowResizedCallback(GLFWwindow *HND, int32 width, int32 height);
-    static void WindowContentScaleCallback(GLFWwindow *HND, float xScale, float yScale);
-    static void FramebufferSizeCallback(GLFWwindow *HND, int32 width, int32 height);
-    static void IconifyCallback(GLFWwindow *HND, int32 iconify);
-    static void MaximizeCallback(GLFWwindow *HND, int32 maximize);
-    static void PositionCallback(GLFWwindow *HND, int32 posX, int32 posY);
-    static void FocusCallback(GLFWwindow *HND, int32 focus);
-    static void ErrorCallback(int32 errorCode, const char *description);
-
-private:
-    /** Input manager */
-    std::shared_ptr<class GlfwInput> mInput;
-    /** Primary window of application */
-    Ref<Window> mPrimaryWindow;
-    /** All application windows */
-    std::unordered_map<StringName, Ref<Window>> mWindows;
-    /** Aux hnd map */
-    std::unordered_map<GLFWwindow *, Ref<Window>> mWindowsByHND;
-    /** Use client-api (gl); otherwise no - for vulkan and directx */
-    bool mClientApi = true;
-    bool mVsync = true;
+    MakeContextCurrentFunc mMakeCurrentFunc;
+    SwapBuffersFunc mSwapBuffersFunc;
+    Thread *mRHIThread = nullptr;
 };
 
 /**
@@ -99,4 +94,4 @@ private:
 
 BRK_NS_END
 
-#endif//BERSERK_GLFWWINDOWMANAGER_HPP
+#endif//BERSERK_GLDEVICE_HPP

@@ -14,6 +14,7 @@ set(BERSERK_CORE_HEADER
         core/event/EventKeyboard.hpp
         core/event/EventMouse.hpp
         core/event/EventWindow.hpp
+        core/image/ImageUtil.hpp
         core/io/ArgumentParser.hpp
         core/io/Logger.hpp
         core/io/LoggerListenerOutput.hpp
@@ -46,6 +47,7 @@ set(BERSERK_CORE_SRC
         core/event/EventKeyboard.cpp
         core/event/EventMouse.cpp
         core/event/EventWindow.cpp
+        core/image/ImageUtil.cpp
         core/io/ArgumentParser.cpp
         core/io/Logger.cpp
         core/io/LoggerListenerOutput.cpp

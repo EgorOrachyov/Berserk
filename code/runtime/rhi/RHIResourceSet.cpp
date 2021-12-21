@@ -31,54 +31,60 @@
 
 BRK_NS_BEGIN
 
-void RHIResourceSetDesc::AddTexture(Ref<RHITexture> texture, uint32 location) {
+void RHIResourceSetDesc::AddTexture(Ref<RHITexture> texture, uint32 location, uint32 arrayIndex) {
     TextureBinding binding;
     binding.location = location;
+    binding.arrayIndex = arrayIndex;
     binding.texture = std::move(texture);
     mTextures.push_back(std::move(binding));
 }
 
-void RHIResourceSetDesc::AddSampler(Ref<RHISampler> sampler, uint32 location) {
+void RHIResourceSetDesc::AddSampler(Ref<RHISampler> sampler, uint32 location, uint32 arrayIndex) {
     SamplerBinding binding;
     binding.location = location;
+    binding.arrayIndex = arrayIndex;
     binding.sampler = std::move(sampler);
     mSamplers.push_back(std::move(binding));
 }
 
-void RHIResourceSetDesc::AddBuffer(Ref<RHIUniformBuffer> buffer, uint32 location) {
+void RHIResourceSetDesc::AddBuffer(Ref<RHIUniformBuffer> buffer, uint32 location, uint32 offset, uint32 range) {
     BufferBinding binding;
     binding.location = location;
+    binding.offset = offset;
+    binding.range = range;
     binding.buffer = std::move(buffer);
     mBuffers.push_back(std::move(binding));
 }
 
-bool RHIResourceSetDesc::SetTexture(Ref<RHITexture> texture, uint32 location) {
-    auto query = std::find_if(mTextures.begin(), mTextures.end(), [=](const TextureBinding &b) { return b.location == location; });
+bool RHIResourceSetDesc::SetTexture(Ref<RHITexture> texture, uint32 location, uint32 arrayIndex) {
+    auto query = std::find_if(mTextures.begin(), mTextures.end(),
+                              [=](const TextureBinding &b) { return b.location == location && b.arrayIndex == arrayIndex; });
     if (query != mTextures.end()) {
         query->texture = std::move(texture);
         return true;
     }
-    AddTexture(std::move(texture), location);
+    AddTexture(std::move(texture), location, arrayIndex);
     return false;
 }
 
-bool RHIResourceSetDesc::SetSampler(Ref<RHISampler> sampler, uint32 location) {
-    auto query = std::find_if(mSamplers.begin(), mSamplers.end(), [=](const SamplerBinding &b) { return b.location == location; });
+bool RHIResourceSetDesc::SetSampler(Ref<RHISampler> sampler, uint32 location, uint32 arrayIndex) {
+    auto query = std::find_if(mSamplers.begin(), mSamplers.end(),
+                              [=](const SamplerBinding &b) { return b.location == location && b.arrayIndex == arrayIndex; });
     if (query != mSamplers.end()) {
         query->sampler = std::move(sampler);
         return true;
     }
-    AddSampler(std::move(sampler), location);
+    AddSampler(std::move(sampler), location, arrayIndex);
     return false;
 }
 
-bool RHIResourceSetDesc::SetBuffer(Ref<RHIUniformBuffer> buffer, uint32 location) {
+bool RHIResourceSetDesc::SetBuffer(Ref<RHIUniformBuffer> buffer, uint32 location, uint32 offset, uint32 range) {
     auto query = std::find_if(mBuffers.begin(), mBuffers.end(), [=](const BufferBinding &b) { return b.location == location; });
     if (query != mBuffers.end()) {
         query->buffer = std::move(buffer);
         return true;
     }
-    AddBuffer(std::move(buffer), location);
+    AddBuffer(std::move(buffer), location, offset, range);
     return false;
 }
 

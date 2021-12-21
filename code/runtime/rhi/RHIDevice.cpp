@@ -28,6 +28,8 @@
 #include <core/Engine.hpp>
 #include <rhi/RHIDevice.hpp>
 
+#include <algorithm>
+
 BRK_NS_BEGIN
 
 const std::vector<RHITextureFormat> &RHIDevice::GetSupportedFormats() const {
@@ -48,6 +50,11 @@ const RHIDeviceCaps &RHIDevice::GetCaps() const {
 
 const Mat4x4f &RHIDevice::GetClipMatrix() const {
     return mClipMatrix;
+}
+
+bool RHIDevice::IsSupported(RHIShaderLanguage language) const {
+    auto query = std::find(mSupportedShaderLanguages.begin(), mSupportedShaderLanguages.end(), language);
+    return query != mSupportedShaderLanguages.end();
 }
 
 #define BRK_RENDER_THREAD_SETUP        \

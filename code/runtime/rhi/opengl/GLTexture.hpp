@@ -25,72 +25,46 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_GLFWWINDOWMANAGER_HPP
-#define BERSERK_GLFWWINDOWMANAGER_HPP
+#ifndef BERSERK_GLTEXTURE_HPP
+#define BERSERK_GLTEXTURE_HPP
 
-#include <core/event/EventWindow.hpp>
-#include <platform/WindowManager.hpp>
-
-#include <functional>
-#include <memory>
-#include <unordered_map>
-
-#include <GLFW/glfw3.h>
+#include <core/Data.hpp>
+#include <rhi/RHITexture.hpp>
+#include <rhi/opengl/GLDefs.hpp>
 
 BRK_NS_BEGIN
 
 /**
- * @addtogroup platform
+ * @addtogroup opengl
  * @{
  */
 
 /**
- * @class GlfwWindowManager
- * @brief Glfw window manager implementation
+ * @class GLTexture
+ * @brief GL texture resource implementation
  */
-class GlfwWindowManager final : public WindowManager {
+class GLTexture final : public RHITexture {
 public:
-    using MakeContextCurrentFunc = std::function<void(const Ref<Window> &)>;
-    using SwapBuffersFunc = std::function<void(const Ref<Window> &)>;
+    BRK_API explicit GLTexture(const RHITextureDesc &desc);
+    BRK_API ~GLTexture() override;
 
-    BRK_API GlfwWindowManager(bool vsync, bool clientApi);
-    BRK_API ~GlfwWindowManager() override;
-    BRK_API Ref<Window> CreateWindow(const StringName &name, const Size2i &size, const String &title) override;
-    BRK_API Ref<Window> GetPrimaryWindow() override;
+    BRK_API void Initialize();
+    BRK_API void Initialize2d();
+    BRK_API void Initialize2dArray();
+    BRK_API void InitializeCube();
 
-    BRK_API MakeContextCurrentFunc GetMakeContextCurrentFunc();
-    BRK_API SwapBuffersFunc GetSwapBuffersFunc();
+    BRK_API void UpdateTexture2D(uint32 mipLevel, const Rect2u &region, const Ref<Data> &memory);
+    BRK_API void UpdateTexture2DArray(uint32 arrayIndex, uint32 mipLevel, const Rect2u &region, const Ref<Data> &memory);
+    BRK_API void UpdateTextureCube(RHITextureCubemapFace face, uint32 mipLevel, const Rect2u &region, const Ref<Data> &memory);
+    BRK_API void GenerateMipMaps();
 
-private:
-    friend class Application;
-    BRK_API void PollEvents();
-    BRK_API void DispatchEvent(const Ref<Window> &window, EventWindow::Type type);
-    BRK_API Ref<Window> GetWindow(GLFWwindow *HND);
+    BRK_API void Bind(uint32 location, uint32 slot) const;
+    BRK_API GLenum GetTextureTarget() const;
 
-private:
-    // Glfw Specifics
-    static void WindowCloseCallback(GLFWwindow *HND);
-    static void WindowResizedCallback(GLFWwindow *HND, int32 width, int32 height);
-    static void WindowContentScaleCallback(GLFWwindow *HND, float xScale, float yScale);
-    static void FramebufferSizeCallback(GLFWwindow *HND, int32 width, int32 height);
-    static void IconifyCallback(GLFWwindow *HND, int32 iconify);
-    static void MaximizeCallback(GLFWwindow *HND, int32 maximize);
-    static void PositionCallback(GLFWwindow *HND, int32 posX, int32 posY);
-    static void FocusCallback(GLFWwindow *HND, int32 focus);
-    static void ErrorCallback(int32 errorCode, const char *description);
+    GLuint GetHandle() const { return mHandle; }
 
 private:
-    /** Input manager */
-    std::shared_ptr<class GlfwInput> mInput;
-    /** Primary window of application */
-    Ref<Window> mPrimaryWindow;
-    /** All application windows */
-    std::unordered_map<StringName, Ref<Window>> mWindows;
-    /** Aux hnd map */
-    std::unordered_map<GLFWwindow *, Ref<Window>> mWindowsByHND;
-    /** Use client-api (gl); otherwise no - for vulkan and directx */
-    bool mClientApi = true;
-    bool mVsync = true;
+    GLuint mHandle = 0;
 };
 
 /**
@@ -99,4 +73,4 @@ private:
 
 BRK_NS_END
 
-#endif//BERSERK_GLFWWINDOWMANAGER_HPP
+#endif//BERSERK_GLTEXTURE_HPP

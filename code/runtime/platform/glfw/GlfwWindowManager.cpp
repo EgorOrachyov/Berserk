@@ -138,6 +138,28 @@ Ref<Window> GlfwWindowManager::GetPrimaryWindow() {
     return mPrimaryWindow;
 }
 
+GlfwWindowManager::MakeContextCurrentFunc GlfwWindowManager::GetMakeContextCurrentFunc() {
+    return [](const Ref<Window> &window) {
+        auto glfwWindow = dynamic_cast<GlfwWindow *>(window.Get());
+        if (!glfwWindow) {
+            BRK_ERROR("[GLFW] Passed null or incompatible window to make current");
+            return;
+        }
+        glfwMakeContextCurrent(glfwWindow->mHND);
+    };
+}
+
+GlfwWindowManager::SwapBuffersFunc GlfwWindowManager::GetSwapBuffersFunc() {
+    return [](const Ref<Window> &window) {
+        auto glfwWindow = dynamic_cast<GlfwWindow *>(window.Get());
+        if (!glfwWindow) {
+            BRK_ERROR("[GLFW] Passed null or incompatible window to swap buffers");
+            return;
+        }
+        glfwSwapBuffers(glfwWindow->mHND);
+    };
+}
+
 void GlfwWindowManager::PollEvents() {
     // Required state reset
     mInput->PreUpdate();

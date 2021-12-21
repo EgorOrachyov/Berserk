@@ -25,46 +25,71 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RHIRESOURCE_HPP
-#define BERSERK_RHIRESOURCE_HPP
-
-#include <core/Config.hpp>
-#include <core/Typedefs.hpp>
-#include <core/templates/Ref.hpp>
-#include <core/templates/RefCnt.hpp>
-#include <rhi/RHIDefs.hpp>
+#include <core/Engine.hpp>
+#include <rhi/opengl/GLSampler.hpp>
 
 BRK_NS_BEGIN
 
-/**
- * @addtogroup rhi
- * @{
- */
+GLSampler::GLSampler(const RHISamplerDesc &desc) {
+    mState = desc;
+}
 
-/**
- * @class RHIResource
- * @brief Base class for RHI resource
- *
- * Base class for any RHI resource, created by driver and exposed to the user.
- * Uses automated reference counting, required for safe resource life-time
- * tracking and passing among several system threads.
- *
- * Resource utilise rhi thread command buffer, so it creation/destruction
- * is deferred and executed only on rhi thread as a command.
- */
-class RHIResource : public RefCnt {
-public:
-    BRK_API ~RHIResource() override = default;
+GLSampler::~GLSampler() {
+    if (mHandle) {
+        glDeleteSamplers(1, &mHandle);
+        BRK_GL_CATCH_ERR();
+        mHandle = 0;
+    }
+}
 
-protected:
-    /** Internal: Destroy resource on rhi thread */
-    void Destroy() const override;
-};
+void GLSampler::Initialize() {
+    const auto &caps = Engine::Instance().GetRHIDevice().GetCaps();
+    auto anisotropy = MathUtils::Clamp(mState.maxAnisotropy, 1.0f, caps.maxAnisotropy);
+    auto useAnisotropy = mState.useAnisotropy && caps.supportAnisotropy;
 
-/**
- * @}
- */
+    auto minFilter = GLDefs::GetSamplerMinFilter(mState.minFilter);
+    auto magFilter = GLDefs::GetSamplerMagFilter(mState.magFilter);
+    auto repeatS = GLDefs::GetSamplerRepeatMode(mState.u);
+    auto repeatT = GLDefs::GetSamplerRepeatMode(mState.v);
+    auto repeatR = GLDefs::GetSamplerRepeatMode(mState.w);
+    auto color = GLDefs::GetBorderColor(mState.color);
+
+    glGenSamplers(1, &mHandle);
+    BRK_GL_CATCH_ERR();
+
+    glSamplerParameteri(mHandle, GL_TEXTURE_MIN_FILTER, minFilter);
+    BRK_GL_CATCH_ERR();
+
+    glSamplerParameteri(mHandle, GL_TEXTURE_MAG_FILTER, magFilter);
+    BRK_GL_CATCH_ERR();
+
+    glSamplerParameteri(mHandle, GL_TEXTURE_WRAP_S, repeatS);
+    BRK_GL_CATCH_ERR();
+
+    glSamplerParameteri(mHandle, GL_TEXTURE_WRAP_T, repeatT);
+    BRK_GL_CATCH_ERR();
+
+    glSamplerParameteri(mHandle, GL_TEXTURE_WRAP_R, repeatR);
+    BRK_GL_CATCH_ERR();
+
+    glSamplerParameterf(mHandle, GL_TEXTURE_MIN_LOD, mState.minLod);
+    BRK_GL_CATCH_ERR();
+
+    glSamplerParameterf(mHandle, GL_TEXTURE_MAX_LOD, mState.maxLod);
+    BRK_GL_CATCH_ERR();
+
+    glSamplerParameterfv(mHandle, GL_TEXTURE_BORDER_COLOR, color.GetData());
+    BRK_GL_CATCH_ERR();
+
+    if (useAnisotropy) {
+        glSamplerParameterf(mHandle, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
+        BRK_GL_CATCH_ERR();
+    }
+}
+
+void GLSampler::Bind(uint32 slot) const {
+    glBindSampler(slot, mHandle);
+    BRK_GL_CATCH_ERR();
+}
 
 BRK_NS_END
-
-#endif//BERSERK_RHIRESOURCE_HPP

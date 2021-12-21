@@ -95,6 +95,12 @@ public:
     /** @return Create and compile shader from desc */
     BRK_API virtual Ref<RHIShader> CreateShader(const RHIShaderDesc &desc) = 0;
 
+    /** @return Create render pass from desc */
+    BRK_API virtual Ref<RHIRenderPass> CreateRenderPass(const RHIRenderPassDesc &desc) = 0;
+
+    /** @return Create and compile pipeline from desc */
+    BRK_API virtual Ref<RHIGraphicsPipeline> CreateGraphicsPipeline(const RHIGraphicsPipelineDesc &desc) = 0;
+
     /** Update vertex buffer with data */
     BRK_API virtual void UpdateVertexBuffer(const Ref<RHIVertexBuffer> &buffer, uint32 byteOffset, uint32 byteSize, const Ref<Data> &data);
 
@@ -136,6 +142,9 @@ public:
 
     /** @return Clip matrix */
     BRK_API virtual const Mat4x4f &GetClipMatrix() const;
+
+    /** @return True if language supported */
+    BRK_API bool IsSupported(RHIShaderLanguage language) const;
 
 protected:
     std::vector<RHITextureFormat> mSupportedTextureFormats;
