@@ -53,7 +53,6 @@ Ref<Data> Data::Make(const void *data, size_t sizeInBytes) {
 
     Ref<Data> ptr = Make(sizeInBytes);
     Memory::Copy(ptr->GetDataWrite(), data, sizeInBytes);
-    ptr->MarkImmutable();
     return ptr;
 }
 

@@ -29,6 +29,7 @@
 #define BERSERK_IMAGEUTIL_HPP
 
 #include <core/Config.hpp>
+#include <core/image/Image.hpp>
 #include <core/math/TVecN.hpp>
 
 BRK_NS_BEGIN
@@ -46,6 +47,10 @@ class ImageUtil {
 public:
     BRK_API static uint32 GetMaxMipsCount(uint32 width, uint32 height, uint32 depth);
     BRK_API static Size2u GetMipSize(uint32 level, uint32 width, uint32 height);
+    BRK_API static uint32 GetPixelSize(Image::Format format);
+    BRK_API static uint32 GetChannelsCount(Image::Format format);
+    BRK_API static bool CanAccept(Image::Format format);
+    BRK_API static bool CanSaveRgba(Image::Format format);
 };
 
 /**

@@ -36,6 +36,11 @@ FileSystem::FileSystem() {
     Init();
 }
 
+void FileSystem::CloseFile(std::FILE *file) {
+    assert(file);
+    std::fclose(file);
+}
+
 Ref<Data> FileSystem::ReadFile(const String &filepath) {
     auto *file = OpenFile(filepath, "rb");
 

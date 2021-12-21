@@ -18,7 +18,6 @@ option(BERSERK_DYNAMIC_BUILD "Build dynamic runtime library" YES)
 
 option(BERSERK_WITH_GLFW "Use GLFW Window system" NO)
 option(BERSERK_WITH_GLEW "Use GLEW as gl loader" NO)
-option(BERSERK_WITH_STB_IMAGE "Use STB Image for image importing" YES)
 option(BERSERK_WITH_OPENGL "Use OpenGL-based as rendering backend" NO)
 option(BERSERK_WITH_VULKAN "Use Vulkan-based as rendering backend" NO)
 option(BERSERK_WITH_VMA "Use vma library for vulkan GPU memory allocation" NO)

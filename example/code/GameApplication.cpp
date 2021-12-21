@@ -34,7 +34,7 @@ void GameApplication::OnWindowCreate() {
     auto &windowManager = engine.GetWindowManager();
 
     // Create primary window
-    auto window = windowManager.CreateWindow(berserk::StringName("MAIN"), {1280, 720}, "Example window");
+    windowManager.CreateWindow(berserk::StringName("MAIN"), {1280, 720}, "Example window");
 }
 
 void GameApplication::OnInitialize() {
@@ -97,6 +97,10 @@ void GameApplication::OnInitialize() {
         }
         return false;
     });
+
+    // Load an image
+    auto image = berserk::Image::LoadRgba(BRK_TEXT("../engine/resources/textures/icon.jpeg"), 4);
+    BRK_INFO("Load image w=" << image.GetWidth() << " h=" << image.GetHeight() << " size=" << image.GetSizeBytes());
 }
 
 void GameApplication::OnFinalize() {

@@ -31,6 +31,10 @@ function(berserk_configure_target target)
         target_link_libraries(${target} PRIVATE SPIRV)
     endif ()
 
+    if (BERSERK_WITH_GLEW)
+        target_link_libraries(${target} PRIVATE StbImage)
+    endif ()
+
     foreach (DEFINITION ${BERSERK_RUNTIME_DEFINES_PUBLIC})
         target_compile_definitions(${target} PUBLIC ${DEFINITION})
     endforeach ()

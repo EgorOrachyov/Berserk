@@ -48,4 +48,158 @@ Size2u ImageUtil::GetMipSize(uint32 level, uint32 width, uint32 height) {
     return {width, height};
 }
 
+uint32 ImageUtil::GetPixelSize(Image::Format format) {
+    switch (format) {
+        case Image::Format::R8:
+        case Image::Format::R8_SNORM:
+            return 1;
+        case Image::Format::R16:
+        case Image::Format::R16_SNORM:
+        case Image::Format::RG8:
+        case Image::Format::RG8_SNORM:
+            return 2;
+        case Image::Format::RG16:
+        case Image::Format::RG16_SNORM:
+            return 4;
+        case Image::Format::RGB8:
+        case Image::Format::RGB8_SNORM:
+            return 3;
+        case Image::Format::RGB16_SNORM:
+            return 6;
+        case Image::Format::RGBA8:
+        case Image::Format::RGBA8_SNORM:
+            return 4;
+        case Image::Format::RGBA16:
+            return 8;
+        case Image::Format::SRGB8:
+            return 3;
+        case Image::Format::SRGB8_ALPHA8:
+            return 4;
+        case Image::Format::R16F:
+        case Image::Format::RG16F:
+        case Image::Format::RGB16F:
+        case Image::Format::RGBA16F:
+            return 0;
+        case Image::Format::R32F:
+            return 4;
+        case Image::Format::RG32F:
+            return 8;
+        case Image::Format::RGB32F:
+            return 12;
+        case Image::Format::RGBA32F:
+            return 16;
+        case Image::Format::DEPTH32F:
+            return 4;
+        case Image::Format::DEPTH32F_STENCIL8:
+        case Image::Format::DEPTH24_STENCIL8:
+        default:
+            return 0;
+    }
+}
+
+uint32 ImageUtil::GetChannelsCount(Image::Format format) {
+    switch (format) {
+        case Image::Format::R8:
+        case Image::Format::R8_SNORM:
+        case Image::Format::R16:
+        case Image::Format::R16_SNORM:
+            return 1;
+        case Image::Format::RG8:
+        case Image::Format::RG8_SNORM:
+        case Image::Format::RG16:
+        case Image::Format::RG16_SNORM:
+            return 2;
+        case Image::Format::RGB8:
+        case Image::Format::RGB8_SNORM:
+        case Image::Format::RGB16_SNORM:
+            return 3;
+        case Image::Format::RGBA8:
+        case Image::Format::RGBA8_SNORM:
+        case Image::Format::RGBA16:
+            return 4;
+        case Image::Format::SRGB8:
+            return 3;
+        case Image::Format::SRGB8_ALPHA8:
+            return 4;
+        case Image::Format::R16F:
+            return 1;
+        case Image::Format::RG16F:
+            return 2;
+        case Image::Format::RGB16F:
+            return 3;
+        case Image::Format::RGBA16F:
+            return 4;
+        case Image::Format::R32F:
+            return 1;
+        case Image::Format::RG32F:
+            return 2;
+        case Image::Format::RGB32F:
+            return 3;
+        case Image::Format::RGBA32F:
+            return 4;
+        case Image::Format::DEPTH32F:
+            return 1;
+        case Image::Format::DEPTH32F_STENCIL8:
+        case Image::Format::DEPTH24_STENCIL8:
+            return 2;
+        default:
+            return 0;
+    }
+}
+
+bool ImageUtil::CanAccept(Image::Format format) {
+    switch (format) {
+        case Image::Format::R8:
+        case Image::Format::R8_SNORM:
+        case Image::Format::R16:
+        case Image::Format::R16_SNORM:
+        case Image::Format::RG8:
+        case Image::Format::RG8_SNORM:
+        case Image::Format::RG16:
+        case Image::Format::RG16_SNORM:
+        case Image::Format::RGB8:
+        case Image::Format::RGB8_SNORM:
+        case Image::Format::RGB16_SNORM:
+        case Image::Format::RGBA8:
+        case Image::Format::RGBA8_SNORM:
+        case Image::Format::RGBA16:
+        case Image::Format::SRGB8:
+        case Image::Format::SRGB8_ALPHA8:
+            return true;
+        case Image::Format::R16F:
+        case Image::Format::RG16F:
+        case Image::Format::RGB16F:
+        case Image::Format::RGBA16F:
+            return false;
+        case Image::Format::R32F:
+        case Image::Format::RG32F:
+        case Image::Format::RGB32F:
+        case Image::Format::RGBA32F:
+        case Image::Format::DEPTH32F:
+            return true;
+        case Image::Format::DEPTH32F_STENCIL8:
+        case Image::Format::DEPTH24_STENCIL8:
+        default:
+            return false;
+    }
+}
+
+bool ImageUtil::CanSaveRgba(Image::Format format) {
+    switch (format) {
+        case Image::Format::R8:
+        case Image::Format::R8_SNORM:
+        case Image::Format::RG8:
+        case Image::Format::RG8_SNORM:
+        case Image::Format::RGB8:
+        case Image::Format::RGB8_SNORM:
+        case Image::Format::RGBA8:
+        case Image::Format::RGBA8_SNORM:
+        case Image::Format::SRGB8:
+        case Image::Format::SRGB8_ALPHA8:
+            return true;
+        default:
+            return false;
+    }
+}
+
 BRK_NS_END

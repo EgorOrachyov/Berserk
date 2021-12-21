@@ -62,21 +62,23 @@ public:
     void MarkImmutable() { mMutable = false; }
 
     /**
-     * Makes new immutable data from provided data buffer.
+     * Makes new data from provided data buffer.
      * Uses system malloc for internal data storage allocation.
      *
      * @param data Pointer to data to copy into buffer
      * @param sizeInBytes Size in bytes of the buffer
+     *
      * @return Created data instance
      */
     BRK_API static Ref<Data> Make(const void *data, size_t sizeInBytes);
 
     /**
-     * Makes new mutable data with specified size.
+     * Makes new data with specified size.
      * Use get data function to retrieve writable memory pointer.
      * Uses system malloc for internal data storage allocation.
      *
      * @param sizeInBytes Size in bytes of the data buffer
+     *
      * @return Created data instance
      */
     BRK_API static Ref<Data> Make(size_t sizeInBytes);

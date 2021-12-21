@@ -88,6 +88,12 @@ public:
     BRK_API std::FILE *OpenFile(const String &filepath, const String &mode);
 
     /**
+     * @brief Close opened file
+     * @param file File handle to close
+     */
+    BRK_API void CloseFile(std::FILE* file);
+
+    /**
      * @brief Read file by file path
      *
      * Attempts to open and read content of the file, specified by file path.
