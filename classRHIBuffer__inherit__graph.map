@@ -5,7 +5,7 @@
 <area shape="rect" id="node8" href="$classRHIVertexBuffer.html" title="RHI vertex buffer." alt="" coords="291,229,407,256"/>
 <area shape="rect" id="node2" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="153,80,253,107"/>
 <area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="172,5,235,32"/>
-<area shape="rect" id="node5" href="$classGLIndexBuffer.html" title=" " alt="" coords="8,304,113,331"/>
-<area shape="rect" id="node7" href="$classGLUniformBuffer.html" title=" " alt="" coords="143,304,263,331"/>
-<area shape="rect" id="node9" href="$classGLVertexBuffer.html" title=" " alt="" coords="293,304,404,331"/>
+<area shape="rect" id="node5" href="$classGLIndexBuffer.html" title="GL index buffer implementation." alt="" coords="8,304,113,331"/>
+<area shape="rect" id="node7" href="$classGLUniformBuffer.html" title="GL uniform buffer implementation." alt="" coords="143,304,263,331"/>
+<area shape="rect" id="node9" href="$classGLVertexBuffer.html" title="GL vertex buffer implementation." alt="" coords="293,304,404,331"/>
 </map>

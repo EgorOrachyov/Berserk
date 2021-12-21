@@ -1,5 +1,5 @@
 <map id="GLUniformBuffer" name="GLUniformBuffer">
-<area shape="rect" id="node1" title=" " alt="" coords="69,304,189,331"/>
+<area shape="rect" id="node1" title="GL uniform buffer implementation." alt="" coords="69,304,189,331"/>
 <area shape="rect" id="node2" href="$classRHIUniformBuffer.html" title="RHI uniform buffer." alt="" coords="5,229,131,256"/>
 <area shape="rect" id="node3" href="$classRHIBuffer.html" title="RHI device buffer." alt="" coords="29,155,107,181"/>
 <area shape="rect" id="node4" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="18,80,118,107"/>

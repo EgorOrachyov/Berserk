@@ -29,9 +29,9 @@
 <area shape="rect" id="node17" href="$classRHIIndexBuffer.html" title="RHI index buffer." alt="" coords="489,360,600,387"/>
 <area shape="rect" id="node19" href="$classRHIUniformBuffer.html" title="RHI uniform buffer." alt="" coords="482,411,607,437"/>
 <area shape="rect" id="node21" href="$classRHIVertexBuffer.html" title="RHI vertex buffer." alt="" coords="487,461,603,488"/>
-<area shape="rect" id="node18" href="$classGLIndexBuffer.html" title=" " alt="" coords="671,360,777,387"/>
-<area shape="rect" id="node20" href="$classGLUniformBuffer.html" title=" " alt="" coords="664,411,784,437"/>
-<area shape="rect" id="node22" href="$classGLVertexBuffer.html" title=" " alt="" coords="669,461,779,488"/>
+<area shape="rect" id="node18" href="$classGLIndexBuffer.html" title="GL index buffer implementation." alt="" coords="671,360,777,387"/>
+<area shape="rect" id="node20" href="$classGLUniformBuffer.html" title="GL uniform buffer implementation." alt="" coords="664,411,784,437"/>
+<area shape="rect" id="node22" href="$classGLVertexBuffer.html" title="GL vertex buffer implementation." alt="" coords="669,461,779,488"/>
 <area shape="rect" id="node25" href="$classGLFramebuffer.html" title="GL framebuffer implementation." alt="" coords="490,512,599,539"/>
 <area shape="rect" id="node27" href="$classGLGraphicsPipeline.html" title="GL graphics pipeline state." alt="" coords="475,563,614,589"/>
 <area shape="rect" id="node29" href="$classGLRenderPass.html" title="GL render pass state object." alt="" coords="489,613,600,640"/>

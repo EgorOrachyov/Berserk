@@ -1,5 +1,5 @@
 <map id="GLVertexBuffer" name="GLVertexBuffer">
-<area shape="rect" id="node1" title=" " alt="" coords="68,304,179,331"/>
+<area shape="rect" id="node1" title="GL vertex buffer implementation." alt="" coords="68,304,179,331"/>
 <area shape="rect" id="node2" href="$classRHIVertexBuffer.html" title="RHI vertex buffer." alt="" coords="5,229,121,256"/>
 <area shape="rect" id="node3" href="$classRHIBuffer.html" title="RHI device buffer." alt="" coords="24,155,103,181"/>
 <area shape="rect" id="node4" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="13,80,113,107"/>
