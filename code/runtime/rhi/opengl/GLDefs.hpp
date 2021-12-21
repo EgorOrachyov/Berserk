@@ -53,6 +53,10 @@ BRK_NS_BEGIN
  * @{
  */
 
+/**
+ * @class GLDefs
+ * @brief GL mapping of RHI definitions
+ */
 class GLDefs {
 public:
     static void CatchErrors() {

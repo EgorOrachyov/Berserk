@@ -164,6 +164,12 @@ endfunction()
 if(glew-cmake_BUILD_STATIC)
 	add_library(libglew_static STATIC ${LIBGLEW_SRCS})
 
+	if (UNIX)
+		# Force -fPIC on linux/mac, since we link static library with dynamic
+		# to avoid `relocation R_X86_64_PC32 against symbol...` errors
+	    target_compile_options(libglew_static PRIVATE "-fPIC")
+	endif()
+
 	set_representative_target(libglew_static)
 
 	target_compile_definitions(libglew_static PUBLIC GLEW_STATIC)
