@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['platform_2734',['Platform',['../group__platform.html',1,'']]]
+  ['rhi_2734',['Rhi',['../group__rhi.html',1,'']]]
 ];

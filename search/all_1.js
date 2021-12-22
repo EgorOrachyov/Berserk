@@ -47,7 +47,7 @@ var searchData=
   ['brk_5flog_89',['BRK_LOG',['../group__core.html#ga2216b74c084d0e6e80b2e8178a0d8d62',1,'Logger.hpp']]],
   ['brk_5flog_5fmessage_90',['BRK_LOG_MESSAGE',['../group__core.html#ga2ab926276eafe0e4724f92ee9c5fc519',1,'Logger.hpp']]],
   ['brk_5fns_91',['BRK_NS',['../Config_8hpp.html#aa64b2c1b97ee7a4c5520cbfb93ab4b65',1,'Config.hpp']]],
-  ['brk_5fns_5fbegin_92',['BRK_NS_BEGIN',['../Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1',1,'BRK_NS_BEGIN():&#160;Config.hpp'],['../group__BRK__NS__BEGIN.html',1,'(Global Namespace)'],['../namespaceBRK__NS__BEGIN.html',1,'BRK_NS_BEGIN']]],
+  ['brk_5fns_5fbegin_92',['BRK_NS_BEGIN',['../Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1',1,'BRK_NS_BEGIN():&#160;Config.hpp'],['../namespaceBRK__NS__BEGIN.html',1,'BRK_NS_BEGIN']]],
   ['brk_5fns_5fend_93',['BRK_NS_END',['../Config_8hpp.html#a206fc1c8e28399b1f48e8215d5584500',1,'Config.hpp']]],
   ['brk_5fns_5fuse_94',['BRK_NS_USE',['../Config_8hpp.html#aee6cdddb16b728b5b41e2cf7225b59ef',1,'Config.hpp']]],
   ['brk_5frender_5fthread_5fsetup_95',['BRK_RENDER_THREAD_SETUP',['../RHIDevice_8cpp.html#a829f3ee886c5ab139a1c7a3834a09f0a',1,'RHIDevice.cpp']]],

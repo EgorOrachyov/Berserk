@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['opengl_2733',['Opengl',['../group__opengl.html',1,'']]]
+  ['platform_2733',['Platform',['../group__platform.html',1,'']]]
 ];
