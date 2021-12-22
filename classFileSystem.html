@@ -101,6 +101,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a88ed369864c1f75c88699b06e7982778"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> std::FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileSystem.html#a88ed369864c1f75c88699b06e7982778">OpenFile</a> (const <a class="el" href="classString.html">String</a> &amp;filepath, const <a class="el" href="classString.html">String</a> &amp;mode)</td></tr>
 <tr class="memdesc:a88ed369864c1f75c88699b06e7982778"><td class="mdescLeft">&#160;</td><td class="mdescRight">Open file by file path and mode.  <a href="classFileSystem.html#a88ed369864c1f75c88699b06e7982778">More...</a><br /></td></tr>
 <tr class="separator:a88ed369864c1f75c88699b06e7982778"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5abbc741a948ffa4fe02ef43e71a68e9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileSystem.html#a5abbc741a948ffa4fe02ef43e71a68e9">CloseFile</a> (std::FILE *file)</td></tr>
+<tr class="memdesc:a5abbc741a948ffa4fe02ef43e71a68e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Close opened file.  <a href="classFileSystem.html#a5abbc741a948ffa4fe02ef43e71a68e9">More...</a><br /></td></tr>
+<tr class="separator:a5abbc741a948ffa4fe02ef43e71a68e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0629ef3da87a4c79cd6740c97297483b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classData.html">Data</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileSystem.html#a0629ef3da87a4c79cd6740c97297483b">ReadFile</a> (const <a class="el" href="classString.html">String</a> &amp;filepath)</td></tr>
 <tr class="memdesc:a0629ef3da87a4c79cd6740c97297483b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read file by file path.  <a href="classFileSystem.html#a0629ef3da87a4c79cd6740c97297483b">More...</a><br /></td></tr>
 <tr class="separator:a0629ef3da87a4c79cd6740c97297483b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -241,6 +244,32 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">path</td><td>Search path to add; must be not empty </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5abbc741a948ffa4fe02ef43e71a68e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5abbc741a948ffa4fe02ef43e71a68e9">&#9670;&nbsp;</a></span>CloseFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FileSystem::CloseFile </td>
+          <td>(</td>
+          <td class="paramtype">std::FILE *&#160;</td>
+          <td class="paramname"><em>file</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Close opened file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file</td><td>File handle to close </td></tr>
   </table>
   </dd>
 </dl>

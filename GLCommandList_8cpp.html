@@ -65,46 +65,144 @@ $(function() {
 </div>
 </div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
 <div class="title">GLCommandList.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="GLCommandList_8hpp_source.html">rhi/opengl/GLCommandList.hpp</a>&gt;</code><br />
+<div class="textblock"><code>#include &lt;<a class="el" href="Engine_8hpp_source.html">core/Engine.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="GLBuffer_8hpp_source.html">rhi/opengl/GLBuffer.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="GLCommandList_8hpp_source.html">rhi/opengl/GLCommandList.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="GLDevice_8hpp_source.html">rhi/opengl/GLDevice.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="GLTexture_8hpp_source.html">rhi/opengl/GLTexture.hpp</a>&gt;</code><br />
+<code>#include &lt;cassert&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for GLCommandList.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="GLCommandList_8cpp__incl.png" border="0" usemap="#acode_2runtime_2rhi_2opengl_2GLCommandList_8cpp" alt=""/></div>
 <map name="acode_2runtime_2rhi_2opengl_2GLCommandList_8cpp" id="acode_2runtime_2rhi_2opengl_2GLCommandList_8cpp">
-<area shape="rect" title=" " alt="" coords="526,5,683,47"/>
-<area shape="rect" href="GLCommandList_8hpp.html" title=" " alt="" coords="502,95,707,121"/>
-<area shape="rect" href="GLDefs_8hpp.html" title=" " alt="" coords="529,169,680,196"/>
-<area shape="rect" title=" " alt="" coords="289,244,371,271"/>
-<area shape="rect" href="Logger_8hpp.html" title=" " alt="" coords="1213,244,1343,271"/>
-<area shape="rect" href="TVecN_8hpp.html" title=" " alt="" coords="395,244,545,271"/>
-<area shape="rect" href="RHIDefs_8hpp.html" title=" " alt="" coords="839,319,954,345"/>
-<area shape="rect" href="Config_8hpp.html" title=" " alt="" coords="720,468,831,495"/>
-<area shape="rect" href="Typedefs_8hpp.html" title=" " alt="" coords="450,393,578,420"/>
-<area shape="rect" href="String_8hpp.html" title=" " alt="" coords="979,319,1124,345"/>
-<area shape="rect" title=" " alt="" coords="1282,319,1343,345"/>
-<area shape="rect" title=" " alt="" coords="1368,319,1447,345"/>
-<area shape="rect" title=" " alt="" coords="1471,319,1528,345"/>
-<area shape="rect" title=" " alt="" coords="1552,319,1609,345"/>
-<area shape="rect" title=" " alt="" coords="1634,319,1703,345"/>
-<area shape="rect" title=" " alt="" coords="1149,319,1207,345"/>
-<area shape="rect" title=" " alt="" coords="477,468,551,495"/>
-<area shape="rect" title=" " alt="" coords="192,468,260,495"/>
-<area shape="rect" title=" " alt="" coords="1024,393,1079,420"/>
-<area shape="rect" href="Crc32_8hpp.html" title=" " alt="" coords="415,319,525,345"/>
-<area shape="rect" href="Memory_8hpp.html" title=" " alt="" coords="5,319,127,345"/>
-<area shape="rect" href="MathUtils_8hpp.html" title=" " alt="" coords="600,319,764,345"/>
-<area shape="rect" title=" " alt="" coords="202,319,298,345"/>
-<area shape="rect" title=" " alt="" coords="322,319,391,345"/>
-<area shape="rect" title=" " alt="" coords="71,393,131,420"/>
-<area shape="rect" title=" " alt="" coords="155,393,217,420"/>
-<area shape="rect" title=" " alt="" coords="653,393,711,420"/>
+<area shape="rect" title=" " alt="" coords="1771,5,1928,47"/>
+<area shape="rect" href="Engine_8hpp.html" title=" " alt="" coords="947,95,1061,121"/>
+<area shape="rect" title=" " alt="" coords="1262,319,1327,345"/>
+<area shape="rect" href="GLBuffer_8hpp.html" title=" " alt="" coords="3461,244,3619,271"/>
+<area shape="rect" href="GLCommandList_8hpp.html" title=" " alt="" coords="2852,169,3057,196"/>
+<area shape="rect" href="GLDevice_8hpp.html" title=" " alt="" coords="1707,95,1871,121"/>
+<area shape="rect" href="GLTexture_8hpp.html" title=" " alt="" coords="2602,244,2769,271"/>
+<area shape="rect" href="Config_8hpp.html" title=" " alt="" coords="2730,841,2841,868"/>
+<area shape="rect" href="EventDispatcher_8hpp.html" title=" " alt="" coords="1485,617,1656,644"/>
+<area shape="rect" title=" " alt="" coords="733,841,801,868"/>
+<area shape="rect" href="Scheduler_8hpp.html" title=" " alt="" coords="987,617,1120,644"/>
+<area shape="rect" href="Thread_8hpp.html" title=" " alt="" coords="1195,617,1309,644"/>
+<area shape="rect" title=" " alt="" coords="93,692,152,719"/>
+<area shape="rect" href="FileSystem_8hpp.html" title=" " alt="" coords="749,543,912,569"/>
+<area shape="rect" href="Input_8hpp.html" title=" " alt="" coords="1657,543,1783,569"/>
+<area shape="rect" href="Output_8hpp.html" title=" " alt="" coords="2796,617,2932,644"/>
+<area shape="rect" href="WindowManager_8hpp.html" title=" " alt="" coords="449,543,642,569"/>
+<area shape="rect" href="RHIDevice_8hpp.html" title=" " alt="" coords="1726,169,1853,196"/>
+<area shape="rect" title=" " alt="" coords="676,169,737,196"/>
+<area shape="rect" title=" " alt="" coords="761,169,823,196"/>
+<area shape="rect" href="Typedefs_8hpp.html" title=" " alt="" coords="1488,767,1616,793"/>
+<area shape="rect" href="Event_8hpp.html" title=" " alt="" coords="1665,692,1809,719"/>
+<area shape="rect" title=" " alt="" coords="1410,692,1489,719"/>
+<area shape="rect" title=" " alt="" coords="542,692,653,719"/>
+<area shape="rect" title=" " alt="" coords="2036,692,2095,719"/>
+<area shape="rect" title=" " alt="" coords="779,692,837,719"/>
+<area shape="rect" title=" " alt="" coords="1244,692,1385,719"/>
+<area shape="rect" href="Data_8hpp.html" title=" " alt="" coords="1681,617,1783,644"/>
+<area shape="rect" href="String_8hpp.html" title=" " alt="" coords="2501,692,2646,719"/>
+<area shape="rect" href="Ref_8hpp.html" title=" " alt="" coords="861,692,1017,719"/>
+<area shape="rect" title=" " alt="" coords="601,617,658,644"/>
+<area shape="rect" href="InputDefs_8hpp.html" title=" " alt="" coords="2221,692,2374,719"/>
+<area shape="rect" href="InputDevices_8hpp.html" title=" " alt="" coords="2061,617,2235,644"/>
+<area shape="rect" href="Window_8hpp.html" title=" " alt="" coords="2630,617,2773,644"/>
+<area shape="rect" href="TMatMxN_8hpp.html" title=" " alt="" coords="1435,244,1600,271"/>
+<area shape="rect" href="RHIBuffer_8hpp.html" title=" " alt="" coords="2886,543,3007,569"/>
+<area shape="rect" href="RHIResource_8hpp.html" title=" " alt="" coords="2411,617,2554,644"/>
+<area shape="rect" href="RHIDefs_8hpp.html" title=" " alt="" coords="3311,692,3425,719"/>
+<area shape="rect" href="RHICommandList_8hpp.html" title=" " alt="" coords="2100,244,2268,271"/>
+<area shape="rect" href="RHIGraphicsPipeline_8hpp.html" title=" " alt="" coords="2242,319,2427,345"/>
+<area shape="rect" href="RHIRenderPass_8hpp.html" title=" " alt="" coords="2529,393,2687,420"/>
+<area shape="rect" href="RHIFramebuffer_8hpp.html" title=" " alt="" coords="1843,468,1999,495"/>
+<area shape="rect" href="RHITexture_8hpp.html" title=" " alt="" coords="2171,543,2301,569"/>
+<area shape="rect" href="RHIResourceSet_8hpp.html" title=" " alt="" coords="2075,468,2237,495"/>
+<area shape="rect" title=" " alt="" coords="3041,319,3092,345"/>
+<area shape="rect" href="GLDefs_8hpp.html" title=" " alt="" coords="3269,319,3419,345"/>
+<area shape="rect" href="GLGraphicsPipeline_8hpp.html" title=" " alt="" coords="2843,244,3066,271"/>
+<area shape="rect" href="GLRenderPass_8hpp.html" title=" " alt="" coords="3140,244,3335,271"/>
+<area shape="rect" href="GLResourceSet_8hpp.html" title=" " alt="" coords="1877,244,2075,271"/>
+<area shape="rect" href="GLVaoCache_8hpp.html" title=" " alt="" coords="2393,244,2577,271"/>
 </map>
 </div>
-</div></div><!-- contents -->
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a14178f963549f60fe1aa52703a075600"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="GLCommandList_8cpp.html#a14178f963549f60fe1aa52703a075600">BRK_GL_UPDATE_BUFFER</a>(gl_type)</td></tr>
+<tr class="separator:a14178f963549f60fe1aa52703a075600"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac38f3aa310998e420e2e3e1f41a212bb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="GLCommandList_8cpp.html#ac38f3aa310998e420e2e3e1f41a212bb">BRK_GL_TEXTURE_SETUP</a></td></tr>
+<tr class="separator:ac38f3aa310998e420e2e3e1f41a212bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf2e1dcf82bbee17baf14c95704a745a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="GLCommandList_8cpp.html#abf2e1dcf82bbee17baf14c95704a745a">BRK_GL_TEXTURE_UPDATE_SETUP</a></td></tr>
+<tr class="separator:abf2e1dcf82bbee17baf14c95704a745a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ac38f3aa310998e420e2e3e1f41a212bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac38f3aa310998e420e2e3e1f41a212bb">&#9670;&nbsp;</a></span>BRK_GL_TEXTURE_SETUP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BRK_GL_TEXTURE_SETUP</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    assert(!mInRenderPass);      \</div>
+<div class="line">    assert(texture.IsNotNull()); \</div>
+<div class="line">    auto native = (<a class="code" href="classGLTexture.html">GLTexture</a> *) texture.Get();</div>
+<div class="ttc" id="aclassGLTexture_html"><div class="ttname"><a href="classGLTexture.html">GLTexture</a></div><div class="ttdoc">GL texture resource implementation.</div><div class="ttdef"><b>Definition:</b> GLTexture.hpp:46</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="abf2e1dcf82bbee17baf14c95704a745a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf2e1dcf82bbee17baf14c95704a745a">&#9670;&nbsp;</a></span>BRK_GL_TEXTURE_UPDATE_SETUP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BRK_GL_TEXTURE_UPDATE_SETUP</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    assert(data.IsNotNull());       \</div>
+<div class="line">    BRK_GL_TEXTURE_SETUP</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a14178f963549f60fe1aa52703a075600"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14178f963549f60fe1aa52703a075600">&#9670;&nbsp;</a></span>BRK_GL_UPDATE_BUFFER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BRK_GL_UPDATE_BUFFER</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">gl_type</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    assert(!mInRenderPass);                 \</div>
+<div class="line">    assert(buffer.IsNotNull());             \</div>
+<div class="line">    assert(data.IsNotNull());               \</div>
+<div class="line">    auto native = (gl_type *) buffer.Get(); \</div>
+<div class="line">    native-&gt;Update(byteOffset, byteSize, data-&gt;GetData());</div>
+</div><!-- fragment -->
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1

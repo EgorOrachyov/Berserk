@@ -1,12 +1,14 @@
 <map id="code/runtime/core/Data.hpp" name="code/runtime/core/Data.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="127,5,309,32"/>
-<area shape="rect" id="node2" href="$Config_8hpp.html" title=" " alt="" coords="5,229,116,256"/>
-<area shape="rect" id="node3" href="$Typedefs_8hpp.html" title=" " alt="" coords="71,80,199,107"/>
-<area shape="rect" id="node6" href="$Ref_8hpp.html" title=" " alt="" coords="224,80,380,107"/>
-<area shape="rect" id="node10" title=" " alt="" coords="404,80,483,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="98,155,173,181"/>
-<area shape="rect" id="node5" title=" " alt="" coords="197,155,265,181"/>
-<area shape="rect" id="node7" href="$RefCnt_8hpp.html" title=" " alt="" coords="290,155,466,181"/>
-<area shape="rect" id="node8" title=" " alt="" coords="303,229,365,256"/>
-<area shape="rect" id="node9" title=" " alt="" coords="389,229,455,256"/>
+<area shape="rect" id="node1" title=" " alt="" coords="211,5,392,32"/>
+<area shape="rect" id="node2" href="$Config_8hpp.html" title=" " alt="" coords="222,229,333,256"/>
+<area shape="rect" id="node3" href="$Typedefs_8hpp.html" title=" " alt="" coords="5,155,133,181"/>
+<area shape="rect" id="node6" href="$String_8hpp.html" title=" " alt="" coords="115,80,261,107"/>
+<area shape="rect" id="node8" href="$Ref_8hpp.html" title=" " alt="" coords="339,80,495,107"/>
+<area shape="rect" id="node12" title=" " alt="" coords="519,80,598,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="7,229,81,256"/>
+<area shape="rect" id="node5" title=" " alt="" coords="106,229,174,256"/>
+<area shape="rect" id="node7" title=" " alt="" coords="209,155,263,181"/>
+<area shape="rect" id="node9" href="$RefCnt_8hpp.html" title=" " alt="" coords="339,155,515,181"/>
+<area shape="rect" id="node10" title=" " alt="" coords="465,229,527,256"/>
+<area shape="rect" id="node11" title=" " alt="" coords="375,229,441,256"/>
 </map>

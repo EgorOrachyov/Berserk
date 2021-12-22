@@ -1,12 +1,11 @@
 <map id="GLRenderPass" name="GLRenderPass">
-<area shape="rect" id="node1" title="GL render pass state object." alt="" coords="788,107,899,133"/>
-<area shape="rect" id="node2" href="$classRHIRenderPass.html" title="Compiled render pass object." alt="" coords="623,107,739,133"/>
-<area shape="rect" id="node3" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="406,44,506,71"/>
-<area shape="rect" id="node4" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="67,5,130,32"/>
-<area shape="rect" id="node5" href="$classRHIRenderPassDesc.html" title="Full render pass descriptor." alt="" coords="383,132,529,159"/>
-<area shape="rect" id="node6" href="$classRef.html" title=" " alt="" coords="43,56,154,83"/>
-<area shape="rect" id="node7" href="$classRef.html" title=" " alt="" coords="21,107,177,133"/>
-<area shape="rect" id="node8" href="$classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="53,157,144,184"/>
-<area shape="rect" id="node9" href="$structRHIViewport.html" title="Area of the render target to draw." alt="" coords="51,208,147,235"/>
-<area shape="rect" id="node10" href="$structRHIDepthStencilAttachment.html" title="Depth&#45;stencil render target attachment descriptor." alt="" coords="5,259,192,285"/>
+<area shape="rect" id="node1" title="GL render pass state object." alt="" coords="115,260,225,287"/>
+<area shape="rect" id="node2" href="$classRHIRenderPass.html" title="Compiled render pass object." alt="" coords="112,184,228,211"/>
+<area shape="rect" id="node3" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="47,95,147,121"/>
+<area shape="rect" id="node4" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="5,5,68,32"/>
+<area shape="rect" id="node5" href="$classRHIRenderPassDesc.html" title="Full render pass descriptor." alt="" coords="231,95,378,121"/>
+<area shape="rect" id="node6" href="$classRef.html" title=" " alt="" coords="92,5,203,32"/>
+<area shape="rect" id="node7" href="$classRef.html" title=" " alt="" coords="227,5,383,32"/>
+<area shape="rect" id="node8" href="$classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="407,5,498,32"/>
+<area shape="rect" id="node9" href="$structRHIDepthStencilAttachment.html" title="Depth&#45;stencil render target attachment descriptor." alt="" coords="522,5,709,32"/>
 </map>

@@ -79,6 +79,7 @@ Inheritance diagram for RHICommandList:</div>
 <div class="center"><img src="classRHICommandList__inherit__graph.png" border="0" usemap="#aRHICommandList_inherit__map" alt="Inheritance graph"/></div>
 <map name="aRHICommandList_inherit__map" id="aRHICommandList_inherit__map">
 <area shape="rect" title="Command list for commands capturing and submission." alt="" coords="5,155,132,181"/>
+<area shape="rect" href="classGLCommandList.html" title=" " alt="" coords="8,229,129,256"/>
 <area shape="rect" href="classRHIResource.html" title="Base class for RHI resource." alt="" coords="19,80,119,107"/>
 <area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="37,5,100,32"/>
 </map>
@@ -114,12 +115,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7b35e625e683fc6f7ce9081aaf826b8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58f0695c2f2f6907c6ae8a01a613da38"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHICommandList.html#a58f0695c2f2f6907c6ae8a01a613da38">GenerateMipMaps</a> (const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHITexture.html">RHITexture</a> &gt; &amp;texture)=0</td></tr>
 <tr class="separator:a58f0695c2f2f6907c6ae8a01a613da38"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af02dfba58d23c9e57dc3c0b1450780a6"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHICommandList.html#af02dfba58d23c9e57dc3c0b1450780a6">BeginRenderPass</a> (const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIRenderPass.html">RHIRenderPass</a> &gt; &amp;renderPass)=0</td></tr>
-<tr class="separator:af02dfba58d23c9e57dc3c0b1450780a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2dc16aff1ae9ea347258cffcf698d14"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHICommandList.html#ac2dc16aff1ae9ea347258cffcf698d14">BeginRenderPass</a> (const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIRenderPass.html">RHIRenderPass</a> &gt; &amp;renderPass, const <a class="el" href="classRHIRenderPassBeginInfo.html">RHIRenderPassBeginInfo</a> &amp;beginInfo)=0</td></tr>
+<tr class="separator:ac2dc16aff1ae9ea347258cffcf698d14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37c3eece3ff3a21055916e925be65ba9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHICommandList.html#a37c3eece3ff3a21055916e925be65ba9">BindGraphicsPipeline</a> (const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIGraphicsPipeline.html">RHIGraphicsPipeline</a> &gt; &amp;pipeline)=0</td></tr>
 <tr class="separator:a37c3eece3ff3a21055916e925be65ba9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae91ae11bd579f73b23f328c146617e91"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHICommandList.html#ae91ae11bd579f73b23f328c146617e91">BindVertexBuffer</a> (const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIVertexBuffer.html">RHIVertexBuffer</a> &gt; &amp;buffer, <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> bufferId)=0</td></tr>
-<tr class="separator:ae91ae11bd579f73b23f328c146617e91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7534107fd213e938f7b448ceaf4748cb"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHICommandList.html#a7534107fd213e938f7b448ceaf4748cb">BindVertexBuffers</a> (const std::vector&lt; <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIVertexBuffer.html">RHIVertexBuffer</a> &gt;&gt; &amp;buffers)=0</td></tr>
+<tr class="separator:a7534107fd213e938f7b448ceaf4748cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9e79e4755ab649610f6ae8bf5026609"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHICommandList.html#ab9e79e4755ab649610f6ae8bf5026609">BindIndexBuffer</a> (const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIIndexBuffer.html">RHIIndexBuffer</a> &gt; &amp;buffer, <a class="el" href="group__rhi.html#ga3da6175a7c7a65fd73a500a02061e929">RHIIndexType</a> indexType)=0</td></tr>
 <tr class="separator:ab9e79e4755ab649610f6ae8bf5026609"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf96f9097afa11d3648a7561041481b7"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHICommandList.html#abf96f9097afa11d3648a7561041481b7">BindResourceSet</a> (const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIResourceSet.html">RHIResourceSet</a> &gt; &amp;resourceSet, <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> set)=0</td></tr>
@@ -130,6 +131,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a19e886f5a41716355bb06904a8ec5149"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee86267721f14f1efd9f7169237347b2"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHICommandList.html#aee86267721f14f1efd9f7169237347b2">EndRenderPass</a> ()=0</td></tr>
 <tr class="separator:aee86267721f14f1efd9f7169237347b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e02ecb4ca539024a8d4ae138a385058"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHICommandList.html#a1e02ecb4ca539024a8d4ae138a385058">SwapBuffers</a> (const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classWindow.html">Window</a> &gt; &amp;window)=0</td></tr>
+<tr class="separator:a1e02ecb4ca539024a8d4ae138a385058"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7adf7fb491909b8edf6274517667123f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHICommandList.html#a7adf7fb491909b8edf6274517667123f">Submit</a> ()=0</td></tr>
+<tr class="separator:a7adf7fb491909b8edf6274517667123f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classRHIResource"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classRHIResource')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classRHIResource.html">RHIResource</a></td></tr>
 <tr class="memitem:aeef95619b3f2ff4080b5c12e7b37d917 inherit pub_methods_classRHIResource"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHIResource.html#aeef95619b3f2ff4080b5c12e7b37d917">~RHIResource</a> () override=default</td></tr>
 <tr class="separator:aeef95619b3f2ff4080b5c12e7b37d917 inherit pub_methods_classRHIResource"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,8 +186,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="af02dfba58d23c9e57dc3c0b1450780a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af02dfba58d23c9e57dc3c0b1450780a6">&#9670;&nbsp;</a></span>BeginRenderPass()</h2>
+<a id="ac2dc16aff1ae9ea347258cffcf698d14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2dc16aff1ae9ea347258cffcf698d14">&#9670;&nbsp;</a></span>BeginRenderPass()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -194,8 +199,18 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void RHICommandList::BeginRenderPass </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIRenderPass.html">RHIRenderPass</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>renderPass</em></td><td>)</td>
+          <td class="paramname"><em>renderPass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const <a class="el" href="classRHIRenderPassBeginInfo.html">RHIRenderPassBeginInfo</a> &amp;&#160;</td>
+          <td class="paramname"><em>beginInfo</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -205,6 +220,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Begin render pass for drawing (must be followed with end call) </p>
+
+<p>Implemented in <a class="el" href="classGLCommandList.html#a8ca55a681fdbb459cd5c7307d3871c9b">GLCommandList</a>.</p>
 
 </div>
 </div>
@@ -232,6 +249,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Bind compiled graphics pipeline for the rendering (must be called inside render pass) </p>
+
+<p>Implemented in <a class="el" href="classGLCommandList.html#a690f3a79371288305f0646cbcf8b700f">GLCommandList</a>.</p>
 
 </div>
 </div>
@@ -270,6 +289,8 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Bind index buffer (must be called inside render pass) </p>
 
+<p>Implemented in <a class="el" href="classGLCommandList.html#a2b8d214ca1814a0c1b127f9b53702485">GLCommandList</a>.</p>
+
 </div>
 </div>
 <a id="abf96f9097afa11d3648a7561041481b7"></a>
@@ -307,10 +328,12 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Bind resource set to specified set index (must be called inside render pass) </p>
 
+<p>Implemented in <a class="el" href="classGLCommandList.html#a24887bb2ff45f6f364a36452dae73ff3">GLCommandList</a>.</p>
+
 </div>
 </div>
-<a id="ae91ae11bd579f73b23f328c146617e91"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae91ae11bd579f73b23f328c146617e91">&#9670;&nbsp;</a></span>BindVertexBuffer()</h2>
+<a id="a7534107fd213e938f7b448ceaf4748cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7534107fd213e938f7b448ceaf4748cb">&#9670;&nbsp;</a></span>BindVertexBuffers()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -319,21 +342,11 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void RHICommandList::BindVertexBuffer </td>
+          <td class="memname">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void RHICommandList::BindVertexBuffers </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIVertexBuffer.html">RHIVertexBuffer</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIVertexBuffer.html">RHIVertexBuffer</a> &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>buffers</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a>&#160;</td>
-          <td class="paramname"><em>bufferId</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -342,7 +355,9 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Bind vertex buffer to selected location (must be called inside render pass) </p>
+<p>Bind vertex buffers (must be called inside render pass) </p>
+
+<p>Implemented in <a class="el" href="classGLCommandList.html#a07144d5b90bce552e750a1cb8617d0f7">GLCommandList</a>.</p>
 
 </div>
 </div>
@@ -386,6 +401,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Issue draw call for vertex data only </p>
+
+<p>Implemented in <a class="el" href="classGLCommandList.html#aefe3232f987cfb18965272221660a097">GLCommandList</a>.</p>
 
 </div>
 </div>
@@ -436,6 +453,8 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Issue draw call for indexed data rendering only </p>
 
+<p>Implemented in <a class="el" href="classGLCommandList.html#ac0623c7377f1b8e9f1e8fc7a34d88e38">GLCommandList</a>.</p>
+
 </div>
 </div>
 <a id="aee86267721f14f1efd9f7169237347b2"></a>
@@ -461,6 +480,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>End render pass (must be called in the end after begin render pass) </p>
+
+<p>Implemented in <a class="el" href="classGLCommandList.html#ab706e9d7081db335a2a3da5c6ee2653e">GLCommandList</a>.</p>
 
 </div>
 </div>
@@ -488,6 +509,65 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Generate mip maps for the texture (2d, 2d array, cube) </p>
+
+<p>Implemented in <a class="el" href="classGLCommandList.html#a484ac9636ede4ff64295f501435b7e44">GLCommandList</a>.</p>
+
+</div>
+</div>
+<a id="a7adf7fb491909b8edf6274517667123f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7adf7fb491909b8edf6274517667123f">&#9670;&nbsp;</a></span>Submit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void RHICommandList::Submit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Submit list for execution </p>
+
+<p>Implemented in <a class="el" href="classGLCommandList.html#a7d084a8148fd30625d0ebca8808363a4">GLCommandList</a>.</p>
+
+</div>
+</div>
+<a id="a1e02ecb4ca539024a8d4ae138a385058"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e02ecb4ca539024a8d4ae138a385058">&#9670;&nbsp;</a></span>SwapBuffers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void RHICommandList::SwapBuffers </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classWindow.html">Window</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Request buffers swap </p>
+
+<p>Implemented in <a class="el" href="classGLCommandList.html#a3ece1808dcffae69dbe8083a455e2ce6">GLCommandList</a>.</p>
 
 </div>
 </div>
@@ -538,6 +618,8 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Update index buffer with data </p>
 
+<p>Implemented in <a class="el" href="classGLCommandList.html#a63009c9f205eeaccefea5f2d79e6a414">GLCommandList</a>.</p>
+
 </div>
 </div>
 <a id="a7b35e625e683fc6f7ce9081aaf826b8b"></a>
@@ -574,6 +656,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Update resource set </p>
+
+<p>Implemented in <a class="el" href="classGLCommandList.html#ae65583f7e6947478707f5392d5753d41">GLCommandList</a>.</p>
 
 </div>
 </div>
@@ -623,6 +707,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Update chosen region and mip level of 2d texture </p>
+
+<p>Implemented in <a class="el" href="classGLCommandList.html#ac706606cb2bca07a08114219a6f010cb">GLCommandList</a>.</p>
 
 </div>
 </div>
@@ -679,6 +765,8 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Update chosen array index, region and mip level of 2d texture array </p>
 
+<p>Implemented in <a class="el" href="classGLCommandList.html#afeafe016fec86016811cb4c621bc9b9a">GLCommandList</a>.</p>
+
 </div>
 </div>
 <a id="a88c5958ce45b653b44b8fc2bb97a76eb"></a>
@@ -734,6 +822,8 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Update chosen face, region and mip level of cube texture </p>
 
+<p>Implemented in <a class="el" href="classGLCommandList.html#a930cca730d5e7bb1cd3401a49eed919a">GLCommandList</a>.</p>
+
 </div>
 </div>
 <a id="ac2d824784f560390207adf1dbf772e62"></a>
@@ -783,6 +873,8 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Update uniform buffer with data </p>
 
+<p>Implemented in <a class="el" href="classGLCommandList.html#aa81f45ad5b384f030feae71146b295db">GLCommandList</a>.</p>
+
 </div>
 </div>
 <a id="a46f48d742b375e0a460e614be4a0fe86"></a>
@@ -831,6 +923,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Update vertex buffer with data </p>
+
+<p>Implemented in <a class="el" href="classGLCommandList.html#a6eabbd291d37a8aa9fa5ee5af7544b8c">GLCommandList</a>.</p>
 
 </div>
 </div>

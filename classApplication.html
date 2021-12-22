@@ -87,6 +87,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad3f42c91a02dfde25c04b1d0e0ba7e28"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classApplication.html#ad3f42c91a02dfde25c04b1d0e0ba7e28">OnInitialize</a> ()</td></tr>
 <tr class="memdesc:ad3f42c91a02dfde25c04b1d0e0ba7e28"><td class="mdescLeft">&#160;</td><td class="mdescRight">On application initialize callback.  <a href="classApplication.html#ad3f42c91a02dfde25c04b1d0e0ba7e28">More...</a><br /></td></tr>
 <tr class="separator:ad3f42c91a02dfde25c04b1d0e0ba7e28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbe5e0999ca86f5050940afd6f53794c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classApplication.html#afbe5e0999ca86f5050940afd6f53794c">OnPreUpdate</a> ()</td></tr>
+<tr class="memdesc:afbe5e0999ca86f5050940afd6f53794c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called each frame before engine update.  <a href="classApplication.html#afbe5e0999ca86f5050940afd6f53794c">More...</a><br /></td></tr>
+<tr class="separator:afbe5e0999ca86f5050940afd6f53794c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc7490ae7c6e5aae74f13103dc920260"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classApplication.html#adc7490ae7c6e5aae74f13103dc920260">OnPostUpdate</a> ()</td></tr>
+<tr class="memdesc:adc7490ae7c6e5aae74f13103dc920260"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called each frame after engine update.  <a href="classApplication.html#adc7490ae7c6e5aae74f13103dc920260">More...</a><br /></td></tr>
+<tr class="separator:adc7490ae7c6e5aae74f13103dc920260"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ffdc13938d74181997134665f5b49e5"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classApplication.html#a1ffdc13938d74181997134665f5b49e5">OnFinalize</a> ()</td></tr>
 <tr class="memdesc:a1ffdc13938d74181997134665f5b49e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">On application finalize callback.  <a href="classApplication.html#a1ffdc13938d74181997134665f5b49e5">More...</a><br /></td></tr>
 <tr class="separator:a1ffdc13938d74181997134665f5b49e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,6 +187,62 @@ Public Member Functions</h2></td></tr>
 
 <p>On application initialize callback. </p>
 <p>Called once, when the engine systems fully initialized. Override this method in our application game to add custom init logic to the engine and application. </p>
+
+</div>
+</div>
+<a id="adc7490ae7c6e5aae74f13103dc920260"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc7490ae7c6e5aae74f13103dc920260">&#9670;&nbsp;</a></span>OnPostUpdate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Application::OnPostUpdate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Called each frame after engine update. </p>
+<p>Override this method to add custom pre update logic of the application inside main thread loop </p>
+
+</div>
+</div>
+<a id="afbe5e0999ca86f5050940afd6f53794c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbe5e0999ca86f5050940afd6f53794c">&#9670;&nbsp;</a></span>OnPreUpdate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Application::OnPreUpdate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Called each frame before engine update. </p>
+<p>Override this method to add custom pre update logic of the application inside main thread loop </p>
 
 </div>
 </div>

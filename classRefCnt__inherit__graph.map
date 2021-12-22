@@ -6,8 +6,8 @@
 <area shape="rect" id="node11" href="$classKeyboard.html" title="Keyboard device state." alt="" coords="135,309,211,336"/>
 <area shape="rect" id="node13" href="$classMouse.html" title="Mouse device state." alt="" coords="143,360,204,387"/>
 <area shape="rect" id="node15" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="123,588,223,615"/>
-<area shape="rect" id="node40" href="$classRHIShaderMeta.html" title="Reflection info about compiled RHI program." alt="" coords="116,639,231,665"/>
-<area shape="rect" id="node41" href="$classWindow.html" title="Platform specific OS window for rendering." alt="" coords="139,816,207,843"/>
+<area shape="rect" id="node41" href="$classRHIShaderMeta.html" title="Reflection info about compiled RHI program." alt="" coords="116,639,231,665"/>
+<area shape="rect" id="node42" href="$classWindow.html" title="Platform specific OS window for rendering." alt="" coords="139,816,207,843"/>
 <area shape="rect" id="node4" href="$classEventDropInput.html" title="Drop input event." alt="" coords="297,5,407,32"/>
 <area shape="rect" id="node5" href="$classEventJoystick.html" title="Joystick input event." alt="" coords="301,56,403,83"/>
 <area shape="rect" id="node6" href="$classEventKeyboard.html" title="Keyboard input event." alt="" coords="297,107,407,133"/>
@@ -18,27 +18,28 @@
 <area shape="rect" id="node14" href="$classGlfwMouse.html" title="Glfw device implementation." alt="" coords="308,360,396,387"/>
 <area shape="rect" id="node16" href="$classRHIBuffer.html" title="RHI device buffer." alt="" coords="313,411,391,437"/>
 <area shape="rect" id="node23" href="$classRHICommandList.html" title="Command list for commands capturing and submission." alt="" coords="289,461,415,488"/>
-<area shape="rect" id="node24" href="$classRHIFramebuffer.html" title="Collection of render targets for drawing." alt="" coords="295,512,409,539"/>
-<area shape="rect" id="node26" href="$classRHIGraphicsPipeline.html" title="Graphics pipeline." alt="" coords="281,563,423,589"/>
-<area shape="rect" id="node28" href="$classRHIRenderPass.html" title="Compiled render pass object." alt="" coords="294,613,410,640"/>
-<area shape="rect" id="node30" href="$classRHIResourceSet.html" title="Set of resource ready to be bound to the pipeline." alt="" coords="292,664,412,691"/>
-<area shape="rect" id="node32" href="$classRHISampler.html" title="RHI sampler object." alt="" coords="305,715,399,741"/>
-<area shape="rect" id="node34" href="$classRHIShader.html" title="Compiled and linked native shader." alt="" coords="309,765,395,792"/>
-<area shape="rect" id="node36" href="$classRHITexture.html" title="RHI Texture primitive." alt="" coords="308,816,396,843"/>
-<area shape="rect" id="node38" href="$classRHIVertexDeclaration.html" title="Contains information about a vertex declaration." alt="" coords="279,867,425,893"/>
-<area shape="rect" id="node17" href="$classRHIIndexBuffer.html" title="RHI index buffer." alt="" coords="489,360,600,387"/>
-<area shape="rect" id="node19" href="$classRHIUniformBuffer.html" title="RHI uniform buffer." alt="" coords="482,411,607,437"/>
-<area shape="rect" id="node21" href="$classRHIVertexBuffer.html" title="RHI vertex buffer." alt="" coords="487,461,603,488"/>
-<area shape="rect" id="node18" href="$classGLIndexBuffer.html" title="GL index buffer implementation." alt="" coords="671,360,777,387"/>
-<area shape="rect" id="node20" href="$classGLUniformBuffer.html" title="GL uniform buffer implementation." alt="" coords="664,411,784,437"/>
-<area shape="rect" id="node22" href="$classGLVertexBuffer.html" title="GL vertex buffer implementation." alt="" coords="669,461,779,488"/>
-<area shape="rect" id="node25" href="$classGLFramebuffer.html" title="GL framebuffer implementation." alt="" coords="490,512,599,539"/>
-<area shape="rect" id="node27" href="$classGLGraphicsPipeline.html" title="GL graphics pipeline state." alt="" coords="475,563,614,589"/>
-<area shape="rect" id="node29" href="$classGLRenderPass.html" title="GL render pass state object." alt="" coords="489,613,600,640"/>
-<area shape="rect" id="node31" href="$classGLResourceSet.html" title="GL set of pipeline resources." alt="" coords="487,664,602,691"/>
-<area shape="rect" id="node33" href="$classGLSampler.html" title="GL sampler implementation." alt="" coords="501,715,589,741"/>
-<area shape="rect" id="node35" href="$classGLShader.html" title="GL Shader (compiled and linked) native program." alt="" coords="504,765,585,792"/>
-<area shape="rect" id="node37" href="$classGLTexture.html" title="GL texture resource implementation." alt="" coords="503,816,586,843"/>
-<area shape="rect" id="node39" href="$classGLVertexDeclaration.html" title="GL vertex declaration implementation." alt="" coords="473,867,616,893"/>
-<area shape="rect" id="node42" href="$classGlfwWindow.html" title="Glfw window implementation." alt="" coords="305,917,399,944"/>
+<area shape="rect" id="node25" href="$classRHIFramebuffer.html" title="Collection of render targets for drawing." alt="" coords="295,512,409,539"/>
+<area shape="rect" id="node27" href="$classRHIGraphicsPipeline.html" title="Graphics pipeline." alt="" coords="281,563,423,589"/>
+<area shape="rect" id="node29" href="$classRHIRenderPass.html" title="Compiled render pass object." alt="" coords="294,613,410,640"/>
+<area shape="rect" id="node31" href="$classRHIResourceSet.html" title="Set of resource ready to be bound to the pipeline." alt="" coords="292,664,412,691"/>
+<area shape="rect" id="node33" href="$classRHISampler.html" title="RHI sampler object." alt="" coords="305,715,399,741"/>
+<area shape="rect" id="node35" href="$classRHIShader.html" title="Compiled and linked native shader." alt="" coords="309,765,395,792"/>
+<area shape="rect" id="node37" href="$classRHITexture.html" title="RHI Texture primitive." alt="" coords="308,816,396,843"/>
+<area shape="rect" id="node39" href="$classRHIVertexDeclaration.html" title="Contains information about a vertex declaration." alt="" coords="279,867,425,893"/>
+<area shape="rect" id="node17" href="$classRHIIndexBuffer.html" title="RHI index buffer." alt="" coords="489,309,600,336"/>
+<area shape="rect" id="node19" href="$classRHIUniformBuffer.html" title="RHI uniform buffer." alt="" coords="482,360,607,387"/>
+<area shape="rect" id="node21" href="$classRHIVertexBuffer.html" title="RHI vertex buffer." alt="" coords="487,411,603,437"/>
+<area shape="rect" id="node18" href="$classGLIndexBuffer.html" title="GL index buffer implementation." alt="" coords="671,309,777,336"/>
+<area shape="rect" id="node20" href="$classGLUniformBuffer.html" title="GL uniform buffer implementation." alt="" coords="664,360,784,387"/>
+<area shape="rect" id="node22" href="$classGLVertexBuffer.html" title="GL vertex buffer implementation." alt="" coords="669,411,779,437"/>
+<area shape="rect" id="node24" href="$classGLCommandList.html" title=" " alt="" coords="484,461,605,488"/>
+<area shape="rect" id="node26" href="$classGLFramebuffer.html" title="GL framebuffer implementation." alt="" coords="490,512,599,539"/>
+<area shape="rect" id="node28" href="$classGLGraphicsPipeline.html" title="GL graphics pipeline state." alt="" coords="475,563,614,589"/>
+<area shape="rect" id="node30" href="$classGLRenderPass.html" title="GL render pass state object." alt="" coords="489,613,600,640"/>
+<area shape="rect" id="node32" href="$classGLResourceSet.html" title="GL set of pipeline resources." alt="" coords="487,664,602,691"/>
+<area shape="rect" id="node34" href="$classGLSampler.html" title="GL sampler implementation." alt="" coords="501,715,589,741"/>
+<area shape="rect" id="node36" href="$classGLShader.html" title="GL Shader (compiled and linked) native program." alt="" coords="504,765,585,792"/>
+<area shape="rect" id="node38" href="$classGLTexture.html" title="GL texture resource implementation." alt="" coords="503,816,586,843"/>
+<area shape="rect" id="node40" href="$classGLVertexDeclaration.html" title="GL vertex declaration implementation." alt="" coords="473,867,616,893"/>
+<area shape="rect" id="node43" href="$classGlfwWindow.html" title="Glfw window implementation." alt="" coords="305,917,399,944"/>
 </map>

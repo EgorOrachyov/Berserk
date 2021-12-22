@@ -113,8 +113,8 @@ $(function() {
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    }</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
 <div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classMathUtils2d.html#a9c3ec9fa5336330ec4aa9b320960263f">   54</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="classTMatMxN.html">Mat2x2f</a> <a class="code" href="classMathUtils2d.html#a9c3ec9fa5336330ec4aa9b320960263f">RotateZ</a>(<span class="keywordtype">float</span> angleRad) {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">auto</span> s = Utils::Sin(angleRad);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">auto</span> c = Utils::Cos(angleRad);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">auto</span> s = <a class="code" href="classMathUtils.html#aeca6c8d28ad3df767f56439208b005a9">MathUtils::Sin</a>(angleRad);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">auto</span> c = <a class="code" href="classMathUtils.html#aaa72d79163cd78e1e3d7893e0e15f460">MathUtils::Cos</a>(angleRad);</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">return</span> {c, -s,</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                s, c};</div>
@@ -130,8 +130,10 @@ $(function() {
 <div class="ttc" id="aclassMathUtils2d_html"><div class="ttname"><a href="classMathUtils2d.html">MathUtils2d</a></div><div class="ttdoc">2d space math utils</div><div class="ttdef"><b>Definition:</b> MathUtils2d.hpp:45</div></div>
 <div class="ttc" id="aclassMathUtils2d_html_a233dc69fb10a37744077ef4ee21ecfec"><div class="ttname"><a href="classMathUtils2d.html#a233dc69fb10a37744077ef4ee21ecfec">MathUtils2d::IdentityMatrix</a></div><div class="ttdeci">static Mat2x2f IdentityMatrix()</div><div class="ttdef"><b>Definition:</b> MathUtils2d.hpp:47</div></div>
 <div class="ttc" id="aclassMathUtils2d_html_a9c3ec9fa5336330ec4aa9b320960263f"><div class="ttname"><a href="classMathUtils2d.html#a9c3ec9fa5336330ec4aa9b320960263f">MathUtils2d::RotateZ</a></div><div class="ttdeci">static Mat2x2f RotateZ(float angleRad)</div><div class="ttdef"><b>Definition:</b> MathUtils2d.hpp:54</div></div>
+<div class="ttc" id="aclassMathUtils_html_aaa72d79163cd78e1e3d7893e0e15f460"><div class="ttname"><a href="classMathUtils.html#aaa72d79163cd78e1e3d7893e0e15f460">MathUtils::Cos</a></div><div class="ttdeci">static float Cos(float a)</div><div class="ttdef"><b>Definition:</b> MathUtils.hpp:91</div></div>
+<div class="ttc" id="aclassMathUtils_html_aeca6c8d28ad3df767f56439208b005a9"><div class="ttname"><a href="classMathUtils.html#aeca6c8d28ad3df767f56439208b005a9">MathUtils::Sin</a></div><div class="ttdeci">static float Sin(float a)</div><div class="ttdef"><b>Definition:</b> MathUtils.hpp:88</div></div>
 <div class="ttc" id="aclassTMatMxN_html"><div class="ttname"><a href="classTMatMxN.html">TMatMxN</a></div><div class="ttdoc">Generic matrix of M x N size for space of type T.</div><div class="ttdef"><b>Definition:</b> TMatMxN.hpp:56</div></div>
-<div class="ttc" id="anamespaceBRK__NS__BEGIN_html"><div class="ttname"><a href="namespaceBRK__NS__BEGIN.html">BRK_NS_BEGIN</a></div><div class="ttdef"><b>Definition:</b> GLDevice.cpp:45</div></div>
+<div class="ttc" id="anamespaceBRK__NS__BEGIN_html"><div class="ttname"><a href="namespaceBRK__NS__BEGIN.html">BRK_NS_BEGIN</a></div><div class="ttdef"><b>Definition:</b> GLDevice.cpp:46</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

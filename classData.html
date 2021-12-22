@@ -130,6 +130,8 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a293cc91fcb5e53a2c29911d56bd09b72"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classData.html">Data</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classData.html#a293cc91fcb5e53a2c29911d56bd09b72">Make</a> (const void *data, <a class="el" href="Typedefs_8hpp.html#a801d6a451a01953ef8cbae6feb6a3638">size_t</a> sizeInBytes)</td></tr>
 <tr class="separator:a293cc91fcb5e53a2c29911d56bd09b72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2803afe1c9c59c5e8bf9d74769b105b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classData.html">Data</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classData.html#ab2803afe1c9c59c5e8bf9d74769b105b">Make</a> (const <a class="el" href="classString.html">String</a> &amp;string)</td></tr>
+<tr class="separator:ab2803afe1c9c59c5e8bf9d74769b105b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e996187a17d1420d753093597060bf3"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classData.html">Data</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classData.html#a9e996187a17d1420d753093597060bf3">Make</a> (<a class="el" href="Typedefs_8hpp.html#a801d6a451a01953ef8cbae6feb6a3638">size_t</a> sizeInBytes)</td></tr>
 <tr class="separator:a9e996187a17d1420d753093597060bf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -340,8 +342,42 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ab2803afe1c9c59c5e8bf9d74769b105b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2803afe1c9c59c5e8bf9d74769b105b">&#9670;&nbsp;</a></span>Make() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classData.html">Data</a> &gt; Data::Make </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classString.html">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Makes new data from string characters. Uses system malloc for internal data storage allocation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td><a class="el" href="classString.html" title="Utf-8 encoded std based default string class.">String</a> to make data from</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Created data instance </dd></dl>
+
+</div>
+</div>
 <a id="a293cc91fcb5e53a2c29911d56bd09b72"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a293cc91fcb5e53a2c29911d56bd09b72">&#9670;&nbsp;</a></span>Make() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a293cc91fcb5e53a2c29911d56bd09b72">&#9670;&nbsp;</a></span>Make() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -373,11 +409,11 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Makes new immutable data from provided data buffer. Uses system malloc for internal data storage allocation.</p>
+<p>Makes new data from provided data buffer. Uses system malloc for internal data storage allocation.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">data</td><td>Pointer to data to copy into buffer </td></tr>
-    <tr><td class="paramname">sizeInBytes</td><td>Size in bytes of the buffer </td></tr>
+    <tr><td class="paramname">sizeInBytes</td><td>Size in bytes of the buffer</td></tr>
   </table>
   </dd>
 </dl>
@@ -386,7 +422,7 @@ Protected Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="a9e996187a17d1420d753093597060bf3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e996187a17d1420d753093597060bf3">&#9670;&nbsp;</a></span>Make() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e996187a17d1420d753093597060bf3">&#9670;&nbsp;</a></span>Make() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -408,10 +444,10 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Makes new mutable data with specified size. Use get data function to retrieve writable memory pointer. Uses system malloc for internal data storage allocation.</p>
+<p>Makes new data with specified size. Use get data function to retrieve writable memory pointer. Uses system malloc for internal data storage allocation.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">sizeInBytes</td><td>Size in bytes of the data buffer </td></tr>
+    <tr><td class="paramname">sizeInBytes</td><td>Size in bytes of the data buffer</td></tr>
   </table>
   </dd>
 </dl>

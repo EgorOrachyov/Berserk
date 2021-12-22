@@ -1,0 +1,4 @@
+<map id="RHIRenderPassBeginInfo" name="RHIRenderPassBeginInfo">
+<area shape="rect" id="node1" title="RHI pass info to begin (initial targets clear values)" alt="" coords="5,95,176,121"/>
+<area shape="rect" id="node2" href="$structRHIViewport.html" title="Area of the render target to draw." alt="" coords="43,5,139,32"/>
+</map>

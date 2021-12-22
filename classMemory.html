@@ -81,6 +81,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a1097dfef3721eba2e3d8861cfb24e26b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b76d19026dca6083c5cfa7b8aae6dab"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMemory.html#a3b76d19026dca6083c5cfa7b8aae6dab">Set</a> (void *destination, int value, <a class="el" href="Typedefs_8hpp.html#a801d6a451a01953ef8cbae6feb6a3638">size_t</a> sizeInBytes)</td></tr>
 <tr class="separator:a3b76d19026dca6083c5cfa7b8aae6dab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e7a8109aafd85e3bcc2a7bc074734fd"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMemory.html#a2e7a8109aafd85e3bcc2a7bc074734fd">Compare</a> (const void *a, const void *b, <a class="el" href="Typedefs_8hpp.html#a801d6a451a01953ef8cbae6feb6a3638">size_t</a> sizeInBytes)</td></tr>
+<tr class="separator:a2e7a8109aafd85e3bcc2a7bc074734fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a561e3cc666e9dd90e1a5c37a6247c09c"><td class="memItemLeft" align="right" valign="top">static void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMemory.html#a561e3cc666e9dd90e1a5c37a6247c09c">Allocate</a> (<a class="el" href="Typedefs_8hpp.html#a801d6a451a01953ef8cbae6feb6a3638">size_t</a> sizeInBytes)</td></tr>
 <tr class="separator:a561e3cc666e9dd90e1a5c37a6247c09c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe2041485ca4af55c9fea535756b5292"><td class="memItemLeft" align="right" valign="top">static void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMemory.html#abe2041485ca4af55c9fea535756b5292">Reallocate</a> (void *memory, <a class="el" href="Typedefs_8hpp.html#a801d6a451a01953ef8cbae6feb6a3638">size_t</a> sizeInBytes)</td></tr>
@@ -181,6 +183,58 @@ Static Public Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to allocated memory </dd></dl>
+
+</div>
+</div>
+<a id="a2e7a8109aafd85e3bcc2a7bc074734fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e7a8109aafd85e3bcc2a7bc074734fd">&#9670;&nbsp;</a></span>Compare()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int Memory::Compare </td>
+          <td>(</td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="Typedefs_8hpp.html#a801d6a451a01953ef8cbae6feb6a3638">size_t</a>&#160;</td>
+          <td class="paramname"><em>sizeInBytes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Compare two raw buffers</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td><a class="el" href="classInput.html" title="Engine input manager.">Input</a> buffer </td></tr>
+    <tr><td class="paramname">b</td><td><a class="el" href="classInput.html" title="Engine input manager.">Input</a> buffer </td></tr>
+    <tr><td class="paramname">sizeInBytes</td><td>Range to compare</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 if equals </dd></dl>
 
 </div>
 </div>

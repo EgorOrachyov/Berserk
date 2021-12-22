@@ -69,7 +69,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Image processing utils.  
+<p><a class="el" href="classImage.html" title="Hardware-independent image representation.">Image</a> processing utils.  
  <a href="classImageUtil.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="ImageUtil_8hpp_source.html">ImageUtil.hpp</a>&gt;</code></p>
@@ -80,10 +80,96 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a8b243a7f4d262e64c61e44ec1a83554b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25cf61917c7e411571a0bd447c47f2af"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="group__core.html#gaca6f5508a87fa239fb5f56ceb05607f9">Size2u</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classImageUtil.html#a25cf61917c7e411571a0bd447c47f2af">GetMipSize</a> (<a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> level, <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> width, <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> height)</td></tr>
 <tr class="separator:a25cf61917c7e411571a0bd447c47f2af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39fe055306d1d3a75e8d80e342f5de87"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classImageUtil.html#a39fe055306d1d3a75e8d80e342f5de87">GetPixelSize</a> (<a class="el" href="group__rhi.html#ga1c477faa189843bad812c211db2c54c2">Image::Format</a> format)</td></tr>
+<tr class="separator:a39fe055306d1d3a75e8d80e342f5de87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ced83766a5ee6a0305f6137c9c0c7e1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classImageUtil.html#a4ced83766a5ee6a0305f6137c9c0c7e1">GetChannelsCount</a> (<a class="el" href="group__rhi.html#ga1c477faa189843bad812c211db2c54c2">Image::Format</a> format)</td></tr>
+<tr class="separator:a4ced83766a5ee6a0305f6137c9c0c7e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1215e89d4f34978fc8b3ab36ef98c0cf"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classImageUtil.html#a1215e89d4f34978fc8b3ab36ef98c0cf">CanAccept</a> (<a class="el" href="group__rhi.html#ga1c477faa189843bad812c211db2c54c2">Image::Format</a> format)</td></tr>
+<tr class="separator:a1215e89d4f34978fc8b3ab36ef98c0cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82d046b32c9775075bd69c6c3d623e68"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classImageUtil.html#a82d046b32c9775075bd69c6c3d623e68">CanSaveRgba</a> (<a class="el" href="group__rhi.html#ga1c477faa189843bad812c211db2c54c2">Image::Format</a> format)</td></tr>
+<tr class="separator:a82d046b32c9775075bd69c6c3d623e68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Image processing utils. </p>
+<div class="textblock"><p><a class="el" href="classImage.html" title="Hardware-independent image representation.">Image</a> processing utils. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1215e89d4f34978fc8b3ab36ef98c0cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1215e89d4f34978fc8b3ab36ef98c0cf">&#9670;&nbsp;</a></span>CanAccept()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ImageUtil::CanAccept </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__rhi.html#ga1c477faa189843bad812c211db2c54c2">Image::Format</a>&#160;</td>
+          <td class="paramname"><em>format</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a82d046b32c9775075bd69c6c3d623e68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82d046b32c9775075bd69c6c3d623e68">&#9670;&nbsp;</a></span>CanSaveRgba()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ImageUtil::CanSaveRgba </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__rhi.html#ga1c477faa189843bad812c211db2c54c2">Image::Format</a>&#160;</td>
+          <td class="paramname"><em>format</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4ced83766a5ee6a0305f6137c9c0c7e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ced83766a5ee6a0305f6137c9c0c7e1">&#9670;&nbsp;</a></span>GetChannelsCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> ImageUtil::GetChannelsCount </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__rhi.html#ga1c477faa189843bad812c211db2c54c2">Image::Format</a>&#160;</td>
+          <td class="paramname"><em>format</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a8b243a7f4d262e64c61e44ec1a83554b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8b243a7f4d262e64c61e44ec1a83554b">&#9670;&nbsp;</a></span>GetMaxMipsCount()</h2>
 
@@ -157,6 +243,32 @@ Static Public Member Functions</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a39fe055306d1d3a75e8d80e342f5de87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39fe055306d1d3a75e8d80e342f5de87">&#9670;&nbsp;</a></span>GetPixelSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> ImageUtil::GetPixelSize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__rhi.html#ga1c477faa189843bad812c211db2c54c2">Image::Format</a>&#160;</td>
+          <td class="paramname"><em>format</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>

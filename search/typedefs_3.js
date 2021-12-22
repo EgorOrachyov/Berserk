@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['handle_2232',['Handle',['../classEventDispatcher.html#ad8bf7c8a4bf06f012deeb8b412c198d3',1,'EventDispatcher::Handle()'],['../classScheduler.html#a514914f267546b475c6b462c222233ae',1,'Scheduler::Handle()']]]
+  ['format_2341',['Format',['../classImage.html#af1cff1b5cb1e643ff7f48c10681dfebc',1,'Image']]]
 ];

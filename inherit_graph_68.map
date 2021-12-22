@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structRHIResourceSetDesc_1_1TextureBinding.html" title=" " alt="" coords="5,5,156,47"/>
+<area shape="rect" id="node1" href="$classRHIDevice.html" title="RHI device." alt="" coords="5,5,91,32"/>
+<area shape="rect" id="node2" href="$classGLDevice.html" title="GL device implementation." alt="" coords="139,5,219,32"/>
 </map>
