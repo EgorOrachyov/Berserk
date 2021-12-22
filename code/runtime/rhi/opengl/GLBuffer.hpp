@@ -47,6 +47,8 @@ protected:
     void Initialize(GLenum type, uint32 size, RHIBufferUsage usage);
     void Finalize();
     void Update(uint32 size, uint32 byteOffset, uint32 byteSize, const void *memory);
+
+public:
     GLuint GetHandle() const { return mHandle; }
 
 private:
@@ -64,6 +66,7 @@ public:
     BRK_API ~GLVertexBuffer() override;
 
     BRK_API void Initialize();
+    BRK_API void Update(uint32 byteOffset, uint32 byteSize, const void *memory) { GLBuffer::Update(GetSize(), byteOffset, byteSize, memory); };
 };
 
 /**
@@ -76,6 +79,7 @@ public:
     BRK_API ~GLIndexBuffer() override;
 
     BRK_API void Initialize();
+    BRK_API void Update(uint32 byteOffset, uint32 byteSize, const void *memory) { GLBuffer::Update(GetSize(), byteOffset, byteSize, memory); };
 };
 
 /**
@@ -88,6 +92,7 @@ public:
     BRK_API ~GLUniformBuffer() override;
 
     BRK_API void Initialize();
+    BRK_API void Update(uint32 byteOffset, uint32 byteSize, const void *memory) { GLBuffer::Update(GetSize(), byteOffset, byteSize, memory); };
     BRK_API void Bind(uint32 location, uint32 offset, uint32 range);
 };
 

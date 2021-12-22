@@ -98,6 +98,22 @@ public:
     BRK_API virtual void OnInitialize(){};
 
     /**
+     * @brief Called each frame before engine update
+     *
+     * Override this method to add custom pre update
+     * logic of the application inside main thread loop
+     */
+    virtual void OnPreUpdate(){};
+
+    /**
+     * @brief Called each frame after engine update
+     *
+     * Override this method to add custom pre update
+     * logic of the application inside main thread loop
+     */
+    virtual void OnPostUpdate(){};
+
+    /**
      * @brief On application finalize callback
      *
      * Called once, before the engine systems are finalized.

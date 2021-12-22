@@ -86,6 +86,7 @@ private:
     MakeContextCurrentFunc mMakeCurrentFunc;
     SwapBuffersFunc mSwapBuffersFunc;
     Thread *mRHIThread = nullptr;
+    Ref<class GLCommandList> mCoreCommandList;
 };
 
 /**

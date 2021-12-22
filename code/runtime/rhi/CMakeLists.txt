@@ -42,6 +42,8 @@ set(BERSERK_RHI_OPENGL_SRC
         rhi/opengl/GLShader.hpp
         rhi/opengl/GLTexture.cpp
         rhi/opengl/GLTexture.hpp
+        rhi/opengl/GLVaoCache.cpp
+        rhi/opengl/GLVaoCache.hpp
         rhi/opengl/GLVertexDeclaration.cpp
         rhi/opengl/GLVertexDeclaration.hpp
         )

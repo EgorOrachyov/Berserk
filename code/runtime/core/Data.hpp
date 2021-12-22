@@ -30,6 +30,7 @@
 
 #include <core/Config.hpp>
 #include <core/Typedefs.hpp>
+#include <core/string/String.hpp>
 #include <core/templates/Ref.hpp>
 
 #include <functional>
@@ -71,6 +72,16 @@ public:
      * @return Created data instance
      */
     BRK_API static Ref<Data> Make(const void *data, size_t sizeInBytes);
+
+    /**
+     * Makes new data from string characters.
+     * Uses system malloc for internal data storage allocation.
+     *
+     * @param string String to make data from
+     *
+     * @return Created data instance
+     */
+    BRK_API static Ref<Data> Make(const String &string);
 
     /**
      * Makes new data with specified size.

@@ -110,6 +110,12 @@ public:
     /** @return Game thread id */
     BRK_API std::thread::id GetGameThreadId() const;
 
+    /** @return Current in-engine delta-time */
+    BRK_API float GetDeltaTime() const;
+
+    /** @return Current in-engine time */
+    BRK_API float GetTime() const;
+
     /** @brief Return engine global instance */
     BRK_API static Engine &Instance();
 
@@ -122,7 +128,7 @@ private:
     void SetInput(std::shared_ptr<Input> input);
     void SetRHIDevice(std::shared_ptr<RHIDevice> device);
     void SetRHIThread(std::shared_ptr<Thread> thread);
-    void Update(float dt);
+    void Update(float t, float dt);
 
 private:
     /** Engine standard output */
@@ -154,6 +160,12 @@ private:
 
     /** Close request */
     std::atomic_bool mCloseRequested{false};
+
+    /** Current delta-time */
+    float mDt = 0.0f;
+
+    /** Current time */
+    float mT = 0.0f;
 
     /** Global instance */
     static Engine *gEngine;

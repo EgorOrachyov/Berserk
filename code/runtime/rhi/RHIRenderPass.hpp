@@ -48,7 +48,6 @@ BRK_NS_BEGIN
  * @brief Single render target color attachment descriptor
  */
 struct RHIColorAttachment {
-    Vec4f clearColor{};
     RHIRenderTargetOption option = RHIRenderTargetOption::DiscardDiscard;
 };
 
@@ -57,8 +56,6 @@ struct RHIColorAttachment {
  * @brief Depth-stencil render target attachment descriptor
  */
 struct RHIDepthStencilAttachment {
-    float depthClear = 1.0f;
-    uint32 stencilClear = 0;
     RHIRenderTargetOption depthOption = RHIRenderTargetOption::DiscardDiscard;
     RHIRenderTargetOption stencilOption = RHIRenderTargetOption::DiscardDiscard;
 };
@@ -86,9 +83,6 @@ public:
     /** Action to perform on each depth/stencil attachment before/after pass */
     RHIDepthStencilAttachment depthStencilAttachment;
 
-    /** Region to draw into */
-    RHIViewport viewport;
-
     /** Name of the render pass for debugging */
     StringName name;
 
@@ -97,6 +91,18 @@ public:
 
     /** For window rendering */
     Ref<Window> window;
+};
+
+/**
+ * @class RHIRenderPassBeginInfo
+ * @brief RHI pass info to begin (initial targets clear values)
+ */
+class RHIRenderPassBeginInfo {
+public:
+    RHIViewport viewport;
+    std::vector<Vec4f> clearColors;
+    float depthClear = 1.0f;
+    uint32 stencilClear = 0;
 };
 
 /**

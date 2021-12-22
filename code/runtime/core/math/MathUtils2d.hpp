@@ -52,8 +52,8 @@ public:
 
     /** Counter clockwise rotation around imaginable Z axis for 2D space  */
     static Mat2x2f RotateZ(float angleRad) {
-        auto s = Utils::Sin(angleRad);
-        auto c = Utils::Cos(angleRad);
+        auto s = MathUtils::Sin(angleRad);
+        auto c = MathUtils::Cos(angleRad);
 
         return {c, -s,
                 s, c};

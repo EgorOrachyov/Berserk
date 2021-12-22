@@ -28,6 +28,7 @@
 #include <core/Engine.hpp>
 #include <core/math/MathUtils3d.hpp>
 #include <rhi/opengl/GLBuffer.hpp>
+#include <rhi/opengl/GLCommandList.hpp>
 #include <rhi/opengl/GLDevice.hpp>
 #include <rhi/opengl/GLFramebuffer.hpp>
 #include <rhi/opengl/GLGraphicsPipeline.hpp>
@@ -154,9 +155,13 @@ GLDevice::GLDevice(MakeContextCurrentFunc makeCurrentFunc, SwapBuffersFunc swapB
     mClipMatrix = MathUtils3d::IdentityMatrix();
     mType = RHIType::OpenGL;
     mRHIThread = &Engine::Instance().GetRHIThread();
+    mCoreCommandList = Ref<GLCommandList>(new GLCommandList);
+
+    BRK_INFO("Initialize RHI Device");
 }
 
 GLDevice::~GLDevice() {
+    mCoreCommandList.Reset();
     BRK_INFO(BRK_TEXT("Finalize RHI Device"));
 }
 
@@ -213,7 +218,7 @@ Ref<RHIGraphicsPipeline> GLDevice::CreateGraphicsPipeline(const RHIGraphicsPipel
 }
 
 Ref<RHICommandList> GLDevice::GetCoreCommandList() {
-    return Ref<RHICommandList>();
+    return mCoreCommandList.As<RHICommandList>();
 }
 
 #undef BRK_GL_CREATE_RESOURCE

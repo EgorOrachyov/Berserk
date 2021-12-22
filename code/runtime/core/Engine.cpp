@@ -35,8 +35,8 @@ Engine::~Engine() {
     // Release in reverse order
     mEventDispatcher.reset();
     mScheduler.reset();
-    mRHIThread.reset();
     mRHIDevice.reset();
+    mRHIThread.reset();
     mInput.reset();
     mWindowManager.reset();
     mFileSystem.reset();
@@ -90,6 +90,14 @@ std::thread::id Engine::GetGameThreadId() const {
     return mGameThreadID;
 }
 
+float Engine::GetDeltaTime() const {
+    return mDt;
+}
+
+float Engine::GetTime() const {
+    return mT;
+}
+
 Engine &Engine::Instance() {
     return *gEngine;
 }
@@ -135,7 +143,9 @@ void Engine::SetRHIThread(std::shared_ptr<Thread> thread) {
     mRHIThread = std::move(thread);
 }
 
-void Engine::Update(float dt) {
+void Engine::Update(float t, float dt) {
+    mT = t;
+    mDt = dt;
     mScheduler->Update(dt);
     mEventDispatcher->Update();
 }

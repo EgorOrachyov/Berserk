@@ -59,18 +59,21 @@ void GLResourceSet::Bind(GLResourceBindingState &state, const Ref<GLShader> &sha
     for (const auto &bind : mTextures) {
         assert(bind.texture.IsNotNull());
         assert(bind.texture->UsageShaderSampling());
+        assert(bind.location < 0xffffff);
         uint32 location = bind.location + bind.arrayIndex;
         uint32 slot = state.GetSlot(location);
         bind.texture.ForceCast<GLTexture>()->Bind(location, slot);
     }
     for (const auto &bind : mSamplers) {
         assert(bind.sampler.IsNotNull());
+        assert(bind.location < 0xffffff);
         uint32 location = bind.location + bind.arrayIndex;
         uint32 slot = state.GetSlot(location);
         bind.sampler.ForceCast<GLSampler>()->Bind(slot);
     }
     for (const auto &bind : mBuffers) {
         assert(bind.buffer.IsNotNull());
+        assert(bind.location < 0xffffff);
         bind.buffer.ForceCast<GLUniformBuffer>()->Bind(bind.location, bind.offset, bind.range);
         shader->BindUniformBlock(bind.location);
     }

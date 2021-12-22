@@ -80,13 +80,13 @@ public:
     BRK_API virtual void GenerateMipMaps(const Ref<RHITexture> &texture) = 0;
 
     /** Begin render pass for drawing (must be followed with end call)*/
-    BRK_API virtual void BeginRenderPass(const Ref<RHIRenderPass> &renderPass) = 0;
+    BRK_API virtual void BeginRenderPass(const Ref<RHIRenderPass> &renderPass, const RHIRenderPassBeginInfo &beginInfo) = 0;
 
     /** Bind compiled graphics pipeline for the rendering (must be called inside render pass) */
     BRK_API virtual void BindGraphicsPipeline(const Ref<RHIGraphicsPipeline> &pipeline) = 0;
 
-    /** Bind vertex buffer to selected location (must be called inside render pass) */
-    BRK_API virtual void BindVertexBuffer(const Ref<RHIVertexBuffer> &buffer, uint32 bufferId) = 0;
+    /** Bind vertex buffers (must be called inside render pass) */
+    BRK_API virtual void BindVertexBuffers(const std::vector<Ref<RHIVertexBuffer>> &buffers) = 0;
 
     /** Bind index buffer (must be called inside render pass) */
     BRK_API virtual void BindIndexBuffer(const Ref<RHIIndexBuffer> &buffer, RHIIndexType indexType) = 0;
@@ -102,6 +102,12 @@ public:
 
     /** End render pass (must be called in the end after begin render pass) */
     BRK_API virtual void EndRenderPass() = 0;
+
+    /** Request buffers swap */
+    BRK_API virtual void SwapBuffers(const Ref<Window> &window) = 0;
+
+    /** Submit list for execution */
+    BRK_API virtual void Submit() = 0;
 };
 
 /**

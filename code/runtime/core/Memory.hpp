@@ -74,6 +74,19 @@ public:
     }
 
     /**
+     * Compare two raw buffers
+     *
+     * @param a Input buffer
+     * @param b Input buffer
+     * @param sizeInBytes Range to compare
+     *
+     * @return 0 if equals
+     */
+    static int Compare(const void *a, const void *b, size_t sizeInBytes) {
+        return std::memcmp(a, b, sizeInBytes);
+    }
+
+    /**
      * Dynamically allocates data by default system allocator.
      * @param sizeInBytes Non-zero size in byte to allocate
      *

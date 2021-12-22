@@ -64,7 +64,7 @@ public:
     /** @return Aspect ratio width / height */
     BRK_API virtual float GetAspectRatio() const {
         auto s = GetSize();
-        return s[1] > 0 ? static_cast<float>(s[0]) / static_cast<float>(s[0]) : 1.0f;
+        return s[1] > 0 ? static_cast<float>(s[0]) / static_cast<float>(s[1]) : 1.0f;
     }
 
     /** @return True if window receives focus */

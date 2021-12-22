@@ -73,12 +73,12 @@ Ref<const RHIShaderMeta> GLShader::GetShaderMeta() const {
 
 void GLShader::Initialize() {
     if (!Engine::Instance().GetRHIDevice().IsSupported(mLanguage)) {
-        BRK_ERROR("Shader " << mName << " language is not supported " << static_cast<int>(mLanguage));
+        BRK_ERROR("Shader \"" << mName << "\" language is not supported " << static_cast<int>(mLanguage));
         mCompilationStatus.store(RHIShader::Status::FailedCompile);
         return;
     }
     if (!ValidateStages()) {
-        BRK_ERROR("Invalid shader " << mName << " stages " << static_cast<int>(mLanguage));
+        BRK_ERROR("Invalid shader \"" << mName << "\" stages " << static_cast<int>(mLanguage));
         mCompilationStatus.store(RHIShader::Status::FailedCompile);
         return;
     }
@@ -150,7 +150,7 @@ void GLShader::Initialize() {
         mCompilerMessage = std::move(error);
         mCompilationStatus.store(Status::FailedCompile);
 
-        BRK_ERROR("Shader " << mName << " compilation: Error");
+        BRK_ERROR("Shader \"" << mName << "\" compilation: Error");
         return;
     }
 
@@ -203,7 +203,7 @@ void GLShader::Initialize() {
         mCompilerMessage = std::move(error);
         mCompilationStatus.store(Status::FailedCompile);
 
-        BRK_ERROR("Shader " << mName << " compilation: Error");
+        BRK_ERROR("Shader \"" << mName << "\" compilation: Error");
         return;
     }
     // Create reflection meta information
@@ -213,7 +213,7 @@ void GLShader::Initialize() {
     mCompilationStatus.store(Status::Compiled);
 
     // Debug only
-    BRK_INFO("Shader " << mName << " compilation: OK");
+    BRK_INFO("Shader \"" << mName << "\" compilation: OK");
 
     // Notify user
     if (mCallback) {

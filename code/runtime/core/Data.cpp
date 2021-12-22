@@ -56,6 +56,15 @@ Ref<Data> Data::Make(const void *data, size_t sizeInBytes) {
     return ptr;
 }
 
+Ref<Data> Data::Make(const String &string) {
+    if (string.empty())
+        return Ref<Data>();
+
+    Ref<Data> ptr = Make(string.size());
+    Memory::Copy(ptr->GetDataWrite(), string.c_str(), string.size());
+    return ptr;
+}
+
 Ref<Data> Data::Make(size_t sizeInBytes) {
     assert(sizeInBytes > 0);
 

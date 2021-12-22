@@ -31,6 +31,7 @@
 #include <core/Config.hpp>
 #include <core/Data.hpp>
 #include <core/Typedefs.hpp>
+#include <core/io/Logger.hpp>
 #include <core/string/StringName.hpp>
 #include <rhi/RHIResource.hpp>
 
@@ -83,6 +84,24 @@ public:
         uint32 slot;
         uint32 size;
     };
+
+    inline uint32 GetSamplerLocation(const StringName &p) const {
+        auto query = samplers.find(p);
+        if (query == samplers.end()) {
+            BRK_ERROR("Failed to find p=\"" << p << "\" in shader name=\"" << name << "\'");
+            return 0xffffffff;
+        }
+        return query->second.location;
+    }
+
+    inline uint32 GetParamBlockSlot(const StringName &p) const {
+        auto query = paramBlocks.find(p);
+        if (query == paramBlocks.end()) {
+            BRK_ERROR("Failed to find p=\"" << p << "\" in shader name=\"" << name << "\'");
+            return 0xffffffff;
+        }
+        return query->second.slot;
+    }
 
     StringName name;
     std::unordered_map<StringName, InputAttribute> inputs;

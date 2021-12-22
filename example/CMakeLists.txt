@@ -71,7 +71,8 @@ list(APPEND GAME_SRC main/Main.cpp)
 
 # Head files
 list(APPEND GAME_HEADERS
-        code/GameApplication.hpp)
+        code/GameApplication.hpp
+        code/TestRHISimpleQuad.hpp)
 
 # Source file
 list(APPEND GAME_SRC

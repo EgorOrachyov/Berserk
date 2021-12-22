@@ -53,11 +53,13 @@ int Application::Run(int argc, const char *const *argv) {
     // Create primary window
     OnWindowCreate();
 
-    // Initialize rendering device and thread
-    auto gRhiDevice = GLDevice::Make(gWindowManager->GetMakeContextCurrentFunc(), gWindowManager->GetSwapBuffersFunc());
+    // Initialize rendering thread first and set it
     auto gRhiThread = std::make_shared<Thread>();
-    gEngine->SetRHIDevice(gRhiDevice);
     gEngine->SetRHIThread(gRhiThread);
+
+    // Then it is safe to create device
+    auto gRhiDevice = GLDevice::Make(gWindowManager->GetMakeContextCurrentFunc(), gWindowManager->GetSwapBuffersFunc());
+    gEngine->SetRHIDevice(gRhiDevice);
 
     // Post init call
     OnInitialize();
@@ -65,12 +67,14 @@ int Application::Run(int argc, const char *const *argv) {
     using clock = std::chrono::steady_clock;
     using ns = std::chrono::nanoseconds;
 
-    auto time = clock::now();
+    auto start = clock::now();
+    auto time = start;
 
     // Main loop
     while (!gEngine->CloseRequested()) {
         auto newTime = clock::now();
         auto dt = static_cast<double>(std::chrono::duration_cast<ns>(newTime - time).count()) / 1.0e9;
+        auto t = static_cast<double>(std::chrono::duration_cast<ns>(newTime - start).count()) / 1.0e9;
 
         // Swap queued messages
         gRhiThread->Update();
@@ -80,22 +84,14 @@ int Application::Run(int argc, const char *const *argv) {
         // Execute update logic (queued resource update etc.)
         gRhiThread->ExecuteUpdate();
 
+        // Custom pre-update
+        OnPreUpdate();
+
         // Update engine, rendering and game
-        gEngine->Update(static_cast<float>(dt));
+        gEngine->Update(static_cast<float>(t), static_cast<float>(dt));
 
-        // todo: will be removed <------------
-        static auto window = gWindowManager->GetPrimaryWindow();
-        static auto makeCurrent = gWindowManager->GetMakeContextCurrentFunc();
-        static auto swapBuffers = gWindowManager->GetSwapBuffersFunc();
-        static float factor = 0.0f;
-
-        makeCurrent(window);
-        auto dtf = static_cast<float>(dt);
-        factor = (factor + dtf) > 1.0f ? (factor + dtf) - 1.0f : factor + dtf;
-        glClearColor(1.0f * factor, 1.0f * (1.0f - factor * factor), 0.4f * factor, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        swapBuffers(window);
-        // todo: will be removed <------------
+        // Custom post-update
+        OnPostUpdate();
 
         // Execute after logic (resources destruction etc.)
         gRhiThread->ExecuteAfter();
@@ -110,8 +106,8 @@ int Application::Run(int argc, const char *const *argv) {
     OnFinalize();
 
     // Release RHI related stuff
-    gRhiThread.reset();
     gRhiDevice.reset();
+    gRhiThread.reset();
 
     // Release platform window manager
     gWindowManager.reset();

@@ -37,19 +37,20 @@ GLRenderPass::GLRenderPass(const RHIRenderPassDesc &desc) {
     mDesc = desc;
 }
 
-void GLRenderPass::Bind(GLRenderPassStateVars &state) {
+void GLRenderPass::Bind(GLRenderPassStateVars &state, const RHIRenderPassBeginInfo &beginInfo) {
     if (WindowPass())
-        BindWindow(state);
+        BindWindow(state, beginInfo);
     else
-        BindFramebuffer(state);
+        BindFramebuffer(state, beginInfo);
 }
 
-void GLRenderPass::BindFramebuffer(GLRenderPassStateVars &state) {
+void GLRenderPass::BindFramebuffer(GLRenderPassStateVars &state, const RHIRenderPassBeginInfo &beginInfo) {
     auto &renderPass = mDesc;
     auto &renderTarget = renderPass.framebuffer;
 
     assert(renderTarget.IsNotNull());
     assert(renderPass.colorAttachments.size() == renderTarget->GetColorAttachmentsCount());
+    assert(renderPass.colorAttachments.size() == beginInfo.clearColors.size());
 
     auto colorAttachments = renderTarget->GetColorAttachmentsCount();
     auto target = renderTarget.ForceCast<GLFramebuffer>();
@@ -57,7 +58,7 @@ void GLRenderPass::BindFramebuffer(GLRenderPassStateVars &state) {
     glBindFramebuffer(GL_FRAMEBUFFER, target->GetHandle());
     BRK_GL_CATCH_ERR();
 
-    auto viewport = renderPass.viewport;
+    auto viewport = beginInfo.viewport;
 
     glViewport(viewport.left, viewport.bottom, static_cast<GLsizei>(viewport.width), static_cast<GLsizei>(viewport.height));
     BRK_GL_CATCH_ERR();
@@ -65,7 +66,7 @@ void GLRenderPass::BindFramebuffer(GLRenderPassStateVars &state) {
     // Clear target buffers if need
     for (uint32 i = 0; i < colorAttachments; i++) {
         if (GLDefs::NeedClearBefore(renderPass.colorAttachments[i].option)) {
-            auto &c = renderPass.colorAttachments[i].clearColor;
+            const auto &c = beginInfo.clearColors[i];
 
             glDisable(GL_STENCIL_TEST);
             BRK_GL_CATCH_ERR();
@@ -93,14 +94,14 @@ void GLRenderPass::BindFramebuffer(GLRenderPassStateVars &state) {
         BRK_GL_CATCH_ERR();
 
         if (needClearDepth && needClearStencil) {
-            auto stencilClear = static_cast<int32>(renderPass.depthStencilAttachment.stencilClear);
-            glClearBufferfi(GL_DEPTH_STENCIL, 0, renderPass.depthStencilAttachment.depthClear, stencilClear);
+            auto stencilClear = static_cast<int32>(beginInfo.stencilClear);
+            glClearBufferfi(GL_DEPTH_STENCIL, 0, beginInfo.depthClear, stencilClear);
             BRK_GL_CATCH_ERR();
         } else if (needClearDepth) {
-            glClearBufferfv(GL_DEPTH, 0, &renderPass.depthStencilAttachment.depthClear);
+            glClearBufferfv(GL_DEPTH, 0, &beginInfo.depthClear);
             BRK_GL_CATCH_ERR();
         } else {
-            auto stencilClear = static_cast<int32>(renderPass.depthStencilAttachment.stencilClear);
+            auto stencilClear = static_cast<int32>(beginInfo.stencilClear);
             glClearBufferiv(GL_DEPTH, 0, &stencilClear);
             BRK_GL_CATCH_ERR();
         }
@@ -111,11 +112,12 @@ void GLRenderPass::BindFramebuffer(GLRenderPassStateVars &state) {
     state.hasStencilAttachment = hasStencil;
 }
 
-void GLRenderPass::BindWindow(GLRenderPassStateVars &state) {
+void GLRenderPass::BindWindow(GLRenderPassStateVars &state, const RHIRenderPassBeginInfo &beginInfo) {
     auto &renderPass = mDesc;
     auto &window = renderPass.window;
 
     assert(renderPass.colorAttachments.size() == 1);
+    assert(renderPass.colorAttachments.size() == beginInfo.clearColors.size());
 
     // Make context of the window current, so render pass drawing ends-up in this window
     auto device = dynamic_cast<GLDevice *>(&Engine::Instance().GetRHIDevice());
@@ -124,7 +126,7 @@ void GLRenderPass::BindWindow(GLRenderPassStateVars &state) {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     BRK_GL_CATCH_ERR();
 
-    auto viewport = renderPass.viewport;
+    auto viewport = beginInfo.viewport;
 
     glViewport(viewport.left, viewport.bottom, static_cast<GLsizei>(viewport.width), static_cast<GLsizei>(viewport.height));
     BRK_GL_CATCH_ERR();
@@ -133,7 +135,7 @@ void GLRenderPass::BindWindow(GLRenderPassStateVars &state) {
     GLbitfield clearMask = 0;
 
     if (GLDefs::NeedClearBefore(renderPass.colorAttachments[0].option)) {
-        auto &c = renderPass.colorAttachments[0].clearColor;
+        const auto &c = beginInfo.clearColors[0];
         clearMask |= GL_COLOR_BUFFER_BIT;
 
         glDisable(GL_STENCIL_TEST);
@@ -151,7 +153,7 @@ void GLRenderPass::BindWindow(GLRenderPassStateVars &state) {
         glDepthMask(GL_TRUE);
         BRK_GL_CATCH_ERR();
 
-        glClearDepthf(renderPass.depthStencilAttachment.depthClear);
+        glClearDepthf(beginInfo.depthClear);
         BRK_GL_CATCH_ERR();
     }
     if (GLDefs::NeedClearBefore(renderPass.depthStencilAttachment.stencilOption)) {
@@ -160,7 +162,7 @@ void GLRenderPass::BindWindow(GLRenderPassStateVars &state) {
         glStencilMask(0xffffffff);
         BRK_GL_CATCH_ERR();
 
-        glClearStencil(static_cast<int32>(renderPass.depthStencilAttachment.stencilClear));
+        glClearStencil(static_cast<int32>(beginInfo.stencilClear));
         BRK_GL_CATCH_ERR();
     }
 

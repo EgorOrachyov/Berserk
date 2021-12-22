@@ -37,7 +37,7 @@
 BRK_NS_BEGIN
 
 /**
- * @addtogroup
+ * @addtogroup core
  * @{
  */
 

@@ -91,7 +91,7 @@ public:
      * @brief Close opened file
      * @param file File handle to close
      */
-    BRK_API void CloseFile(std::FILE* file);
+    BRK_API void CloseFile(std::FILE *file);
 
     /**
      * @brief Read file by file path

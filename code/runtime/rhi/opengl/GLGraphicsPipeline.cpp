@@ -42,9 +42,6 @@ void GLGraphicsPipeline::Bind(const GLRenderPassStateVars &state) {
     assert(pipelineState.declaration.IsNotNull());
     assert(pipelineState.shader->GetCompilationStatus() == RHIShader::Status::Compiled);
 
-    // Pipeline update
-    auto primitivesType = GLDefs::GetPrimitivesType(pipelineState.primitivesType);
-
     // Bind shader for drawing
     pipelineState.shader.ForceCast<GLShader>()->Use();
 

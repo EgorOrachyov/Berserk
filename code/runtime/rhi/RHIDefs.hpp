@@ -333,6 +333,9 @@ struct RHILimits {
 
     /** Max number of simultaneously drawn frames (1 - draw frame and wait, 2 - draw and present one frame, prepare other, ...)*/
     static const uint32 MAX_FRAMES_IN_FLIGHT = 2;
+
+    /** Max resources sets count */
+    static const uint32 MAX_RESOURCE_SETS = 3;
 };
 
 /** @brief RHI device capabilities */

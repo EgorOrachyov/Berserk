@@ -43,9 +43,15 @@ BRK_NS_BEGIN
  * @brief GL render pass shared state variables for context management
  */
 struct GLRenderPassStateVars {
-    bool hasDepthAttachment;
-    bool hasStencilAttachment;
-    uint32 colorAttachmentsCount;
+    bool hasDepthAttachment = false;
+    bool hasStencilAttachment = false;
+    uint32 colorAttachmentsCount = 0;
+
+    void Reset() {
+        hasDepthAttachment = false;
+        hasStencilAttachment = false;
+        colorAttachmentsCount = 0;
+    }
 };
 
 /**
@@ -57,9 +63,9 @@ public:
     BRK_API explicit GLRenderPass(const RHIRenderPassDesc &desc);
     BRK_API ~GLRenderPass() override = default;
 
-    BRK_API void Bind(GLRenderPassStateVars &state);
-    BRK_API void BindFramebuffer(GLRenderPassStateVars &state);
-    BRK_API void BindWindow(GLRenderPassStateVars &state);
+    BRK_API void Bind(GLRenderPassStateVars &state, const RHIRenderPassBeginInfo &beginInfo);
+    BRK_API void BindFramebuffer(GLRenderPassStateVars &state, const RHIRenderPassBeginInfo &beginInfo);
+    BRK_API void BindWindow(GLRenderPassStateVars &state, const RHIRenderPassBeginInfo &beginInfo);
 
     bool WindowPass() const { return mDesc.window.IsNotNull(); }
 };

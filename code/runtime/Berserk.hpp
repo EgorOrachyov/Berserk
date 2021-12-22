@@ -55,6 +55,9 @@
 #include <core/image/Image.hpp>
 #include <core/image/ImageUtil.hpp>
 #include <core/io/Logger.hpp>
+#include <core/math/MathUtils.hpp>
+#include <core/math/MathUtils2d.hpp>
+#include <core/math/MathUtils3d.hpp>
 #include <core/string/String.hpp>
 #include <core/string/String16u.hpp>
 #include <core/string/StringName.hpp>
