@@ -33,6 +33,7 @@ BRK_NS_BEGIN
 
 Engine::~Engine() {
     // Release in reverse order
+    mRenderEngine.reset();
     mEventDispatcher.reset();
     mScheduler.reset();
     mRHIDevice.reset();
@@ -86,6 +87,10 @@ Thread &Engine::GetRHIThread() {
     return *mRHIThread;
 }
 
+RenderEngine &Engine::GetRenderEngine() {
+    return *mRenderEngine;
+}
+
 std::thread::id Engine::GetGameThreadId() const {
     return mGameThreadID;
 }
@@ -112,13 +117,19 @@ void Engine::Init() {
     listener.SetLevel(Logger::Level::Info);
 #endif
 
+    // Logger setup first
     Logger::Instance().AddListener([=](const Logger::Entry &entry) { listener.OnEntry(entry); });
 
+    // In order from lower level foundation to high-level system
     mGameThreadID = std::this_thread::get_id();
     mOutput = std::unique_ptr<Output>(new Output());
     mFileSystem = std::unique_ptr<FileSystem>(new FileSystem());
     mScheduler = std::unique_ptr<Scheduler>(new Scheduler());
     mEventDispatcher = std::unique_ptr<EventDispatcher>(new EventDispatcher());
+    mRenderEngine = std::unique_ptr<RenderEngine>(new RenderEngine());
+
+    // Init call
+    mRenderEngine->Init();
 
     // Provide singleton
     gEngine = this;
@@ -148,6 +159,8 @@ void Engine::Update(float t, float dt) {
     mDt = dt;
     mScheduler->Update(dt);
     mEventDispatcher->Update();
+    mRenderEngine->PreUpdate();
+    mRenderEngine->PostUpdate();
 }
 
 Engine *Engine::gEngine = nullptr;

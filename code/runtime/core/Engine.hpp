@@ -36,6 +36,7 @@
 #include <platform/Input.hpp>
 #include <platform/Output.hpp>
 #include <platform/WindowManager.hpp>
+#include <render/RenderEngine.hpp>
 #include <rhi/RHIDevice.hpp>
 
 #include <atomic>
@@ -107,6 +108,9 @@ public:
     /** @return RHI thread (for safe cmd submission) */
     BRK_API Thread &GetRHIThread();
 
+    /** @return Rendering engine for game rendering */
+    BRK_API RenderEngine &GetRenderEngine();
+
     /** @return Game thread id */
     BRK_API std::thread::id GetGameThreadId() const;
 
@@ -154,6 +158,9 @@ private:
 
     /** RHI thread (for safe cmd submission) */
     std::shared_ptr<Thread> mRHIThread;
+
+    /** Rendering engine for game rendering */
+    std::unique_ptr<RenderEngine> mRenderEngine;
 
     /** Main game thread id */
     std::thread::id mGameThreadID;

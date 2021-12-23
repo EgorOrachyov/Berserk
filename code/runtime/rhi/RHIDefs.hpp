@@ -354,6 +354,57 @@ struct RHIDeviceCaps {
     bool supportAnisotropy;
 };
 
+/** @return Host data size of value of specified type */
+inline uint32 GetRHIShaderDataTypeSize(RHIShaderDataType type) {
+    const uint32 fBase = 4;
+    const uint32 iBase = 4;
+    const uint32 uBase = 4;
+    const uint32 bBase = 4;
+
+    switch (type) {
+        case RHIShaderDataType::Float1:
+            return fBase * 1;
+        case RHIShaderDataType::Float2:
+            return fBase * 2;
+        case RHIShaderDataType::Float3:
+            return fBase * 3;
+        case RHIShaderDataType::Float4:
+            return fBase * 4;
+        case RHIShaderDataType::Int1:
+            return iBase * 1;
+        case RHIShaderDataType::Int2:
+            return iBase * 2;
+        case RHIShaderDataType::Int3:
+            return iBase * 3;
+        case RHIShaderDataType::Int4:
+            return iBase * 4;
+        case RHIShaderDataType::Uint1:
+            return uBase * 1;
+        case RHIShaderDataType::Uint2:
+            return uBase * 2;
+        case RHIShaderDataType::Uint3:
+            return uBase * 3;
+        case RHIShaderDataType::Uint4:
+            return uBase * 4;
+        case RHIShaderDataType::Bool1:
+            return bBase * 1;
+        case RHIShaderDataType::Bool2:
+            return bBase * 2;
+        case RHIShaderDataType::Bool3:
+            return bBase * 3;
+        case RHIShaderDataType::Bool4:
+            return bBase * 4;
+        case RHIShaderDataType::Mat2:
+            return fBase * 2 * 2;
+        case RHIShaderDataType::Mat3:
+            return fBase * 3 * 3;
+        case RHIShaderDataType::Mat4:
+            return fBase * 4 * 4;
+        default:
+            return 0;
+    }
+}
+
 /**
  * @}
  */

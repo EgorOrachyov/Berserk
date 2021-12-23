@@ -112,4 +112,26 @@
 #include <rhi/RHITexture.hpp>
 #include <rhi/RHIVertexDeclaration.hpp>
 
+/**
+ * @defgroup render
+ * @brief Rendering module of the engine
+ *
+ * Provides access to engine low-level and high-level rendering
+ * functionality, required for the rendering of the complex 2d/3d
+ * scenes as well as auxiliary features for debugging.
+ *
+ * Implements such primitives as high-level shaders, materials,
+ * provides low-level abstraction for render view, render objects,
+ * auxiliary debug draw features.
+ *
+ * Also provides abstraction for 3d scene, high-level render objects,
+ * meshes, post effects, high-level graphics pipelines.
+ */
+
+#include <render/RenderEngine.hpp>
+#include <render/shader/Shader.hpp>
+#include <render/shader/ShaderManager.hpp>
+#include <render/shader/ShaderPass.hpp>
+#include <render/shader/ShaderTechnique.hpp>
+
 #endif//BERSERK_BERSERK_HPP
