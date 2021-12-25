@@ -11,6 +11,7 @@ function(berserk_configure_target target)
     target_link_libraries(${target} PRIVATE StbImage)
     target_link_libraries(${target} PRIVATE portable_file_dialogs)
     target_link_libraries(${target} PRIVATE WhereAmI)
+    target_link_libraries(${target} PRIVATE TinyXML2)
 
     if (BERSERK_TARGET_WINDOWS)
         target_link_libraries(${target} PRIVATE Shlwapi.lib)

@@ -28,6 +28,7 @@ option(BERSERK_WITH_FREETYPE "Use freetype2 as font importing library" NO)
 option(BERSERK_WITH_TINYOBJ "Tiny obj loader to import simple meshes" NO)
 option(BERSERK_WITH_PFD "Use portable file dialogs lib for dialogs creation" YES)
 option(BERSERK_WITH_STB_IMAGE "Use stb image utility for image processing" YES)
+option(BERSERK_WITH_TINYXML2 "Use tinyxml2 for xml documents parsing" YES)
 
 ####################################################################
 ## Internal flags
@@ -256,6 +257,11 @@ endif ()
 if (BERSERK_WITH_STB_IMAGE)
     message(STATUS "Add stb image utility for image processing")
     add_subdirectory(deps/stbimage)
+endif ()
+
+if (BERSERK_WITH_TINYXML2)
+    message(STATUS "Add tinyxml2 for xml documents parsing")
+    add_subdirectory(deps/tinyxml2)
 endif ()
 
 if (BERSERK_WITH_WHEREAMI)
