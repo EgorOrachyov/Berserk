@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['bufferbinding_2333',['BufferBinding',['../classGLResourceSet.html#acd332cea212d62817508c774398df807',1,'GLResourceSet']]]
+  ['archetypeptr_2677',['ArchetypePtr',['../classShaderManager.html#a8061b1beb9a8d9ce4e5a7c94888c24c2',1,'ShaderManager']]]
 ];

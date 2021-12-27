@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['format_2341',['Format',['../classImage.html#af1cff1b5cb1e643ff7f48c10681dfebc',1,'Image']]]
+  ['eventtype_2685',['EventType',['../group__core.html#ga4d378b9bef5b6941971a760969748165',1,'Event.hpp']]]
 ];

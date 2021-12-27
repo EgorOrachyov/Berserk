@@ -1,0 +1,5 @@
+<map id="ShaderParam" name="ShaderParam">
+<area shape="rect" id="node1" title="Describes single param in the shader." alt="" coords="67,109,168,136"/>
+<area shape="rect" id="node2" href="$classStringName.html" title="Cached shared utf&#45;8 string id." alt="" coords="5,5,96,32"/>
+<area shape="rect" id="node3" href="$classShaderParamType.html" title="General types of shader params." alt="" coords="121,5,250,32"/>
+</map>

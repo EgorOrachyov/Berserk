@@ -64,7 +64,8 @@ $(function() {
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
-<a href="#enum-members">Enumerations</a>  </div>
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Rhi</div>  </div>
 </div><!--header-->
@@ -169,7 +170,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Single shader stage.  <a href="structRHIShaderStageDesc.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRHIShaderDesc.html">RHIShaderDesc</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shader creation descriptor. Allows create from byteCode.  <a href="structRHIShaderDesc.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classShader.html" title="Defines complete rendering flow for the object.">Shader</a> creation descriptor. Allows create from byteCode.  <a href="structRHIShaderDesc.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHIShader.html">RHIShader</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compiled and linked native shader.  <a href="classRHIShader.html#details">More...</a><br /></td></tr>
@@ -452,6 +453,29 @@ Enumerations</h2></td></tr>
 <br />
  }</td></tr>
 <tr class="separator:ga5f75f243f2e466fe9e42d21d21648974"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ga230ed0ec22945aa9f2dd5d16716c1e4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__rhi.html#ga230ed0ec22945aa9f2dd5d16716c1e4f">GetRHIShaderDataTypeSize</a> (<a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a> type)</td></tr>
+<tr class="separator:ga230ed0ec22945aa9f2dd5d16716c1e4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf316257a868d96664372e83c3638cc4e"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__rhi.html#gaf316257a868d96664372e83c3638cc4e">RHIGetShaderDataIdGLSL</a> (<a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a> type)</td></tr>
+<tr class="separator:gaf316257a868d96664372e83c3638cc4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga72e43728275ea3a6dfe7690c0e65fd68"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__rhi.html#ga72e43728275ea3a6dfe7690c0e65fd68">RHIGetShaderParamIdGLSL</a> (<a class="el" href="group__rhi.html#ga153c28812a635991eb66c1c1038892eb">RHIShaderParamType</a> type)</td></tr>
+<tr class="separator:ga72e43728275ea3a6dfe7690c0e65fd68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadc95d472d4b479fc7fc07c9b795509b7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__rhi.html#gadc95d472d4b479fc7fc07c9b795509b7">RHIIsIntegralBaseType</a> (<a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a> type)</td></tr>
+<tr class="separator:gadc95d472d4b479fc7fc07c9b795509b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga882b97b6e974703f233ffdfec2fa53c5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__rhi.html#ga882b97b6e974703f233ffdfec2fa53c5">RHIIsFloatBaseType</a> (<a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a> type)</td></tr>
+<tr class="separator:ga882b97b6e974703f233ffdfec2fa53c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4ff3c94452dd0a6efddde9b0b030b88a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__rhi.html#ga4ff3c94452dd0a6efddde9b0b030b88a">RHIIsIntegralBaseSignedType</a> (<a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a> type)</td></tr>
+<tr class="separator:ga4ff3c94452dd0a6efddde9b0b030b88a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0822343f89c1a5417e95b69b6504345f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__rhi.html#ga0822343f89c1a5417e95b69b6504345f">RHIIsVectorType</a> (<a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a> type)</td></tr>
+<tr class="separator:ga0822343f89c1a5417e95b69b6504345f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad6b6b51b0e151f2fa4ea290502c74ab4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__rhi.html#gad6b6b51b0e151f2fa4ea290502c74ab4">RHIGetVectorComponentsCount</a> (<a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a> type)</td></tr>
+<tr class="separator:gad6b6b51b0e151f2fa4ea290502c74ab4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabc2111d0813d07a4a9b22fa9b54bb66d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__rhi.html#gabc2111d0813d07a4a9b22fa9b54bb66d">RHIGetMatrixSize</a> (<a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a> type, <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> &amp;rows, <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> &amp;cols)</td></tr>
+<tr class="separator:gabc2111d0813d07a4a9b22fa9b54bb66d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2edb517e6d5a9e6a9b6ecafc6569a620"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__rhi.html#gaf8c98a3f2cef867026ae99b59eeebf94">RHIShaderLanguage</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__rhi.html#ga2edb517e6d5a9e6a9b6ecafc6569a620">RHIParseShaderLanguage</a> (const char *language)</td></tr>
+<tr class="separator:ga2edb517e6d5a9e6a9b6ecafc6569a620"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Rendering hardware interface. </p>
@@ -1286,6 +1310,284 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="gga29dff8ee197f866de66e715fff252cf1a638926405e39d8cd5227b49fa3156e1a"></a>PerInstance&#160;</td><td class="fielddoc"><p>Element index changes per instance </p>
 </td></tr>
 </table>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ga230ed0ec22945aa9f2dd5d16716c1e4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga230ed0ec22945aa9f2dd5d16716c1e4f">&#9670;&nbsp;</a></span>GetRHIShaderDataTypeSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> GetRHIShaderDataTypeSize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>Host data size of value of specified type </dd></dl>
+
+</div>
+</div>
+<a id="gabc2111d0813d07a4a9b22fa9b54bb66d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabc2111d0813d07a4a9b22fa9b54bb66d">&#9670;&nbsp;</a></span>RHIGetMatrixSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RHIGetMatrixSize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> &amp;&#160;</td>
+          <td class="paramname"><em>rows</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> &amp;&#160;</td>
+          <td class="paramname"><em>cols</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="gaf316257a868d96664372e83c3638cc4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf316257a868d96664372e83c3638cc4e">&#9670;&nbsp;</a></span>RHIGetShaderDataIdGLSL()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* RHIGetShaderDataIdGLSL </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ga72e43728275ea3a6dfe7690c0e65fd68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga72e43728275ea3a6dfe7690c0e65fd68">&#9670;&nbsp;</a></span>RHIGetShaderParamIdGLSL()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* RHIGetShaderParamIdGLSL </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__rhi.html#ga153c28812a635991eb66c1c1038892eb">RHIShaderParamType</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="gad6b6b51b0e151f2fa4ea290502c74ab4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad6b6b51b0e151f2fa4ea290502c74ab4">&#9670;&nbsp;</a></span>RHIGetVectorComponentsCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> RHIGetVectorComponentsCount </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ga882b97b6e974703f233ffdfec2fa53c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga882b97b6e974703f233ffdfec2fa53c5">&#9670;&nbsp;</a></span>RHIIsFloatBaseType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RHIIsFloatBaseType </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ga4ff3c94452dd0a6efddde9b0b030b88a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4ff3c94452dd0a6efddde9b0b030b88a">&#9670;&nbsp;</a></span>RHIIsIntegralBaseSignedType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RHIIsIntegralBaseSignedType </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="gadc95d472d4b479fc7fc07c9b795509b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gadc95d472d4b479fc7fc07c9b795509b7">&#9670;&nbsp;</a></span>RHIIsIntegralBaseType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RHIIsIntegralBaseType </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ga0822343f89c1a5417e95b69b6504345f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0822343f89c1a5417e95b69b6504345f">&#9670;&nbsp;</a></span>RHIIsVectorType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RHIIsVectorType </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ga2edb517e6d5a9e6a9b6ecafc6569a620"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2edb517e6d5a9e6a9b6ecafc6569a620">&#9670;&nbsp;</a></span>RHIParseShaderLanguage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__rhi.html#gaf8c98a3f2cef867026ae99b59eeebf94">RHIShaderLanguage</a> RHIParseShaderLanguage </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>language</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
