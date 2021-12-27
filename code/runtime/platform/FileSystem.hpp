@@ -70,7 +70,7 @@ public:
         EntryType type;
     };
 
-    /** Init file system */
+    /** InitCore file system */
     BRK_API FileSystem();
     BRK_API ~FileSystem() = default;
 

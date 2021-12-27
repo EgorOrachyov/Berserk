@@ -30,7 +30,7 @@
 
 BRK_NS_BEGIN
 
-GlfwWindow::GlfwWindow(const StringName &name, const Size2i &size, String title, bool clientApi) : mName(name), mTitle(std::move(title)) {
+GlfwWindow::GlfwWindow(StringName name, const Size2i &size, String title, bool clientApi) : mName(std::move(name)), mTitle(std::move(title)) {
     if (clientApi) {
 #if defined(BERSERK_TARGET_MACOS)
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -44,7 +44,7 @@ GlfwWindow::GlfwWindow(const StringName &name, const Size2i &size, String title,
 #endif
     }
 
-    mHND = glfwCreateWindow(size.x(), size.y(), title.c_str(), nullptr, nullptr);
+    mHND = glfwCreateWindow(size.x(), size.y(), mTitle.c_str(), nullptr, nullptr);
 
     glfwGetWindowPos(mHND, &mPosition[0], &mPosition[1]);
     glfwGetWindowSize(mHND, &mSize[0], &mSize[1]);

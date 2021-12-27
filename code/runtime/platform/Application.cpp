@@ -42,7 +42,7 @@ int Application::Run(int argc, const char *const *argv) {
 
     // Setup engine
     gEngine = std::unique_ptr<Engine>(new Engine());
-    gEngine->Init();
+    gEngine->InitCore();
 
     // Create platform window manager
     // NOTE: use glfw, it is sufficient for know
@@ -52,6 +52,8 @@ int Application::Run(int argc, const char *const *argv) {
 
     // Create primary window
     OnWindowCreate();
+    // If app does not create window, create default
+    gEngine->ConfigureWindow();
 
     // Initialize rendering thread first and set it
     auto gRhiThread = std::make_shared<Thread>();
@@ -62,7 +64,7 @@ int Application::Run(int argc, const char *const *argv) {
     gEngine->SetRHIDevice(gRhiDevice);
 
     // After RHI is created
-    gEngine->PostInit();
+    gEngine->InitEngine();
 
     // Post init call
     OnInitialize();

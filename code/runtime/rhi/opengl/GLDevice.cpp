@@ -158,6 +158,20 @@ GLDevice::GLDevice(MakeContextCurrentFunc makeCurrentFunc, SwapBuffersFunc swapB
     mCoreCommandList = Ref<GLCommandList>(new GLCommandList);
 
     BRK_INFO("Initialize RHI Device");
+
+#ifdef BERSERK_DEBUG
+    auto renderer = glGetString(GL_RENDERER);
+    BRK_GL_CATCH_ERR();
+    auto vendor = glGetString(GL_VENDOR);
+    BRK_GL_CATCH_ERR();
+    auto version = glGetString(GL_VERSION);
+    BRK_GL_CATCH_ERR();
+    auto glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
+    BRK_GL_CATCH_ERR();
+
+    BRK_INFO("OpenGL Renderer: " << renderer << " vendor: " << vendor
+                                 << " version " << version << " glsl version " << glslVersion);
+#endif
 }
 
 GLDevice::~GLDevice() {

@@ -32,6 +32,7 @@
 #include <core/EventDispatcher.hpp>
 #include <core/Scheduler.hpp>
 #include <core/Thread.hpp>
+#include <core/io/Config.hpp>
 #include <platform/FileSystem.hpp>
 #include <platform/Input.hpp>
 #include <platform/Output.hpp>
@@ -84,6 +85,9 @@ public:
      */
     BRK_API bool CloseRequested();
 
+    /** @return Engine config file */
+    BRK_API const Ref<Config> &GetConfig();
+
     /** @return Engine standard output */
     BRK_API Output &GetOutput();
 
@@ -126,9 +130,9 @@ public:
 private:
     friend class Application;
 
-    void Init();
-    void PostInit();
-    void Configure();
+    void InitCore();
+    void InitEngine();
+    void ConfigureWindow();
     void SetWindowManager(std::shared_ptr<WindowManager> windowManager);
     void SetInput(std::shared_ptr<Input> input);
     void SetRHIDevice(std::shared_ptr<RHIDevice> device);
@@ -136,6 +140,9 @@ private:
     void Update(float t, float dt);
 
 private:
+    /** Engine config file */
+    Ref<Config> mConfig;
+
     /** Engine standard output */
     std::unique_ptr<Output> mOutput;
 

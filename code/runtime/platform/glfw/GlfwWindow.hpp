@@ -45,7 +45,7 @@ BRK_NS_BEGIN
  */
 class GlfwWindow final : public Window {
 public:
-    BRK_API GlfwWindow(const StringName &name, const Size2i &size, String title, bool clientApi);
+    BRK_API GlfwWindow(StringName name, const Size2i &size, String title, bool clientApi);
     BRK_API ~GlfwWindow() override;
     BRK_API Point2i GetPosition() const override;
     BRK_API Size2i GetSize() const override;

@@ -54,6 +54,7 @@
 #include <core/event/EventWindow.hpp>
 #include <core/image/Image.hpp>
 #include <core/image/ImageUtil.hpp>
+#include <core/io/Config.hpp>
 #include <core/io/Logger.hpp>
 #include <core/math/MathUtils.hpp>
 #include <core/math/MathUtils2d.hpp>

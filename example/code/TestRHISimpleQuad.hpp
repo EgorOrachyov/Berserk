@@ -73,13 +73,8 @@ public:
 
     void OnWindowCreate() override {
         BRK_INFO("Initialize game window");
-
         engine = &berserk::Engine::Instance();
         dispatcher = &engine->GetEventDispatcher();
-        auto &windowManager = engine->GetWindowManager();
-
-        window = windowManager.CreateWindow(berserk::StringName("MAIN"), {1280, 720}, "Example window");
-
         dispatcher->Subscribe(berserk::EventWindow::GetEventTypeStatic(), [](const berserk::Event &_event) {
             auto event = dynamic_cast<const berserk::EventWindow *>(&_event);
             if (event->GetType() == berserk::EventWindow::Type::CloseRequested) {
@@ -93,12 +88,11 @@ public:
     void OnInitialize() override {
         fileSystem = &engine->GetFileSystem();
         device = &engine->GetRHIDevice();
+        window = engine->GetWindowManager().GetPrimaryWindow();
         angle = 0.0f;
         speed = 0.5f;
         gamma = device->GetDriverType() == berserk::RHIType::Vulkan ? 2.2f : 1.0f;
         commandList = device->GetCoreCommandList();
-
-        fileSystem->AddSearchPath(fileSystem->GetExecutableDir());
 
         InitShader();
         InitTexture();

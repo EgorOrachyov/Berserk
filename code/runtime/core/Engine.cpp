@@ -55,6 +55,10 @@ bool Engine::CloseRequested() {
     return mCloseRequested.load();
 }
 
+const Ref<Config> &Engine::GetConfig() {
+    return mConfig;
+}
+
 Output &Engine::GetOutput() {
     return *mOutput;
 }
@@ -107,7 +111,7 @@ Engine &Engine::Instance() {
     return *gEngine;
 }
 
-void Engine::Init() {
+void Engine::InitCore() {
     // Setup logger
     LoggerListenerOutput listener;
     listener.SetName("Engine");
@@ -130,14 +134,30 @@ void Engine::Init() {
 
     // Provide singleton
     gEngine = this;
+
+    // Set default search path
+    mFileSystem->AddSearchPath(mFileSystem->GetExecutableDir());
+
+    // Create config file
+    mConfig = Ref<Config>(new Config);
+    mConfig->Open("config/engine.config.xml");
 }
 
-void Engine::PostInit() {
+void Engine::InitEngine() {
     // Init call
     mRenderEngine->Init();
 }
 
-void Engine::Configure() {
+void Engine::ConfigureWindow() {
+    // Create primary window if is not created
+    if (mWindowManager->GetPrimaryWindow().IsNull()) {
+        StringName sectionApp("application");
+        auto w = mConfig->GetProperty(sectionApp, StringName("window.width"), 1280);
+        auto h = mConfig->GetProperty(sectionApp, StringName("window.height"), 720);
+        auto caption = mConfig->GetProperty(sectionApp, StringName("window.caption"), "Default window");
+        auto name = mConfig->GetProperty(sectionApp, StringName("window.name"), "MAIN");
+        mWindowManager->CreateWindow(StringName(name), Size2i{w, h}, caption);
+    }
 }
 
 void Engine::SetWindowManager(std::shared_ptr<WindowManager> windowManager) {

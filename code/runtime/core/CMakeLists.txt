@@ -17,6 +17,7 @@ set(BERSERK_CORE_HEADER
         core/image/Image.hpp
         core/image/ImageUtil.hpp
         core/io/ArgumentParser.hpp
+        core/io/Config.hpp
         core/io/Logger.hpp
         core/io/LoggerListenerOutput.hpp
         core/math/MathUtils.hpp
@@ -51,6 +52,7 @@ set(BERSERK_CORE_SRC
         core/image/Image.cpp
         core/image/ImageUtil.cpp
         core/io/ArgumentParser.cpp
+        core/io/Config.cpp
         core/io/Logger.cpp
         core/io/LoggerListenerOutput.cpp
         core/math/MathUtils.cpp

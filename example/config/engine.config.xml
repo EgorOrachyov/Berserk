@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config name="engine" description="Engine core config">
+
+    <section name="application">
+        <entry key="window.width" value="1280"/>
+        <entry key="window.height" value="720"/>
+        <entry key="window.caption" value="Test window"/>
+        <entry key="window.name" value="MAIN"/>
+    </section>
+
+</config>
