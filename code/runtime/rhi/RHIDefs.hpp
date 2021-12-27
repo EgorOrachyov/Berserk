@@ -452,7 +452,7 @@ inline const char *RHIGetShaderDataIdGLSL(RHIShaderDataType type) {
     }
 }
 
-inline const char* RHIGetShaderParamIdGLSL(RHIShaderParamType type) {
+inline const char *RHIGetShaderParamIdGLSL(RHIShaderParamType type) {
     switch (type) {
         case RHIShaderParamType::Sampler2d:
             return "sampler2D";

@@ -95,7 +95,7 @@ public:
         stream << "//<-- inserted generated uniform params -->//\n";
     }
 
-    static void GenerateUserCode(const String& code, std::stringstream &stream) {
+    static void GenerateUserCode(const String &code, std::stringstream &stream) {
         stream << "//<-- inserted user code -->//\n";
         stream << code << "\n";
         stream << "//<-- inserted user code -->//\n";

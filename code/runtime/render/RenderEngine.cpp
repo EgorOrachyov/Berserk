@@ -29,7 +29,7 @@
 
 BRK_NS_BEGIN
 
-ShaderManager & RenderEngine::GetShaderManager() const {
+ShaderManager &RenderEngine::GetShaderManager() const {
     return *mShaderManager;
 }
 
@@ -39,11 +39,9 @@ void RenderEngine::Init() {
 }
 
 void RenderEngine::PreUpdate() {
-
 }
 
 void RenderEngine::PostUpdate() {
-
 }
 
 BRK_NS_END

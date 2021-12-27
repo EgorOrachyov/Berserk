@@ -27,6 +27,8 @@
 
 #include <render/shader/ShaderTechnique.hpp>
 
+#include <algorithm>
+
 BRK_NS_BEGIN
 
 void ShaderTechnique::SetName(StringName name) {
