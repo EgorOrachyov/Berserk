@@ -30,7 +30,7 @@
 
 #include <Berserk.hpp>
 
-class TestRHISimpleQuad {
+class TestRHISimpleQuad final : public berserk::Application {
 public:
     struct Vertex {
         berserk::Vec3f pos;
@@ -43,7 +43,9 @@ public:
     };
 
     berserk::Engine *engine = nullptr;
+    berserk::EventDispatcher *dispatcher = nullptr;
     berserk::RHIDevice *device = nullptr;
+    berserk::FileSystem *fileSystem = nullptr;
 
     berserk::Ref<berserk::Window> window;
 
@@ -66,14 +68,37 @@ public:
     float gamma{};
 
 public:
-    TestRHISimpleQuad() {
+    TestRHISimpleQuad() = default;
+    ~TestRHISimpleQuad() override = default;
+
+    void OnWindowCreate() override {
+        BRK_INFO("Initialize game window");
+
         engine = &berserk::Engine::Instance();
+        dispatcher = &engine->GetEventDispatcher();
+        auto &windowManager = engine->GetWindowManager();
+
+        window = windowManager.CreateWindow(berserk::StringName("MAIN"), {1280, 720}, "Example window");
+
+        dispatcher->Subscribe(berserk::EventWindow::GetEventTypeStatic(), [](const berserk::Event &_event) {
+            auto event = dynamic_cast<const berserk::EventWindow *>(&_event);
+            if (event->GetType() == berserk::EventWindow::Type::CloseRequested) {
+                BRK_INFO("Request engine close");
+                berserk::Engine::Instance().RequestClose();
+            }
+            return false;
+        });
+    }
+
+    void OnInitialize() override {
+        fileSystem = &engine->GetFileSystem();
         device = &engine->GetRHIDevice();
-        window = engine->GetWindowManager().GetPrimaryWindow();
         angle = 0.0f;
         speed = 0.5f;
         gamma = device->GetDriverType() == berserk::RHIType::Vulkan ? 2.2f : 1.0f;
         commandList = device->GetCoreCommandList();
+
+        fileSystem->AddSearchPath(fileSystem->GetExecutableDir());
 
         InitShader();
         InitTexture();
@@ -82,6 +107,30 @@ public:
         InitResourceSet();
         InitRenderPass();
         InitPipeline();
+
+        auto &shaderManager = engine->GetRenderEngine().GetShaderManager();
+        auto options = berserk::Ref<berserk::ShaderCompileOptions>(new berserk::ShaderCompileOptions);
+        auto hshader = shaderManager.Load("shaders/forward-lit.shader.xml", options);
+    }
+
+    void OnFinalize() override {
+        window.Reset();
+        vertexBuffers.clear();
+        indexBuffer.Reset();
+        uniformBuffer.Reset();
+        vertexDeclaration.Reset();
+        sampler.Reset();
+        texture.Reset();
+        resourceSet.Reset();
+        shader.Reset();
+        renderPass.Reset();
+        pipeline.Reset();
+        commandList.Reset();
+    }
+
+    void OnPostUpdate() override {
+        Update();
+        Draw();
     }
 
     void Update() {
@@ -108,7 +157,7 @@ public:
         commandList->UpdateUniformBuffer(uniformBuffer, 0, sizeof(Transform), transform);
     }
 
-    void Draw() {
+    void Draw() const {
         using namespace berserk;
 
         RHIRenderPassBeginInfo beginInfo;
@@ -129,6 +178,7 @@ public:
         commandList->DrawIndexed(6, 0, 0, 1);
         commandList->EndRenderPass();
         commandList->SwapBuffers(window);
+        commandList->Submit();
     }
 
 protected:
@@ -176,9 +226,9 @@ protected:
         shaderDesc.language = RHIShaderLanguage::GLSL410GL;
         shaderDesc.stages.resize(2);
         shaderDesc.stages[0].type = RHIShaderType::Vertex;
-        shaderDesc.stages[0].sourceCode = Data::Make(vs);
+        shaderDesc.stages[0].sourceCode = vs;
         shaderDesc.stages[1].type = RHIShaderType::Fragment;
-        shaderDesc.stages[1].sourceCode = Data::Make(fs);
+        shaderDesc.stages[1].sourceCode = fs;
         shader = device->CreateShader(shaderDesc);
 
         assert(shader->GetCompilationStatus() == RHIShader::Status::Compiled);

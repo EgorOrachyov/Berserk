@@ -33,15 +33,23 @@ void Shader::SetName(StringName name) {
     mName = std::move(name);
 }
 
+void Shader::SetArchetype(StringName archetype) {
+    mArchetype = std::move(archetype);
+}
+
 void Shader::SetLoadPath(String loadPath) {
     mLoadPath = std::move(loadPath);
+}
+
+void Shader::SetDescription(String description) {
+    mDescription = std::move(description);
 }
 
 void Shader::SetVariation(ShaderVariation variation) {
     mVariation = variation;
 }
 
-void Shader::SetOptions(ShaderCompileOptions options) {
+void Shader::SetOptions(Ref<ShaderCompileOptions> options) {
     mOptions = std::move(options);
 }
 
@@ -49,8 +57,16 @@ void Shader::SetTechniques(std::vector<Ref<ShaderTechnique>> techniques) {
     mTechniques = std::move(techniques);
 }
 
+void Shader::SetAllOptions(std::vector<ShaderOption> options) {
+    mAllOptions = std::move(options);
+}
+
 void Shader::SetParams(Ref<ShaderParams> params) {
     mParams = std::move(params);
+}
+
+void Shader::SetDeclaration(Ref<RHIVertexDeclaration> declaration) {
+    mVertexDeclaration = std::move(declaration);
 }
 
 Ref<const ShaderTechnique> Shader::GetTechnique(const StringName &name) const {

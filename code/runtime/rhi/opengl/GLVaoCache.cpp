@@ -152,7 +152,6 @@ void GLVaoCache::CreateVaoObject(const GLVaoDescriptor &descriptor, GLVaoCache::
 void GLVaoCache::ReleaseVaoObject(const GLVaoCache::GLVaoValue &vao) const {
     glDeleteVertexArrays(1, &vao.handle);
     BRK_GL_CATCH_ERR();
-
     BRK_INFO("Release VAO hnd=" << vao.handle << " frame used=" << vao.frameUsed);
 }
 

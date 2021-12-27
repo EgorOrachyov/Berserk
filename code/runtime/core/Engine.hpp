@@ -127,6 +127,7 @@ private:
     friend class Application;
 
     void Init();
+    void PostInit();
     void Configure();
     void SetWindowManager(std::shared_ptr<WindowManager> windowManager);
     void SetInput(std::shared_ptr<Input> input);

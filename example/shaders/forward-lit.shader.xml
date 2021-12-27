@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<shader name="forward-lit" archetype="brk_shader_base" description="Forward lightning with single light source">
+    <options>
+        <option name="D_DEBUG_COLOR" description="Use extra color for debug"/>
+        <option name="D_ANIMATE" description="Use engine global time to animate"/>
+    </options>
+    <params>
+        <param name="ptDiffuse" uiName="Diffuse" type="texture2d" default="white"/>
+        <param name="ptMask" uiName="Mask" type="texture2d" default="white"/>
+        <param name="pMVP" uiName="MVP matrix" type="mat4"/>
+        <param name="pMV" uiName="MV matrix" type="mat4"/>
+        <param name="pLightPos" uiName="Light pos" type="float3" default="0 0 0"/>
+        <param name="pLightColor" uiName="Light color" type="float3" default="1 1 1"/>
+        <param name="pLightDir" uiName="Light direction" type="float3" default="0 0 -1"/>
+    </params>
+    <techniques>
+        <technique name="default" language="GLSL410GL">
+            <passes>
+                <pass name="main">
+                    <vertex>
+                        void vertex(inout Params params) {
+                            params.projPos = pMVP * vec4(getPos(), 1.0f);
+                            params.worldPos = vec3(pMV * vec4(getPos(), 1.0f));
+                            params.color = getColor();
+                            params.uv = getUV();
+                        }
+                    </vertex>
+                    <fragment>
+                        void fragment(inout Params params) {
+                            vec3 pos = getWorldPos();
+                            vec3 toL = normalize(pLightPos - pos);
+                            float dotLD = dot(toL, pLightDir);
+                            float mask = texture(ptMask, getUV()).r;
+                            vec3 color = texture(ptDiffuse, getUV()).rgb;
+                            vec3 result = color * pLightColor * (mask * dotLD);
+                            params.outColor = vec4(result, 1.0f);
+                        }
+                    </fragment>
+                </pass>
+            </passes>
+        </technique>
+    </techniques>
+</shader>

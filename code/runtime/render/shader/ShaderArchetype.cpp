@@ -25,4 +25,15 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include "ShaderArchetype.hpp"
+#include <render/shader/ShaderArchetype.hpp>
+
+#include <algorithm>
+
+BRK_NS_BEGIN
+
+bool ShaderArchetype::IsSupportedLanguage(RHIShaderLanguage language) const {
+    const auto &languages = GetSupportedLanguages();
+    return std::find(languages.begin(), languages.end(), language) != languages.end();
+}
+
+BRK_NS_END

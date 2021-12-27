@@ -90,16 +90,16 @@ void GLShader::Initialize() {
     String error;
 
     for (const auto &module : mStages) {
-        assert(module.sourceCode);
+        assert(!module.sourceCode.empty());
 
         auto shaderType = GLDefs::GetShaderType(module.type);
 
         GLuint handle = glCreateShader(shaderType);
         BRK_GL_CATCH_ERR();
 
-        const char *source = (const char *) module.sourceCode->GetData();
+        const char *source = module.sourceCode.c_str();
         const char *sources[] = {source};
-        GLint length[] = {(GLint) module.sourceCode->GetSize()};
+        GLint length[] = {(GLint) module.sourceCode.length()};
 
         glShaderSource(handle, 1, sources, length);
         BRK_GL_CATCH_ERR();
@@ -147,10 +147,10 @@ void GLShader::Initialize() {
             BRK_GL_CATCH_ERR();
         }
 
+        BRK_ERROR("Shader \"" << mName << "\" compilation: Error: " << error);
+
         mCompilerMessage = std::move(error);
         mCompilationStatus.store(Status::FailedCompile);
-
-        BRK_ERROR("Shader \"" << mName << "\" compilation: Error");
         return;
     }
 
@@ -199,11 +199,11 @@ void GLShader::Initialize() {
         glDeleteProgram(mHandle);
         BRK_GL_CATCH_ERR();
 
+        BRK_ERROR("Shader \"" << mName << "\" compilation: Error: " << error);
+
         mHandle = 0;
         mCompilerMessage = std::move(error);
         mCompilationStatus.store(Status::FailedCompile);
-
-        BRK_ERROR("Shader \"" << mName << "\" compilation: Error");
         return;
     }
     // Create reflection meta information

@@ -33,10 +33,6 @@ void ShaderTechnique::SetName(StringName name) {
     mName = std::move(name);
 }
 
-void ShaderTechnique::SetArchetype(StringName archetype) {
-    mArchetype = std::move(archetype);
-}
-
 void ShaderTechnique::SetTags(const ShaderTechniqueTags &tags) {
     mTags = tags;
 }
@@ -60,7 +56,6 @@ void ShaderTechnique::SetShader(class Shader *shader) {
 
 void ShaderTechnique::FillPipelineDesc(RHIGraphicsPipelineDesc &desc, uint32 passIdx) const {
     assert(passIdx < mPasses.size());
-    desc.declaration = mVertexDeclaration;
     mPasses[passIdx]->FillPipelineDesc(desc);
 }
 

@@ -196,4 +196,12 @@ const String &FileSystem::GetExecutablePath() {
     return mExecutablePath;
 }
 
+String FileSystem::GetExecutableDir() const {
+    auto pos = mExecutablePath.find_last_of('/');
+    if (pos != String::npos)
+        return mExecutablePath.substr(0, pos);
+
+    return ".";
+}
+
 BRK_NS_END

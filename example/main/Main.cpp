@@ -26,8 +26,9 @@
 /**********************************************************************************/
 
 #include <GameApplication.hpp>
+#include <TestRHISimpleQuad.hpp>
 
 int main(int argc, const char *const *argv) {
-    GameApplication application;
+    TestRHISimpleQuad application;
     return application.Run(argc, argv);
 }

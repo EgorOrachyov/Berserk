@@ -30,18 +30,12 @@
 
 #include <Berserk.hpp>
 
-#include <TestRHISimpleQuad.hpp>
-
 class GameApplication final : public berserk::Application {
 public:
     ~GameApplication() override = default;
     void OnWindowCreate() override;
     void OnInitialize() override;
     void OnFinalize() override;
-    void OnPostUpdate() override;
-
-private:
-    std::shared_ptr<TestRHISimpleQuad> testRhiSimpleQuad;
 };
 
 #endif//BERSERK_GAMEAPPLICATION_HPP

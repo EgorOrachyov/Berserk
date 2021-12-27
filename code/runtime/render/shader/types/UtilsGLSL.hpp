@@ -25,12 +25,13 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_SHADERARCHETYPE_HPP
-#define BERSERK_SHADERARCHETYPE_HPP
+#ifndef BERSERK_GLSLUTILS_HPP
+#define BERSERK_GLSLUTILS_HPP
 
-#include <core/Config.hpp>
-#include <core/Typedefs.hpp>
 #include <render/shader/Shader.hpp>
+#include <render/shader/ShaderParams.hpp>
+
+#include <sstream>
 
 BRK_NS_BEGIN
 
@@ -40,68 +41,65 @@ BRK_NS_BEGIN
  */
 
 /**
- * @class ShaderVariationHelper
- * @brief Assist in building variation key from options
+ * @class UtilsGLSL
+ * @brief GLSL source code processing utils
  */
-class ShaderVariationHelper {
+class UtilsGLSL {
 public:
-    /** Register new option */
-    BRK_API void AddOption(const StringName &option) {
-        auto find = mOptions.find(option);
-        if (find == mOptions.end()) mOptions[option] = mNextOption++;
+    static void GenerateDefines(const ShaderCompileOptions &options, std::stringstream &stream) {
+        stream << "//<-- inserted generated options -->//\n";
+        for (const auto &option : options.Get())
+            stream << "#define " << option << "\n";
+        stream << "//<-- inserted generated options -->//\n";
     }
 
-    /** @return Get option id mapping */
-    BRK_API uint32 GetOption(const StringName &option) {
-        auto find = mOptions.find(option);
-        if (find != mOptions.end()) return find->second;
-        return mOptions[option] = mNextOption++;
+    static void GenerateStruct(const char *name, const char *layout, const ShaderParams &params, std::stringstream &stream) {
+        stream << "//<-- inserted generated params code -->//\n";
+        stream << "layout (" << layout << ") uniform " << name << " {\n";
+
+        for (const auto &p : params.GetParams()) {
+            if (p.type == ShaderParamType::Data) {
+                auto array = p.arraySize > 1;
+                auto type = p.typeData;
+
+                stream << "  " << RHIGetShaderDataIdGLSL(type) << " " << p.name;
+
+                if (array)
+                    stream << "[" << p.arraySize << "];\n";
+                else
+                    stream << ";\n";
+            }
+        }
+
+        stream << "};\n";
+        stream << "//<-- inserted generated params code -->//\n";
     }
 
-    /** @return True if option registered */
-    BRK_API bool IsRegistered(const StringName &option) {
-        auto find = mOptions.find(option);
-        return find != mOptions.end();
+    static void GenerateUniformParams(const ShaderParams &params, std::stringstream &stream) {
+        stream << "//<-- inserted generated uniform params -->//\n";
+
+        for (const auto &p : params.GetParams()) {
+            if (p.type == ShaderParamType::Texture) {
+                auto array = p.arraySize > 1;
+                auto type = p.typeParam;
+
+                stream << "uniform " << RHIGetShaderParamIdGLSL(type) << " " << p.name;
+
+                if (array)
+                    stream << "[" << p.arraySize << "];\n";
+                else
+                    stream << ";\n";
+            }
+        }
+
+        stream << "//<-- inserted generated uniform params -->//\n";
     }
 
-private:
-    std::unordered_map<StringName, uint32> mOptions;
-    uint32 mNextOption = 0;
-};
-
-/**
- * @class ShaderArchetype
- * @brief Handles source code pre-processing of shaders with this archetype
- */
-class ShaderArchetype {
-public:
-    /** @brief Processing input data */
-    struct InputData {
-        Ref<ShaderCompileOptions> options{};
-        Ref<ShaderParams> params{};
-        String vertexCode{};
-        String fragmentCode{};
-        uint32 passIndex{};
-        RHIShaderLanguage language{};
-    };
-
-    /** @brief Processing output data */
-    struct OutputData {
-        bool failed = false;
-        String error{};
-        RHIShaderLanguage language{};
-        String vertexCode;
-        String fragmentCode;
-    };
-
-    BRK_API virtual ~ShaderArchetype() = default;
-    BRK_API virtual const StringName &GetArchetype() const = 0;
-    BRK_API virtual const std::vector<RHIShaderLanguage> &GetSupportedLanguages() const = 0;
-    BRK_API virtual bool IsSupportedLanguage(RHIShaderLanguage language) const;
-    BRK_API virtual void DefineOptions(std::vector<ShaderOption> &options) const = 0;
-    BRK_API virtual void DefineVariation(const ShaderCompileOptions &options, ShaderVariation &variation) = 0;
-    BRK_API virtual void DefineDeclaration(const ShaderCompileOptions &options, Ref<RHIVertexDeclaration> &declaration) = 0;
-    BRK_API virtual void Process(const InputData &inputData, OutputData &outputData) = 0;
+    static void GenerateUserCode(const String& code, std::stringstream &stream) {
+        stream << "//<-- inserted user code -->//\n";
+        stream << code << "\n";
+        stream << "//<-- inserted user code -->//\n";
+    }
 };
 
 /**
@@ -110,4 +108,4 @@ public:
 
 BRK_NS_END
 
-#endif//BERSERK_SHADERARCHETYPE_HPP
+#endif//BERSERK_GLSLUTILS_HPP

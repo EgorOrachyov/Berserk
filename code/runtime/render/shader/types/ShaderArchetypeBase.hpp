@@ -25,61 +25,40 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <core/Engine.hpp>
-#include <core/io/Logger.hpp>
-#include <render/shader/ShaderCompiler.hpp>
-#include <render/shader/ShaderManager.hpp>
-#include <render/shader/types/ShaderArchetypeBase.hpp>
+#ifndef BERSERK_SHADERARCHETYPEBASE_HPP
+#define BERSERK_SHADERARCHETYPEBASE_HPP
+
+#include <render/shader/ShaderArchetype.hpp>
+
+#include <unordered_map>
 
 BRK_NS_BEGIN
 
-ShaderManager::ShaderManager() {
-    // Register built-in engine archetypes
-    RegisterArchetype(std::make_shared<ShaderArchetypeBase>());
-}
+/**
+ * @addtogroup render
+ * @{
+ */
 
-Ref<const Shader> ShaderManager::Load(const String &filepath, const Ref<ShaderCompileOptions> &options) {
-    auto &engine = Engine::Instance();
-    auto &fs = engine.GetFileSystem();
-    auto fullPath = fs.GetFullFilePath(filepath);
+class ShaderArchetypeBase final : public ShaderArchetype {
+public:
+    ~ShaderArchetypeBase() override = default;
+    const StringName &GetArchetype() const override;
+    const std::vector<RHIShaderLanguage> &GetSupportedLanguages() const override;
+    void DefineOptions(std::vector<ShaderOption> &options) const override;
+    void DefineVariation(const ShaderCompileOptions &options, ShaderVariation &variation) override;
+    void DefineDeclaration(const ShaderCompileOptions &options, Ref<RHIVertexDeclaration> &declaration) override;
+    void Process(const InputData &inputData, OutputData &outputData) override;
 
-    // If no path, nothing to do
-    if (fullPath.empty()) {
-        BRK_ERROR("Failed to get full path for file=\"" << filepath << "\"");
-        return Ref<const Shader>();
-    }
+private:
+    StringName mArchetype{BRK_TEXT("brk_shader_base")};
+    std::vector<RHIShaderLanguage> mLanguages = {RHIShaderLanguage::GLSL410GL};
+    ShaderVariationHelper mVariationHelper;
+};
 
-    // Compile from scratch
-    ShaderCompiler compiler;
-    ShaderCompiler::CompilationResult result = compiler.Compile(fullPath, options);
-
-    // Check result
-    if (result.shader.IsNull()) {
-        BRK_ERROR("Failed to compile shader path=" << fullPath << " line=" << result.line << " error=" << result.error);
-        return Ref<const Shader>();
-    }
-
-    return result.shader.As<const Shader>();
-}
-
-bool ShaderManager::IsRegistered(const StringName &archetype) const {
-    auto query = mArchetypes.find(archetype);
-    return query != mArchetypes.end();
-}
-
-void ShaderManager::RegisterArchetype(ArchetypePtr archetypePtr) {
-    assert(archetypePtr);
-    const auto &name = archetypePtr->GetArchetype();
-    if (IsRegistered(name)) {
-        BRK_ERROR("Archetype with name=\"" << name << "\" already registered");
-        return;
-    }
-    mArchetypes.emplace(name, std::move(archetypePtr));
-}
-
-ShaderManager::ArchetypePtr ShaderManager::FindArchetype(const StringName &archetype) const {
-    auto query = mArchetypes.find(archetype);
-    return query != mArchetypes.end() ? query->second : ArchetypePtr();
-}
+/**
+ * @}
+ */
 
 BRK_NS_END
+
+#endif//BERSERK_SHADERARCHETYPEBASE_HPP

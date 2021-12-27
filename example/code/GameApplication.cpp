@@ -101,18 +101,8 @@ void GameApplication::OnInitialize() {
     // Load an image
     auto image = berserk::Image::LoadRgba(BRK_TEXT("../engine/resources/textures/icon.jpeg"), 4);
     BRK_INFO("Load image w=" << image.GetWidth() << " h=" << image.GetHeight() << " size=" << image.GetSizeBytes());
-
-    // Create test object
-    testRhiSimpleQuad = std::make_shared<TestRHISimpleQuad>();
-}
-
-void GameApplication::OnPostUpdate() {
-    testRhiSimpleQuad->Update();
-    testRhiSimpleQuad->Draw();
 }
 
 void GameApplication::OnFinalize() {
-    testRhiSimpleQuad.reset();
-
     BRK_INFO("Finalize game application");
 }

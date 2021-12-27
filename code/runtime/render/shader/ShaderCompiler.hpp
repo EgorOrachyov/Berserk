@@ -25,61 +25,75 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <core/Engine.hpp>
-#include <core/io/Logger.hpp>
-#include <render/shader/ShaderCompiler.hpp>
-#include <render/shader/ShaderManager.hpp>
-#include <render/shader/types/ShaderArchetypeBase.hpp>
+#ifndef BERSERK_SHADERCOMPILER_HPP
+#define BERSERK_SHADERCOMPILER_HPP
+
+#include <render/shader/Shader.hpp>
+
+#include <tinyxml2.hpp>
 
 BRK_NS_BEGIN
 
-ShaderManager::ShaderManager() {
-    // Register built-in engine archetypes
-    RegisterArchetype(std::make_shared<ShaderArchetypeBase>());
-}
+/**
+ * @addtogroup render
+ * @{
+ */
 
-Ref<const Shader> ShaderManager::Load(const String &filepath, const Ref<ShaderCompileOptions> &options) {
-    auto &engine = Engine::Instance();
-    auto &fs = engine.GetFileSystem();
-    auto fullPath = fs.GetFullFilePath(filepath);
+/**
+ * @class ShaderCompiler
+ * @brief Responsible to compile shaders in engine .shader.xml format
+ */
+class ShaderCompiler final {
+public:
+    /** @brief Compilation result */
+    struct CompilationResult {
+        String error;
+        uint32 line{};
+        Ref<Shader> shader;
+    };
 
-    // If no path, nothing to do
-    if (fullPath.empty()) {
-        BRK_ERROR("Failed to get full path for file=\"" << filepath << "\"");
-        return Ref<const Shader>();
-    }
+    BRK_API ShaderCompiler() = default;
+    BRK_API ~ShaderCompiler() = default;
 
-    // Compile from scratch
-    ShaderCompiler compiler;
-    ShaderCompiler::CompilationResult result = compiler.Compile(fullPath, options);
+    /**
+     * @brief Compile shader with specified full path and options
+     *
+     * @note Accepts shaders in `.shader.xml` format
+     *
+     * @param filepath Full file path to the shader file on disc
+     * @param options Options to compile with
+     *
+     * @return Compilation result
+     */
+    BRK_API CompilationResult Compile(const String &filepath, const Ref<ShaderCompileOptions> &options);
 
-    // Check result
-    if (result.shader.IsNull()) {
-        BRK_ERROR("Failed to compile shader path=" << fullPath << " line=" << result.line << " error=" << result.error);
-        return Ref<const Shader>();
-    }
+private:
+    bool ParseShader(tinyxml2::XMLElement *element);
+    bool ParseOptions(tinyxml2::XMLElement *element);
+    bool ParseParams(tinyxml2::XMLElement *element);
+    bool ParseTechniques(tinyxml2::XMLElement *element);
+    bool ParseTechnique(tinyxml2::XMLElement *element);
+    bool ParsePass(tinyxml2::XMLElement *element);
 
-    return result.shader.As<const Shader>();
-}
+    static bool ParseParamType(const char *typeName, ShaderParamType &type, RHIShaderDataType &dataType, RHIShaderParamType &paramType);
 
-bool ShaderManager::IsRegistered(const StringName &archetype) const {
-    auto query = mArchetypes.find(archetype);
-    return query != mArchetypes.end();
-}
+private:
+    CompilationResult mResult;
 
-void ShaderManager::RegisterArchetype(ArchetypePtr archetypePtr) {
-    assert(archetypePtr);
-    const auto &name = archetypePtr->GetArchetype();
-    if (IsRegistered(name)) {
-        BRK_ERROR("Archetype with name=\"" << name << "\" already registered");
-        return;
-    }
-    mArchetypes.emplace(name, std::move(archetypePtr));
-}
+    Ref<Shader> mShader;
+    Ref<ShaderCompileOptions> mOptions;
+    Ref<ShaderParams> mParams;
+    Ref<ShaderTechnique> mTechnique;
+    Ref<ShaderPass> mPass;
+    std::vector<ShaderOption> mAllOptions;
+    std::shared_ptr<ShaderArchetype> mArchetype{};
+    uint32 mPassIndex{};
+};
 
-ShaderManager::ArchetypePtr ShaderManager::FindArchetype(const StringName &archetype) const {
-    auto query = mArchetypes.find(archetype);
-    return query != mArchetypes.end() ? query->second : ArchetypePtr();
-}
+/**
+ * @}
+ */
 
 BRK_NS_END
+
+#endif//BERSERK_SHADERCOMPILER_HPP

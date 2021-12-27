@@ -61,6 +61,9 @@ int Application::Run(int argc, const char *const *argv) {
     auto gRhiDevice = GLDevice::Make(gWindowManager->GetMakeContextCurrentFunc(), gWindowManager->GetSwapBuffersFunc());
     gEngine->SetRHIDevice(gRhiDevice);
 
+    // After RHI is created
+    gEngine->PostInit();
+
     // Post init call
     OnInitialize();
 

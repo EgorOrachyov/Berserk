@@ -55,12 +55,6 @@ public:
     BRK_API void SetName(StringName name);
     /** Set pass shader program */
     BRK_API void SetShader(Ref<RHIShader> shader);
-    /** Set pass depth stencil state */
-    BRK_API void SetDepthStencil(const RHIDepthStencilState &state);
-    /** Set pass raster state */
-    BRK_API void SetRasterState(const RHIRasterState &state);
-    /** Set pass blend state */
-    BRK_API void SetBlendState(RHIBlendState state);
     /** Set technique this pass belongs to */
     BRK_API void SetTechnique(class ShaderTechnique *technique);
 
@@ -74,12 +68,6 @@ public:
     BRK_API const StringName &GetName() const { return mName; }
     /** @return Pass shader program */
     BRK_API const Ref<RHIShader> &GetShader() const { return mShader; }
-    /** @return Pass depth stencil state */
-    BRK_API const RHIDepthStencilState &GetDepthStencil() const { return mDepthStencil; }
-    /** @return Pass raster state */
-    BRK_API const RHIRasterState &GetRasterState() const { return mRasterState; }
-    /** @return Pass blend state */
-    BRK_API const RHIBlendState &GetBlendState() const { return mBlendState; }
     /** @return Technique this pass belongs to */
     BRK_API class ShaderTechnique *GetTechnique() const { return mTechnique; }
 
@@ -88,9 +76,6 @@ private:
     StringName mName;
     /** Pipeline setup */
     Ref<RHIShader> mShader{};
-    RHIDepthStencilState mDepthStencil{};
-    RHIRasterState mRasterState{};
-    RHIBlendState mBlendState{};
     /** Parent technique this pass belongs to  */
     class ShaderTechnique *mTechnique = nullptr;
 };

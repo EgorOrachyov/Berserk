@@ -128,11 +128,13 @@ void Engine::Init() {
     mEventDispatcher = std::unique_ptr<EventDispatcher>(new EventDispatcher());
     mRenderEngine = std::unique_ptr<RenderEngine>(new RenderEngine());
 
-    // Init call
-    mRenderEngine->Init();
-
     // Provide singleton
     gEngine = this;
+}
+
+void Engine::PostInit() {
+    // Init call
+    mRenderEngine->Init();
 }
 
 void Engine::Configure() {

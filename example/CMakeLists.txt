@@ -86,3 +86,6 @@ if (GAME_BUILD_EXE)
     target_include_directories(${APP_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/code)
     target_link_libraries(${APP_NAME} PRIVATE berserk_runtime_dynamic)
 endif ()
+
+message(STATUS "Copy example content into binary directory")
+file(COPY . DESTINATION ${CMAKE_BINARY_DIR}/example/)

@@ -25,15 +25,18 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
+#include <core/Memory.hpp>
 #include <core/io/Logger.hpp>
 #include <render/shader/ShaderParams.hpp>
 
 #include <cassert>
+#include <sstream>
 
 BRK_NS_BEGIN
 
 ShaderParams::ShaderParams(std::vector<ShaderParam> params) : mParams(std::move(params)) {
     Build();
+    InitDefaults();
 }
 
 bool ShaderParams::HasParam(const StringName &name) const {
@@ -76,7 +79,7 @@ void ShaderParams::Build() {
                 mDataParamsInfo.emplace_back();
                 mDataParamsInfo[nextDataInfo].size = GetRHIShaderDataTypeSize(param.typeData);
                 mDataParamsInfo[nextDataInfo].offset = nextDataOffset;
-                param.id = nextDataInfo;
+                param.info = nextDataInfo;
                 nextDataOffset += mDataParamsInfo[nextDataInfo].size * param.arraySize;
                 nextDataInfo += 1;
                 break;
@@ -85,7 +88,7 @@ void ShaderParams::Build() {
                 assert(param.typeParam != RHIShaderParamType::Unknown);
                 mTextureParamsInfo.emplace_back();
                 mTextureParamsInfo[nextTextureInfo].offset = nextTextureLocation;
-                param.id = nextTextureInfo;
+                param.info = nextTextureInfo;
                 nextTextureLocation += param.arraySize;
                 nextTextureInfo += 1;
                 break;
@@ -96,8 +99,61 @@ void ShaderParams::Build() {
         }
     }
 
+    mParamsLight.resize(mParams.size());
+    for (uint32 id = 0; id < static_cast<uint32>(mParams.size()); id++) {
+        const auto &param = mParams[id];
+        auto &paramLight = mParamsLight[id];
+
+        paramLight.info = param.info;
+        paramLight.arraySize = param.arraySize;
+        paramLight.type = param.type;
+        paramLight.typeData = param.typeData;
+        paramLight.typeParam = param.typeParam;
+    }
+
     mDataSize = nextDataOffset;
     mTexturesCount = nextTextureLocation;
+}
+
+void ShaderParams::InitDefaults() {
+    mDefaultDataValues.resize(GetDataSize(), 0x0);
+
+    for (const auto &param : GetParams()) {
+        if (param.type == ShaderParamType::Data) {
+            const auto &defaultValue = param.defaultValue;
+
+            // Parse value accordingly to type of param
+            if (!defaultValue.empty()) {
+                auto type = param.typeData;
+                auto &paramInfo = mDataParamsInfo[param.info];
+                auto offset = paramInfo.offset;
+
+                assert(RHIIsFloatBaseType(type) && "Only float defaults supported");
+                assert(RHIIsVectorType(type) && "Only vector defaults supported");
+
+                std::stringstream s(defaultValue);
+
+                // Parse vector
+                if (RHIIsVectorType(type)) {
+                    auto components = RHIGetVectorComponentsCount(type);
+
+                    // Initialize first value
+                    for (uint32 c = 0; c < components; c++) {
+                        float singleValue = 0;
+                        s >> singleValue;
+                        Memory::Copy(mDefaultDataValues.data() + offset + c * sizeof(float), &singleValue, sizeof(float));
+                    }
+
+                    // If array, copy to all values v[0] -> v[1] .. v[n-1]
+                    auto arraySize = param.arraySize;
+                    auto size = paramInfo.size;
+                    for (uint32 i = 1; i < arraySize; i++) {
+                        Memory::Copy(mDefaultDataValues.data() + offset + i * size, mDefaultDataValues.data() + offset, size);
+                    }
+                }
+            }
+        }
+    }
 }
 
 BRK_NS_END

@@ -47,7 +47,7 @@ BRK_NS_BEGIN
  * @class ShaderParamType
  * @brief General types of shader params
  */
-enum class ShaderParamType {
+enum class ShaderParamType : uint8 {
     /** Texture resource (some of RHI texture 2d, array, cube and etc.)*/
     Texture,
     /** Raw data value (some of vec of int, float values and etc.) */
@@ -63,6 +63,8 @@ enum class ShaderParamType {
 struct ShaderParam {
     /** Name of the param to set in material */
     StringName name;
+    /** Optional param name displayed for the user */
+    StringName uiName;
     /** Optional param description */
     String description;
     /** Optional default param value */
@@ -70,7 +72,7 @@ struct ShaderParam {
     /** Size of array (if more than 1 value within a param) */
     uint32 arraySize = 1;
     /** [Internal] */
-    uint32 id = 0xffffffff;
+    uint32 info = 0xffffffff;
     /** Type of param */
     ShaderParamType type = ShaderParamType::Unknown;
     /** [Internal] RHI type of variable */
@@ -86,6 +88,15 @@ struct ShaderParam {
 class ShaderParams final : public RefCnt {
 public:
     static const uint32 INVALID_ID = 0xffffffff;
+
+    /** Reduced param info for fast look-up */
+    struct ShaderParamLight {
+        uint32 info = 0xffffffff;
+        uint32 arraySize = 0u;
+        ShaderParamType type = ShaderParamType::Unknown;
+        RHIShaderDataType typeData = RHIShaderDataType::Unknown;
+        RHIShaderParamType typeParam = RHIShaderParamType::Unknown;
+    };
 
     /** @brief Info about raw data param */
     struct DataParamInfo {
@@ -109,8 +120,12 @@ public:
     BRK_API const ShaderParam *GetParam(const StringName &name) const;
     BRK_API const ShaderParam &GetParam(uint32 id) const;
 
+    /** @return Look-up info */
+    BRK_API const std::unordered_map<StringName, uint32> &GetParamLookUp() const { return mParamLookUp; }
     /** @return Params list */
     BRK_API const std::vector<ShaderParam> &GetParams() const { return mParams; }
+    /** @return Params list */
+    BRK_API const std::vector<ShaderParamLight> &GetParamsLight() const { return mParamsLight; }
     /** @return Data params info */
     BRK_API const std::vector<DataParamInfo> &GetDataParamsInfo() const { return mDataParamsInfo; }
     /** @return Texture params info */
@@ -122,22 +137,20 @@ public:
     uint32 GetTexturesCount() const { return mTexturesCount; }
 
 protected:
-    /** Define params layout */
+    /** Define params layout and build look-up structure */
     void Build();
+    /** Define default values */
+    void InitDefaults();
 
 private:
-    /** Find location of param by public name */
-    std::unordered_map<StringName, uint32> mParamLookUp;
-    /** Params list */
-    std::vector<ShaderParam> mParams;
-    /** Data params info */
-    std::vector<DataParamInfo> mDataParamsInfo;
-    /** Texture params info */
-    std::vector<TextureParamInfo> mTextureParamsInfo;
-    /** Byte size of buffer required to pack all data params */
-    uint32 mDataSize = 0;
-    /** Total number of textures (includes array size factor) */
-    uint32 mTexturesCount = 0;
+    std::unordered_map<StringName, uint32> mParamLookUp; /** Find location of param by public name */
+    std::vector<ShaderParam> mParams;                    /** Params list */
+    std::vector<ShaderParamLight> mParamsLight;          /** Fast look-up (reduced param info) */
+    std::vector<DataParamInfo> mDataParamsInfo;          /** Data params info */
+    std::vector<TextureParamInfo> mTextureParamsInfo;    /** Texture params info */
+    std::vector<unsigned char> mDefaultDataValues;       /** [Internal] Default data values */
+    uint32 mDataSize = 0;                                /** Byte size of buffer required to pack all data params */
+    uint32 mTexturesCount = 0;                           /** Total number of textures (includes array size factor) */
 };
 
 BRK_NS_END

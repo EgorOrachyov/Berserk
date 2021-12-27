@@ -116,7 +116,7 @@ public:
  */
 struct RHIShaderStageDesc {
     RHIShaderType type;
-    Ref<Data> sourceCode;
+    String sourceCode;
 };
 
 /**

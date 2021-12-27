@@ -31,6 +31,8 @@
 #include <core/Config.hpp>
 #include <core/Typedefs.hpp>
 
+#include <core/string/String.hpp>
+
 BRK_NS_BEGIN
 
 /**
@@ -403,6 +405,195 @@ inline uint32 GetRHIShaderDataTypeSize(RHIShaderDataType type) {
         default:
             return 0;
     }
+}
+
+inline const char *RHIGetShaderDataIdGLSL(RHIShaderDataType type) {
+    switch (type) {
+        case RHIShaderDataType::Float1:
+            return "float";
+        case RHIShaderDataType::Float2:
+            return "vec2";
+        case RHIShaderDataType::Float3:
+            return "vec3";
+        case RHIShaderDataType::Float4:
+            return "vec4";
+        case RHIShaderDataType::Int1:
+            return "int";
+        case RHIShaderDataType::Int2:
+            return "ivec2";
+        case RHIShaderDataType::Int3:
+            return "ivec3";
+        case RHIShaderDataType::Int4:
+            return "ivec4";
+        case RHIShaderDataType::Uint1:
+            return "uint";
+        case RHIShaderDataType::Uint2:
+            return "uvec2";
+        case RHIShaderDataType::Uint3:
+            return "uvec3";
+        case RHIShaderDataType::Uint4:
+            return "uvec4";
+        case RHIShaderDataType::Bool1:
+            return "bool";
+        case RHIShaderDataType::Bool2:
+            return "bvec2";
+        case RHIShaderDataType::Bool3:
+            return "bvec3";
+        case RHIShaderDataType::Bool4:
+            return "bvec4";
+        case RHIShaderDataType::Mat2:
+            return "mat2";
+        case RHIShaderDataType::Mat3:
+            return "mat3";
+        case RHIShaderDataType::Mat4:
+            return "mat4";
+        default:
+            return "__none__";
+    }
+}
+
+inline const char* RHIGetShaderParamIdGLSL(RHIShaderParamType type) {
+    switch (type) {
+        case RHIShaderParamType::Sampler2d:
+            return "sampler2D";
+        case RHIShaderParamType::Sampler2dArray:
+            return "sampler2DArray";
+        case RHIShaderParamType::Sampler3d:
+            return "sampler3D";
+        case RHIShaderParamType::SamplerCube:
+            return "samplerCube";
+        default:
+            return "__none__";
+    }
+}
+
+inline bool RHIIsIntegralBaseType(RHIShaderDataType type) {
+    switch (type) {
+        case RHIShaderDataType::Int1:
+        case RHIShaderDataType::Int2:
+        case RHIShaderDataType::Int3:
+        case RHIShaderDataType::Int4:
+        case RHIShaderDataType::Uint1:
+        case RHIShaderDataType::Uint2:
+        case RHIShaderDataType::Uint3:
+        case RHIShaderDataType::Uint4:
+        case RHIShaderDataType::Bool1:
+        case RHIShaderDataType::Bool2:
+        case RHIShaderDataType::Bool3:
+        case RHIShaderDataType::Bool4:
+            return true;
+        default:
+            return false;
+    }
+}
+
+inline bool RHIIsFloatBaseType(RHIShaderDataType type) {
+    switch (type) {
+        case RHIShaderDataType::Float1:
+        case RHIShaderDataType::Float2:
+        case RHIShaderDataType::Float3:
+        case RHIShaderDataType::Float4:
+        case RHIShaderDataType::Mat2:
+        case RHIShaderDataType::Mat3:
+        case RHIShaderDataType::Mat4:
+            return true;
+        default:
+            return false;
+    }
+}
+
+inline bool RHIIsIntegralBaseSignedType(RHIShaderDataType type) {
+    switch (type) {
+        case RHIShaderDataType::Int1:
+        case RHIShaderDataType::Int2:
+        case RHIShaderDataType::Int3:
+        case RHIShaderDataType::Int4:
+            return true;
+        default:
+            return false;
+    }
+}
+
+inline bool RHIIsVectorType(RHIShaderDataType type) {
+    switch (type) {
+        case RHIShaderDataType::Float1:
+        case RHIShaderDataType::Float2:
+        case RHIShaderDataType::Float3:
+        case RHIShaderDataType::Float4:
+        case RHIShaderDataType::Int1:
+        case RHIShaderDataType::Int2:
+        case RHIShaderDataType::Int3:
+        case RHIShaderDataType::Int4:
+        case RHIShaderDataType::Uint1:
+        case RHIShaderDataType::Uint2:
+        case RHIShaderDataType::Uint3:
+        case RHIShaderDataType::Uint4:
+        case RHIShaderDataType::Bool1:
+        case RHIShaderDataType::Bool2:
+        case RHIShaderDataType::Bool3:
+        case RHIShaderDataType::Bool4:
+            return true;
+        default:
+            return false;
+    }
+}
+
+inline uint32 RHIGetVectorComponentsCount(RHIShaderDataType type) {
+    switch (type) {
+        case RHIShaderDataType::Float1:
+        case RHIShaderDataType::Int1:
+        case RHIShaderDataType::Uint1:
+        case RHIShaderDataType::Bool1:
+            return 1;
+        case RHIShaderDataType::Float2:
+        case RHIShaderDataType::Int2:
+        case RHIShaderDataType::Uint2:
+        case RHIShaderDataType::Bool2:
+            return 2;
+        case RHIShaderDataType::Float3:
+        case RHIShaderDataType::Int3:
+        case RHIShaderDataType::Uint3:
+        case RHIShaderDataType::Bool3:
+            return 3;
+        case RHIShaderDataType::Float4:
+        case RHIShaderDataType::Int4:
+        case RHIShaderDataType::Uint4:
+        case RHIShaderDataType::Bool4:
+            return 4;
+        default:
+            return 0;
+    }
+}
+
+inline void RHIGetMatrixSize(RHIShaderDataType type, uint32 &rows, uint32 &cols) {
+    switch (type) {
+        case RHIShaderDataType::Mat2:
+            rows = cols = 2u;
+            return;
+        case RHIShaderDataType::Mat3:
+            rows = cols = 3u;
+            return;
+        case RHIShaderDataType::Mat4:
+            rows = cols = 4u;
+            return;
+        default:
+            return;
+    }
+}
+
+inline RHIShaderLanguage RHIParseShaderLanguage(const char *language) {
+    static String g_GLSL410GL("GLSL410GL");
+    static String g_GLSL450GL("GLSL450GL");
+    static String g_GLSL450VK("GLSL450VK");
+
+    if (g_GLSL410GL == language)
+        return RHIShaderLanguage::GLSL410GL;
+    else if (g_GLSL450GL == language)
+        return RHIShaderLanguage::GLSL450GL;
+    else if (g_GLSL450VK == language)
+        return RHIShaderLanguage::GLSL450VK;
+    else
+        return RHIShaderLanguage::Unknown;
 }
 
 /**

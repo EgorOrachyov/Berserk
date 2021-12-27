@@ -213,6 +213,12 @@ public:
      */
     BRK_API const String &GetExecutablePath();
 
+    /**
+     * @brief Path to the executable directory where file of the application is located
+     * @return Path
+     */
+    BRK_API String GetExecutableDir() const;
+
 private:
     void Init();
     void ClearCache();

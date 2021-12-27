@@ -48,14 +48,7 @@ BRK_NS_BEGIN
  * @brief Technique tags used to select techniques
  */
 enum class ShaderTechniqueTag {
-    /** Can be used for LoD-0 level */
-    LodLevel0 = 0,
-    /** Can be used for LoD-1 level */
-    LodLevel1 = 1,
-    /** Can be used for LoD-2 level */
-    LodLevel2 = 2,
-    /** Can be used for LoD-3 level */
-    LodLevel03 = 3
+
 };
 
 /**
@@ -76,10 +69,8 @@ public:
 
     /** Set technique name */
     BRK_API void SetName(StringName name);
-    /** Set technique archetype */
-    BRK_API void SetArchetype(StringName archetype);
     /** Set tags */
-    BRK_API void SetTags(const ShaderTechniqueTags& tags);
+    BRK_API void SetTags(const ShaderTechniqueTags &tags);
     /** Set type of api for the technique */
     BRK_API void SetRHIType(RHIType rhiType);
     /** Set type of shader language used to write technique */
@@ -104,8 +95,6 @@ public:
 
     /** @return Technique name */
     BRK_API const StringName &GetName() const { return mName; }
-    /** @return Technique archetype */
-    BRK_API const StringName &GetArchetype() const { return mArchetype; }
     /** @return Set of tags */
     BRK_API const ShaderTechniqueTags &GetTags() const { return mTags; }
     /** @return Type of api for the technique */
@@ -114,16 +103,12 @@ public:
     BRK_API RHIShaderLanguage GetRHILanguage() const { return mRHILanguage; }
     /** @return List of passes */
     BRK_API const std::vector<Ref<ShaderPass>> &GetPasses() const { return mPasses; }
-    /** @return Input configuration (common for all passes) */
-    BRK_API const Ref<RHIVertexDeclaration> &GetVertexDeclaration() const { return mVertexDeclaration; }
     /** @return Shader this technique belongs to */
     BRK_API class Shader *GetShader() const { return mShader; }
 
 private:
     /** Technique name */
     StringName mName;
-    /** Technique archetype */
-    StringName mArchetype;
     /** Set of tags */
     ShaderTechniqueTags mTags;
     /** Type of api for the technique */
@@ -132,8 +117,6 @@ private:
     RHIShaderLanguage mRHILanguage = RHIShaderLanguage::Unknown;
     /** List of passes */
     std::vector<Ref<ShaderPass>> mPasses;
-    /** Input configuration (common for all passes) */
-    Ref<RHIVertexDeclaration> mVertexDeclaration;
     /** Shader this technique belongs to */
     class Shader *mShader = nullptr;
     /** Cached compile status */

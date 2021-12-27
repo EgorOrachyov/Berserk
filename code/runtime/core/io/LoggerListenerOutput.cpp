@@ -41,7 +41,7 @@ void LoggerListenerOutput::SetLevel(Logger::Level level) {
 }
 
 void LoggerListenerOutput::OnEntry(const Logger::Entry &entry) const {
-    if (static_cast<uint32>(mLevel) >= static_cast<uint32>(entry.level)) {
+    if (static_cast<uint32>(mLevel) <= static_cast<uint32>(entry.level)) {
         auto &output = Engine::Instance().GetOutput();
         auto &fs = Engine::Instance().GetFileSystem();
 

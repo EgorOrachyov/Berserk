@@ -38,18 +38,6 @@ void ShaderPass::SetShader(Ref<RHIShader> shader) {
     mShader = std::move(shader);
 }
 
-void ShaderPass::SetDepthStencil(const RHIDepthStencilState &state) {
-    mDepthStencil = state;
-}
-
-void ShaderPass::SetRasterState(const RHIRasterState &state) {
-    mRasterState = state;
-}
-
-void ShaderPass::SetBlendState(RHIBlendState state) {
-    mBlendState = state;
-}
-
 void ShaderPass::SetTechnique(class ShaderTechnique *technique) {
     mTechnique = technique;
 }
@@ -63,9 +51,6 @@ void ShaderPass::FillPipelineDesc(RHIGraphicsPipelineDesc &desc) const {
     }
 #endif
     desc.shader = mShader;
-    desc.depthStencilState = mDepthStencil;
-    desc.rasterState = mRasterState;
-    desc.blendState = mBlendState;
 }
 
 bool ShaderPass::IsCompiled() const {
