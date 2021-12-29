@@ -134,6 +134,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a20c2094cd78e72fcdcb498b90567772e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a9397521993f2375e50c46e6af697ae"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHIDevice.html#a4a9397521993f2375e50c46e6af697ae">UpdateResourceSet</a> (const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIResourceSet.html">RHIResourceSet</a> &gt; &amp;set, const <a class="el" href="classRHIResourceSetDesc.html">RHIResourceSetDesc</a> &amp;desc)</td></tr>
 <tr class="separator:a4a9397521993f2375e50c46e6af697ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6499cb2ae20c316276199a19b19d76ca"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHIDevice.html#a6499cb2ae20c316276199a19b19d76ca">UpdateResourceSet_RT</a> (const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIResourceSet.html">RHIResourceSet</a> &gt; &amp;set, const <a class="el" href="classRHIResourceSetDesc.html">RHIResourceSetDesc</a> &amp;desc)=0</td></tr>
+<tr class="separator:a6499cb2ae20c316276199a19b19d76ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfc6c5c623cedfd0706f9108cc1e4701"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHIDevice.html#abfc6c5c623cedfd0706f9108cc1e4701">GenerateMipMaps</a> (const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHITexture.html">RHITexture</a> &gt; &amp;texture)</td></tr>
 <tr class="separator:abfc6c5c623cedfd0706f9108cc1e4701"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3357cca36e17134b9283f7fde1c052a"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHICommandList.html">RHICommandList</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHIDevice.html#ad3357cca36e17134b9283f7fde1c052a">GetCoreCommandList</a> ()=0</td></tr>
@@ -802,6 +804,45 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Update resource set </p>
+
+</div>
+</div>
+<a id="a6499cb2ae20c316276199a19b19d76ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6499cb2ae20c316276199a19b19d76ca">&#9670;&nbsp;</a></span>UpdateResourceSet_RT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void RHIDevice::UpdateResourceSet_RT </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIResourceSet.html">RHIResourceSet</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>set</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classRHIResourceSetDesc.html">RHIResourceSetDesc</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Update resource set </p>
+
+<p>Implemented in <a class="el" href="classGLDevice.html#acac6cfd3d868c4fb401cb22570284947">GLDevice</a>.</p>
 
 </div>
 </div>

@@ -133,6 +133,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae80cc8ed544cf3b4274f2b625d66027d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92462cf9d8f1815c2ff3d6e3c924a2cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHICommandList.html">RHICommandList</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGLDevice.html#a92462cf9d8f1815c2ff3d6e3c924a2cc">GetCoreCommandList</a> () override</td></tr>
 <tr class="separator:a92462cf9d8f1815c2ff3d6e3c924a2cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acac6cfd3d868c4fb401cb22570284947"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGLDevice.html#acac6cfd3d868c4fb401cb22570284947">UpdateResourceSet_RT</a> (const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIResourceSet.html">RHIResourceSet</a> &gt; &amp;set, const <a class="el" href="classRHIResourceSetDesc.html">RHIResourceSetDesc</a> &amp;desc) override</td></tr>
+<tr class="separator:acac6cfd3d868c4fb401cb22570284947"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86f1f2dfc2f5b61d6bd7dd79b99acd9f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classGLDevice.html#abc407ba50c5472d6bce313261dd32f34">MakeContextCurrentFunc</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGLDevice.html#a86f1f2dfc2f5b61d6bd7dd79b99acd9f">GetContextFunc</a> ()</td></tr>
 <tr class="separator:a86f1f2dfc2f5b61d6bd7dd79b99acd9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d5776549b9a870d30b7278dc9b4bb82"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classGLDevice.html#a120126748ccb22cdee17f2ca9902f729">SwapBuffersFunc</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGLDevice.html#a3d5776549b9a870d30b7278dc9b4bb82">GetSwapFunc</a> ()</td></tr>
@@ -708,6 +710,45 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Created device; null if failed </dd></dl>
+
+</div>
+</div>
+<a id="acac6cfd3d868c4fb401cb22570284947"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acac6cfd3d868c4fb401cb22570284947">&#9670;&nbsp;</a></span>UpdateResourceSet_RT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GLDevice::UpdateResourceSet_RT </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIResourceSet.html">RHIResourceSet</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>set</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classRHIResourceSetDesc.html">RHIResourceSetDesc</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Update resource set </p>
+
+<p>Implements <a class="el" href="classRHIDevice.html#a6499cb2ae20c316276199a19b19d76ca">RHIDevice</a>.</p>
 
 </div>
 </div>

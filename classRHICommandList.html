@@ -111,8 +111,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2862ac4d72b2a8b2bdd92a2d2706da6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88c5958ce45b653b44b8fc2bb97a76eb"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHICommandList.html#a88c5958ce45b653b44b8fc2bb97a76eb">UpdateTextureCube</a> (const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHITexture.html">RHITexture</a> &gt; &amp;texture, <a class="el" href="group__rhi.html#ga0b9b496f2db1ca0942e4f6a08b767dbb">RHITextureCubemapFace</a> face, <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> mipLevel, const <a class="el" href="group__core.html#ga51725e9979df3b69ce31fe6cc2824534">Rect2u</a> &amp;region, const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classData.html">Data</a> &gt; &amp;data)=0</td></tr>
 <tr class="separator:a88c5958ce45b653b44b8fc2bb97a76eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b35e625e683fc6f7ce9081aaf826b8b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHICommandList.html#a7b35e625e683fc6f7ce9081aaf826b8b">UpdateResourceSet</a> (const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIResourceSet.html">RHIResourceSet</a> &gt; &amp;set, const <a class="el" href="classRHIResourceSetDesc.html">RHIResourceSetDesc</a> &amp;desc)=0</td></tr>
-<tr class="separator:a7b35e625e683fc6f7ce9081aaf826b8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58f0695c2f2f6907c6ae8a01a613da38"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHICommandList.html#a58f0695c2f2f6907c6ae8a01a613da38">GenerateMipMaps</a> (const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHITexture.html">RHITexture</a> &gt; &amp;texture)=0</td></tr>
 <tr class="separator:a58f0695c2f2f6907c6ae8a01a613da38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2dc16aff1ae9ea347258cffcf698d14"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRHICommandList.html#ac2dc16aff1ae9ea347258cffcf698d14">BeginRenderPass</a> (const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIRenderPass.html">RHIRenderPass</a> &gt; &amp;renderPass, const <a class="el" href="classRHIRenderPassBeginInfo.html">RHIRenderPassBeginInfo</a> &amp;beginInfo)=0</td></tr>
@@ -619,45 +617,6 @@ Additional Inherited Members</h2></td></tr>
 <p>Update index buffer with data </p>
 
 <p>Implemented in <a class="el" href="classGLCommandList.html#a63009c9f205eeaccefea5f2d79e6a414">GLCommandList</a>.</p>
-
-</div>
-</div>
-<a id="a7b35e625e683fc6f7ce9081aaf826b8b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b35e625e683fc6f7ce9081aaf826b8b">&#9670;&nbsp;</a></span>UpdateResourceSet()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void RHICommandList::UpdateResourceSet </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIResourceSet.html">RHIResourceSet</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>set</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classRHIResourceSetDesc.html">RHIResourceSetDesc</a> &amp;&#160;</td>
-          <td class="paramname"><em>desc</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Update resource set </p>
-
-<p>Implemented in <a class="el" href="classGLCommandList.html#ae65583f7e6947478707f5392d5753d41">GLCommandList</a>.</p>
 
 </div>
 </div>
