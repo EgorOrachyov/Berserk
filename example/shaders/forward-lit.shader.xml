@@ -11,6 +11,7 @@
         <param name="pLightPos" uiName="Light pos" type="float3" default="0 0 10"/>
         <param name="pLightColor" uiName="Light color" type="float3" default="1 1 1"/>
         <param name="pLightDir" uiName="Light direction" type="float3" default="0 0 -1"/>
+        <param name="pTime" uiName="Time" type="float1" description="Time used to animate texture" default="0.1"/>
     </params>
     <techniques>
         <technique name="default" language="GLSL410GL">
@@ -29,14 +30,21 @@
                         void fragment(inout Params params) {
                             vec3 pos = getWorldPos();
                             vec3 norm = getWorldNorm();
+                            vec2 uv = getUV();
+                        #ifdef D_ANIMATE
+                            uv += vec2(pTime, sin(pTime));
+                        #endif //D_ANIMATE
                             if (!gl_FrontFacing)
                                 norm = -norm;
                             vec3 toL = normalize(pLightPos - pos);
                             float dotLN = max(0.0f, dot(toL, norm));
                             vec3 color = getColor();
-                            vec3 diffuse = texture(ptDiffuse, getUV()).rgb;
+                            vec3 diffuse = texture(ptDiffuse, uv).rgb;
                             vec3 result = color * diffuse * pLightColor * dotLN;
                             params.outColor = vec4(result, 1.0f);
+                        #ifdef D_DEBUG_COLOR
+                            params.outColor = vec4(diffuse * vec3(1, 0.1f, 0.1f), 1);
+                        #endif //D_DEBUG_COLOR
                         }
                     </fragment>
                 </pass>

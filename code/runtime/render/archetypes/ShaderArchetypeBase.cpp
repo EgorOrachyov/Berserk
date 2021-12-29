@@ -26,8 +26,8 @@
 /**********************************************************************************/
 
 #include <core/Engine.hpp>
-#include <render/shader/types/ShaderArchetypeBase.hpp>
-#include <render/shader/types/UtilsGLSL.hpp>
+#include <render/archetypes/ShaderArchetypeBase.hpp>
+#include <render/archetypes/UtilsGLSL.hpp>
 
 #include <sstream>
 #include <vector>
@@ -106,7 +106,7 @@ void ShaderArchetypeBase::Process(const ShaderArchetype::InputData &inputData, S
        << "vec3 getColor() { return _vColor; }\n"
        << "vec2 getUV() { return _vUV; }\n";
 
-    UtilsGLSL::GenerateStruct("ShaderParams", "std140", *inputData.params, vs);
+    UtilsGLSL::GenerateStruct(SHADER_PARAMS_BLOCK, "std140", *inputData.params, vs);
     UtilsGLSL::GenerateUserCode(inputData.vertexCode, vs);
 
     vs << "void main() { \n"
@@ -145,7 +145,7 @@ void ShaderArchetypeBase::Process(const ShaderArchetype::InputData &inputData, S
        << "vec3 getColor() { return _fsColor; }\n"
        << "vec2 getUV() { return _fsUV; }\n";
 
-    UtilsGLSL::GenerateStruct("ShaderParams", "std140", *inputData.params, fs);
+    UtilsGLSL::GenerateStruct(SHADER_PARAMS_BLOCK, "std140", *inputData.params, fs);
     UtilsGLSL::GenerateUniformParams(*inputData.params, fs);
     UtilsGLSL::GenerateUserCode(inputData.fragmentCode, fs);
 
@@ -160,7 +160,7 @@ void ShaderArchetypeBase::Process(const ShaderArchetype::InputData &inputData, S
     outputData.fragmentCode = fs.str();
     outputData.language = RHIShaderLanguage::GLSL410GL;
 
-#if 1
+#ifdef BERSERK_DEBUG
     auto &output = Engine::Instance().GetOutput();
     output.Write("Vertex shader code\n");
     output.Write(outputData.vertexCode);

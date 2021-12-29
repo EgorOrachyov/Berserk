@@ -75,6 +75,9 @@ private:
  */
 class ShaderArchetype {
 public:
+    /** Name of params block generated from material params */
+    static constexpr const char *const SHADER_PARAMS_BLOCK = BRK_TEXT("ShaderParams");
+
     /** @brief Processing input data */
     struct InputData {
         Ref<ShaderCompileOptions> options{};

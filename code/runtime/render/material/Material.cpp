@@ -107,6 +107,54 @@ void Material::SetFloat4(const StringName &name, const Vec4f &value, uint32 arra
     SetDataParam(name, RHIShaderDataType::Float4, &value, arrayIndex);
 }
 
+void Material::SetInt1(const StringName &name, int32 value, uint32 arrayIndex) {
+    SetDataParam(name, RHIShaderDataType::Int1, &value, arrayIndex);
+}
+
+void Material::SetInt2(const StringName &name, const Vec2i &value, uint32 arrayIndex) {
+    SetDataParam(name, RHIShaderDataType::Int2, &value, arrayIndex);
+}
+
+void Material::SetInt3(const StringName &name, const Vec3i &value, uint32 arrayIndex) {
+    SetDataParam(name, RHIShaderDataType::Int3, &value, arrayIndex);
+}
+
+void Material::SetInt4(const StringName &name, const Vec4i &value, uint32 arrayIndex) {
+    SetDataParam(name, RHIShaderDataType::Int4, &value, arrayIndex);
+}
+
+void Material::SetUInt1(const StringName &name, uint32 value, uint32 arrayIndex) {
+    SetDataParam(name, RHIShaderDataType::Uint1, &value, arrayIndex);
+}
+
+void Material::SetUInt2(const StringName &name, const Vec2u &value, uint32 arrayIndex) {
+    SetDataParam(name, RHIShaderDataType::Uint2, &value, arrayIndex);
+}
+
+void Material::SetUInt3(const StringName &name, const Vec3u &value, uint32 arrayIndex) {
+    SetDataParam(name, RHIShaderDataType::Uint3, &value, arrayIndex);
+}
+
+void Material::SetUInt4(const StringName &name, const Vec4u &value, uint32 arrayIndex) {
+    SetDataParam(name, RHIShaderDataType::Uint4, &value, arrayIndex);
+}
+
+void Material::SetBool1(const StringName &name, bool value, uint32 arrayIndex) {
+    SetDataParam(name, RHIShaderDataType::Bool1, &value, arrayIndex);
+}
+
+void Material::SetBool2(const StringName &name, const Vec2b &value, uint32 arrayIndex) {
+    SetDataParam(name, RHIShaderDataType::Bool2, &value, arrayIndex);
+}
+
+void Material::SetBool3(const StringName &name, const Vec3b &value, uint32 arrayIndex) {
+    SetDataParam(name, RHIShaderDataType::Bool3, &value, arrayIndex);
+}
+
+void Material::SetBool4(const StringName &name, const Vec4b &value, uint32 arrayIndex) {
+    SetDataParam(name, RHIShaderDataType::Bool4, &value, arrayIndex);
+}
+
 void Material::SetMat2(const StringName &name, const Mat2x2f &value, uint32 arrayIndex) {
     SetDataParam(name, RHIShaderDataType::Mat2, &value, arrayIndex);
 }

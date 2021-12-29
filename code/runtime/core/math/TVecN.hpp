@@ -599,6 +599,18 @@ using Vec2f = TVecN<float, 2>;
 using Vec3f = TVecN<float, 3>;
 using Vec4f = TVecN<float, 4>;
 
+using Vec2i = TVecN<int32, 2>;
+using Vec3i = TVecN<int32, 3>;
+using Vec4i = TVecN<int32, 4>;
+
+using Vec2u = TVecN<uint32, 2>;
+using Vec3u = TVecN<uint32, 3>;
+using Vec4u = TVecN<uint32, 4>;
+
+using Vec2b = TVecN<bool, 2>;
+using Vec3b = TVecN<bool, 3>;
+using Vec4b = TVecN<bool, 4>;
+
 using Point2i = TVecN<int32, 2>;
 using Point2f = TVecN<float, 2>;
 using Size2i = TVecN<int32, 2>;

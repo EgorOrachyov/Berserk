@@ -142,6 +142,150 @@ public:
     BRK_API void SetFloat4(const StringName &name, const Vec4f &value, uint32 arrayIndex = 0);
 
     /**
+     * @brief Set material int parameter
+     *
+     * Updates material parameter value.
+     * Makes material in dirty state, so requires actual rhi parameters repacking.
+     *
+     * @param name Parameter name
+     * @param value Parameter value
+     * @param arrayIndex Optional array index to modify; for not array params by default is 0
+     */
+    BRK_API void SetInt1(const StringName &name, int32 value, uint32 arrayIndex = 0);
+
+    /**
+     * @brief Set material int vec2 parameter
+     *
+     * Updates material parameter value.
+     * Makes material in dirty state, so requires actual rhi parameters repacking.
+     *
+     * @param name Parameter name
+     * @param value Parameter value
+     * @param arrayIndex Optional array index to modify; for not array params by default is 0
+     */
+    BRK_API void SetInt2(const StringName &name, const Vec2i &value, uint32 arrayIndex = 0);
+
+    /**
+     * @brief Set material int vec3 parameter
+     *
+     * Updates material parameter value.
+     * Makes material in dirty state, so requires actual rhi parameters repacking.
+     *
+     * @param name Parameter name
+     * @param value Parameter value
+     * @param arrayIndex Optional array index to modify; for not array params by default is 0
+     */
+    BRK_API void SetInt3(const StringName &name, const Vec3i &value, uint32 arrayIndex = 0);
+
+    /**
+     * @brief Set material int vec4 parameter
+     *
+     * Updates material parameter value.
+     * Makes material in dirty state, so requires actual rhi parameters repacking.
+     *
+     * @param name Parameter name
+     * @param value Parameter value
+     * @param arrayIndex Optional array index to modify; for not array params by default is 0
+     */
+    BRK_API void SetInt4(const StringName &name, const Vec4i &value, uint32 arrayIndex = 0);
+
+    /**
+     * @brief Set material uint parameter
+     *
+     * Updates material parameter value.
+     * Makes material in dirty state, so requires actual rhi parameters repacking.
+     *
+     * @param name Parameter name
+     * @param value Parameter value
+     * @param arrayIndex Optional array index to modify; for not array params by default is 0
+     */
+    BRK_API void SetUInt1(const StringName &name, uint32 value, uint32 arrayIndex = 0);
+
+    /**
+     * @brief Set material uint vec2 parameter
+     *
+     * Updates material parameter value.
+     * Makes material in dirty state, so requires actual rhi parameters repacking.
+     *
+     * @param name Parameter name
+     * @param value Parameter value
+     * @param arrayIndex Optional array index to modify; for not array params by default is 0
+     */
+    BRK_API void SetUInt2(const StringName &name, const Vec2u &value, uint32 arrayIndex = 0);
+
+    /**
+     * @brief Set material uint vec3 parameter
+     *
+     * Updates material parameter value.
+     * Makes material in dirty state, so requires actual rhi parameters repacking.
+     *
+     * @param name Parameter name
+     * @param value Parameter value
+     * @param arrayIndex Optional array index to modify; for not array params by default is 0
+     */
+    BRK_API void SetUInt3(const StringName &name, const Vec3u &value, uint32 arrayIndex = 0);
+
+    /**
+     * @brief Set material uint vec4 parameter
+     *
+     * Updates material parameter value.
+     * Makes material in dirty state, so requires actual rhi parameters repacking.
+     *
+     * @param name Parameter name
+     * @param value Parameter value
+     * @param arrayIndex Optional array index to modify; for not array params by default is 0
+     */
+    BRK_API void SetUInt4(const StringName &name, const Vec4u &value, uint32 arrayIndex = 0);
+
+    /**
+     * @brief Set material bool parameter
+     *
+     * Updates material parameter value.
+     * Makes material in dirty state, so requires actual rhi parameters repacking.
+     *
+     * @param name Parameter name
+     * @param value Parameter value
+     * @param arrayIndex Optional array index to modify; for not array params by default is 0
+     */
+    BRK_API void SetBool1(const StringName &name, bool value, uint32 arrayIndex = 0);
+
+    /**
+     * @brief Set material bool vec2 parameter
+     *
+     * Updates material parameter value.
+     * Makes material in dirty state, so requires actual rhi parameters repacking.
+     *
+     * @param name Parameter name
+     * @param value Parameter value
+     * @param arrayIndex Optional array index to modify; for not array params by default is 0
+     */
+    BRK_API void SetBool2(const StringName &name, const Vec2b &value, uint32 arrayIndex = 0);
+
+    /**
+     * @brief Set material bool vec3 parameter
+     *
+     * Updates material parameter value.
+     * Makes material in dirty state, so requires actual rhi parameters repacking.
+     *
+     * @param name Parameter name
+     * @param value Parameter value
+     * @param arrayIndex Optional array index to modify; for not array params by default is 0
+     */
+    BRK_API void SetBool3(const StringName &name, const Vec3b &value, uint32 arrayIndex = 0);
+
+    /**
+     * @brief Set material bool vec4 parameter
+     *
+     * Updates material parameter value.
+     * Makes material in dirty state, so requires actual rhi parameters repacking.
+     *
+     * @param name Parameter name
+     * @param value Parameter value
+     * @param arrayIndex Optional array index to modify; for not array params by default is 0
+     */
+    BRK_API void SetBool4(const StringName &name, const Vec4b &value, uint32 arrayIndex = 0);
+
+    /**
      * @brief Set material float mat2x2 parameter
      *
      * Updates material parameter value.

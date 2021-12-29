@@ -49,8 +49,6 @@ BRK_NS_BEGIN
  */
 class MaterialParams final : public RefCnt {
 public:
-    static constexpr const char *const SHADER_PARAMS_BLOCK = BRK_TEXT("ShaderParams");
-
     /** Creates material params for material (uses material technique) */
     BRK_API explicit MaterialParams(class Material &material);
     BRK_API ~MaterialParams() override = default;

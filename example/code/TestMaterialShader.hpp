@@ -140,6 +140,7 @@ public:
         static StringName pMVP("pMVP");
         static StringName pModel("pModel");
         static StringName pLightColor("pLightColor");
+        static StringName pTime("pTime");
 
         Vec3f lightColor(color1 * 0.8f + 2.0f, 1.0f - color2, color3);
 
@@ -147,6 +148,7 @@ public:
         material->SetMat4(pMVP, projViewModel);
         material->SetMat3(pModel, model.SubMatrix<3, 3>(0, 0));
         material->SetFloat3(pLightColor, lightColor);
+        material->SetFloat1(pTime, engine->GetTime());
         material->UpdatePack();
     }
 
@@ -203,15 +205,20 @@ protected:
         samplerDesc.magFilter = RHISamplerMagFilter::Linear;
         samplerDesc.maxAnisotropy = 16.0f;
         samplerDesc.useAnisotropy = true;
-        samplerDesc.u = RHISamplerRepeatMode::ClampToEdge;
-        samplerDesc.v = RHISamplerRepeatMode::ClampToEdge;
-        samplerDesc.w = RHISamplerRepeatMode::ClampToEdge;
+        samplerDesc.u = RHISamplerRepeatMode::Repeat;
+        samplerDesc.v = RHISamplerRepeatMode::Repeat;
+        samplerDesc.w = RHISamplerRepeatMode::Repeat;
         sampler = device->CreateSampler(samplerDesc);
     }
 
     void InitMaterial() {
         auto &shaderManager = engine->GetRenderEngine().GetShaderManager();
         auto options = berserk::Ref<berserk::ShaderCompileOptions>(new berserk::ShaderCompileOptions);
+
+#ifdef BERSERK_DEBUG
+        options->Set(berserk::StringName("D_DEBUG_COLOR"));
+#endif
+        options->Set(berserk::StringName("D_ANIMATE"));
 
         shader = shaderManager.Load("shaders/forward-lit.shader.xml", options);
         material = berserk::Ref<berserk::Material>(new berserk::Material(shader));

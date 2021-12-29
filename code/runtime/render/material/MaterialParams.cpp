@@ -28,6 +28,7 @@
 #include <core/Engine.hpp>
 #include <render/material/Material.hpp>
 #include <render/material/MaterialParams.hpp>
+#include <render/shader/ShaderArchetype.hpp>
 
 BRK_NS_BEGIN
 
@@ -39,7 +40,7 @@ MaterialParams::MaterialParams(class Material &material) {
     mUniformBuffers.reserve(passes.size());
 
     auto &device = Engine::Instance().GetRHIDevice();
-    static StringName nShaderParams(SHADER_PARAMS_BLOCK);
+    static StringName nShaderParams(ShaderArchetype::SHADER_PARAMS_BLOCK);
 
     for (auto &pass : passes) {
         const auto &passProgram = pass->GetShader();
@@ -73,7 +74,7 @@ void MaterialParams::Update(class Material &material) {
     assert(mResourceSets.size() == passes.size());
 
     auto &device = Engine::Instance().GetRHIDevice();
-    static StringName nShaderParams(SHADER_PARAMS_BLOCK);
+    static StringName nShaderParams(ShaderArchetype::SHADER_PARAMS_BLOCK);
 
     // NOTE: in future maybe we need to track modified resources and values and
     // update only them (use history mark or track modified by boolean flags).
@@ -171,7 +172,7 @@ void MaterialParams::Update(class Material &material) {
 
         if (mUniformBuffers[passIdx].IsNotNull()) {
             // Update uniform buffer
-            device.UpdateUniformBuffer(mUniformBuffers[passIdx], 0, dataBuffer->GetSize(), dataBuffer);
+            device.UpdateUniformBuffer(mUniformBuffers[passIdx], 0, static_cast<uint32>(dataBuffer->GetSize()), dataBuffer);
 
             // Add info about uniform buffer of the resource set for the pass
             auto blockInfo = meta->paramBlocks.find(nShaderParams);

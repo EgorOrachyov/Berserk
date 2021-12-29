@@ -1,5 +1,7 @@
 set(BERSERK_RENDER_HEADER
         render/RenderEngine.hpp
+        render/archetypes/ShaderArchetypeBase.hpp
+        render/archetypes/UtilsGLSL.hpp
         render/material/Material.hpp
         render/material/MaterialParams.hpp
         render/shader/Shader.hpp
@@ -9,12 +11,11 @@ set(BERSERK_RENDER_HEADER
         render/shader/ShaderParams.hpp
         render/shader/ShaderPass.hpp
         render/shader/ShaderTechnique.hpp
-        render/shader/types/UtilsGLSL.hpp
-        render/shader/types/ShaderArchetypeBase.hpp
         )
 
 set(BERSERK_RENDER_SRC
         render/RenderEngine.cpp
+        render/archetypes/ShaderArchetypeBase.cpp
         render/material/Material.cpp
         render/material/MaterialParams.cpp
         render/shader/Shader.cpp
@@ -24,5 +25,4 @@ set(BERSERK_RENDER_SRC
         render/shader/ShaderParams.cpp
         render/shader/ShaderPass.cpp
         render/shader/ShaderTechnique.cpp
-        render/shader/types/ShaderArchetypeBase.cpp
         )

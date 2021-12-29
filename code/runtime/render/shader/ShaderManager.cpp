@@ -29,7 +29,8 @@
 #include <core/io/Logger.hpp>
 #include <render/shader/ShaderCompiler.hpp>
 #include <render/shader/ShaderManager.hpp>
-#include <render/shader/types/ShaderArchetypeBase.hpp>
+
+#include <render/archetypes/ShaderArchetypeBase.hpp>
 
 BRK_NS_BEGIN
 
