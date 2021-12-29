@@ -380,8 +380,12 @@ void GLShader::InitializeMeta() {
             GLenum type;
             GLint array;
             GLuint memberIndex = membersIndices[j];
+            GLint matrixStride;
 
             glGetActiveUniform(mHandle, memberIndex, RHILimits::MAX_SHADER_PARAM_NAME, &length, &array, &type, name);
+            BRK_GL_CATCH_ERR();
+
+            glGetActiveUniformsiv(mHandle, 1, &memberIndex, GL_UNIFORM_MATRIX_STRIDE, &matrixStride);
             BRK_GL_CATCH_ERR();
 
             assert(length < RHILimits::MAX_SHADER_PARAM_NAME);
@@ -389,6 +393,7 @@ void GLShader::InitializeMeta() {
             RHIShaderMeta::DataParam dataParam;
             dataParam.name = std::move(StringName(String(name, (std::strchr(name, ']') ? length - 3 : length))));
             dataParam.arraySize = array;
+            dataParam.matrixStride = GLDefs::IsMatrixType(type) ? static_cast<uint16>(matrixStride) : 0;
             dataParam.arrayStride = uniformsArrayStride[memberIndex] > 0 ? uniformsArrayStride[memberIndex] : 0;
             dataParam.elementSize = GLDefs::GetShaderDataSize(type);
             dataParam.type = GLDefs::GetShaderDataParam(type);

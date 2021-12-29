@@ -69,6 +69,11 @@ public:
         }
     }
 
+    TMatMxN(const T *vs, size_t count) {
+        assert(count == GetSize());
+        Memory::Copy(values, vs, sizeof(T) * count);
+    }
+
     TMatMxN(T m_00, T m_01,
             T m_10, T m_11) noexcept : TMatMxN() {
         static_assert(M >= 2 && N >= 2, "Cannot apply to this type");

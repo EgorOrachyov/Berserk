@@ -60,7 +60,6 @@ public:
     BRK_API void UpdateTexture2D(const Ref<RHITexture> &texture, uint32 mipLevel, const Rect2u &region, const Ref<Data> &data) override;
     BRK_API void UpdateTexture2DArray(const Ref<RHITexture> &texture, uint32 arrayIndex, uint32 mipLevel, const Rect2u &region, const Ref<Data> &data) override;
     BRK_API void UpdateTextureCube(const Ref<RHITexture> &texture, RHITextureCubemapFace face, uint32 mipLevel, const Rect2u &region, const Ref<Data> &data) override;
-    BRK_API void UpdateResourceSet(const Ref<RHIResourceSet> &set, const RHIResourceSetDesc &desc) override;
     BRK_API void GenerateMipMaps(const Ref<RHITexture> &texture) override;
 
     BRK_API void BeginRenderPass(const Ref<RHIRenderPass> &renderPass, const RHIRenderPassBeginInfo &beginInfo) override;

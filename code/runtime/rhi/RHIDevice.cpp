@@ -155,14 +155,12 @@ void RHIDevice::UpdateResourceSet(const Ref<RHIResourceSet> &set, const RHIResou
     BRK_RENDER_THREAD_SETUP
 
     if (rhit.OnThread()) {
-        auto cmd = GetCoreCommandList();
-        cmd->UpdateResourceSet(set, desc);
+        UpdateResourceSet_RT(set, desc);
         return;
     }
 
     rhit.EnqueueUpdate([=]() {
-        auto cmd = GetCoreCommandList();
-        cmd->UpdateResourceSet(set, desc);
+        UpdateResourceSet_RT(set, desc);
     });
 }
 

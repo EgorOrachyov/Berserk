@@ -605,6 +605,17 @@ public:
         }
     }
 
+    static bool IsMatrixType(GLenum type) {
+        switch (type) {
+            case GL_FLOAT_MAT2:
+            case GL_FLOAT_MAT3:
+            case GL_FLOAT_MAT4:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     static RHIShaderParamType GetShaderParam(GLenum type) {
         switch (type) {
             case GL_SAMPLER_2D:

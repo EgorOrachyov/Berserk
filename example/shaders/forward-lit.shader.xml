@@ -6,10 +6,9 @@
     </options>
     <params>
         <param name="ptDiffuse" uiName="Diffuse" type="texture2d" default="white"/>
-        <param name="ptMask" uiName="Mask" type="texture2d" default="white"/>
         <param name="pMVP" uiName="MVP matrix" type="mat4"/>
-        <param name="pMV" uiName="MV matrix" type="mat4"/>
-        <param name="pLightPos" uiName="Light pos" type="float3" default="0 0 0"/>
+        <param name="pModel" uiName="Model matrix" type="mat3"/>
+        <param name="pLightPos" uiName="Light pos" type="float3" default="0 0 10"/>
         <param name="pLightColor" uiName="Light color" type="float3" default="1 1 1"/>
         <param name="pLightDir" uiName="Light direction" type="float3" default="0 0 -1"/>
     </params>
@@ -20,7 +19,8 @@
                     <vertex>
                         void vertex(inout Params params) {
                             params.projPos = pMVP * vec4(getPos(), 1.0f);
-                            params.worldPos = vec3(pMV * vec4(getPos(), 1.0f));
+                            params.worldPos = pModel * getPos();
+                            params.worldNorm = pModel * getNorm();
                             params.color = getColor();
                             params.uv = getUV();
                         }
@@ -28,11 +28,14 @@
                     <fragment>
                         void fragment(inout Params params) {
                             vec3 pos = getWorldPos();
+                            vec3 norm = getWorldNorm();
+                            if (!gl_FrontFacing)
+                                norm = -norm;
                             vec3 toL = normalize(pLightPos - pos);
-                            float dotLD = dot(toL, pLightDir);
-                            float mask = texture(ptMask, getUV()).r;
-                            vec3 color = texture(ptDiffuse, getUV()).rgb;
-                            vec3 result = color * pLightColor * (mask * dotLD);
+                            float dotLN = max(0.0f, dot(toL, norm));
+                            vec3 color = getColor();
+                            vec3 diffuse = texture(ptDiffuse, getUV()).rgb;
+                            vec3 result = color * diffuse * pLightColor * dotLN;
                             params.outColor = vec4(result, 1.0f);
                         }
                     </fragment>

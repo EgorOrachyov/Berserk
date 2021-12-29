@@ -72,6 +72,7 @@ list(APPEND GAME_SRC main/Main.cpp)
 # Head files
 list(APPEND GAME_HEADERS
         code/GameApplication.hpp
+        code/TestMaterialShader.hpp
         code/TestRHISimpleQuad.hpp)
 
 # Source file

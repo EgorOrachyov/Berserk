@@ -53,9 +53,19 @@ const ShaderParam *ShaderParams::GetParam(const StringName &name) const {
     return query != mParamLookUp.end() ? &GetParam(query->second) : nullptr;
 }
 
+const ShaderParams::ShaderParamLight *ShaderParams::GetParamLight(const StringName &name) const {
+    auto query = mParamLookUp.find(name);
+    return query != mParamLookUp.end() ? &GetParamLight(query->second) : nullptr;
+}
+
 const ShaderParam &ShaderParams::GetParam(uint32 id) const {
     assert(id < mParams.size());
     return mParams[id];
+}
+
+const ShaderParams::ShaderParamLight &ShaderParams::GetParamLight(uint32 id) const {
+    assert(id < mParamsLight.size());
+    return mParamsLight[id];
 }
 
 void ShaderParams::Build() {
@@ -128,28 +138,45 @@ void ShaderParams::InitDefaults() {
                 auto &paramInfo = mDataParamsInfo[param.info];
                 auto offset = paramInfo.offset;
 
-                assert(RHIIsFloatBaseType(type) && "Only float defaults supported");
-                assert(RHIIsVectorType(type) && "Only vector defaults supported");
-
                 std::stringstream s(defaultValue);
 
-                // Parse vector
-                if (RHIIsVectorType(type)) {
-                    auto components = RHIGetVectorComponentsCount(type);
+                const uint32 MAX_VALUES = 4 * 4;
 
-                    // Initialize first value
-                    for (uint32 c = 0; c < components; c++) {
-                        float singleValue = 0;
-                        s >> singleValue;
-                        Memory::Copy(mDefaultDataValues.data() + offset + c * sizeof(float), &singleValue, sizeof(float));
-                    }
+                int valuesInt[MAX_VALUES];
+                float valuesFloat[MAX_VALUES];
+                unsigned int valuesUint[MAX_VALUES];
 
-                    // If array, copy to all values v[0] -> v[1] .. v[n-1]
-                    auto arraySize = param.arraySize;
-                    auto size = paramInfo.size;
-                    for (uint32 i = 1; i < arraySize; i++) {
-                        Memory::Copy(mDefaultDataValues.data() + offset + i * size, mDefaultDataValues.data() + offset, size);
+                uint32 next = 0;
+                uint32 toRead = RHIGetBaseElementsCount(type);
+
+                assert(toRead < MAX_VALUES);
+
+                // Initialize first value
+                if (RHIIsFloatBaseType(type)) {
+                    for (uint32 c = 0; c < toRead; c++) {
+                        s >> valuesFloat[next];
+                        next += 1;
                     }
+                    Memory::Copy(mDefaultDataValues.data() + offset, valuesFloat, sizeof(float) * toRead);
+                } else if (RHIIsIntegralBaseSignedType(type)) {
+                    for (uint32 c = 0; c < toRead; c++) {
+                        s >> valuesInt[next];
+                        next += 1;
+                    }
+                    Memory::Copy(mDefaultDataValues.data() + offset, valuesInt, sizeof(int) * toRead);
+                } else {
+                    for (uint32 c = 0; c < toRead; c++) {
+                        s >> valuesUint[next];
+                        next += 1;
+                    }
+                    Memory::Copy(mDefaultDataValues.data() + offset, valuesUint, sizeof(unsigned int) * toRead);
+                }
+
+                // If array, copy to all values v[0] -> v[1] .. v[n-1]
+                auto arraySize = param.arraySize;
+                auto size = paramInfo.size;
+                for (uint32 i = 1; i < arraySize; i++) {
+                    Memory::Copy(mDefaultDataValues.data() + offset + i * size, mDefaultDataValues.data() + offset, size);
                 }
             }
         }

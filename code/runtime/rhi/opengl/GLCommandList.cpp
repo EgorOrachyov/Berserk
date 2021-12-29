@@ -80,13 +80,6 @@ void GLCommandList::UpdateTextureCube(const Ref<RHITexture> &texture, RHITexture
     native->UpdateTextureCube(face, mipLevel, region, data);
 }
 
-void GLCommandList::UpdateResourceSet(const Ref<RHIResourceSet> &set, const RHIResourceSetDesc &desc) {
-    assert(!mInRenderPass);
-    assert(set.IsNotNull());
-    auto native = (GLResourceSet *) set.Get();
-    native->Update(desc);
-}
-
 void GLCommandList::GenerateMipMaps(const Ref<RHITexture> &texture) {
     BRK_GL_TEXTURE_SETUP;
     native->GenerateMipMaps();

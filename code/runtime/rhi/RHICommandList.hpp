@@ -73,9 +73,6 @@ public:
     /** Update chosen face, region and mip level of cube texture */
     BRK_API virtual void UpdateTextureCube(const Ref<RHITexture> &texture, RHITextureCubemapFace face, uint32 mipLevel, const Rect2u &region, const Ref<Data> &data) = 0;
 
-    /** Update resource set */
-    BRK_API virtual void UpdateResourceSet(const Ref<RHIResourceSet> &set, const RHIResourceSetDesc &desc) = 0;
-
     /** Generate mip maps for the texture (2d, 2d array, cube) */
     BRK_API virtual void GenerateMipMaps(const Ref<RHITexture> &texture) = 0;
 

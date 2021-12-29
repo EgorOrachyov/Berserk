@@ -118,7 +118,9 @@ public:
 
     BRK_API uint32 GetParamId(const StringName &name) const;
     BRK_API const ShaderParam *GetParam(const StringName &name) const;
+    BRK_API const ShaderParamLight *GetParamLight(const StringName &name) const;
     BRK_API const ShaderParam &GetParam(uint32 id) const;
+    BRK_API const ShaderParamLight &GetParamLight(uint32 id) const;
 
     /** @return Look-up info */
     BRK_API const std::unordered_map<StringName, uint32> &GetParamLookUp() const { return mParamLookUp; }
@@ -130,6 +132,8 @@ public:
     BRK_API const std::vector<DataParamInfo> &GetDataParamsInfo() const { return mDataParamsInfo; }
     /** @return Texture params info */
     BRK_API const std::vector<TextureParamInfo> &GetTextureParamsInfo() const { return mTextureParamsInfo; }
+    /** @return Default data params values */
+    BRK_API const std::vector<unsigned char> &GetDefaultDataValues() const { return mDefaultDataValues; }
 
     /** Byte size of buffer required to pack all data params */
     uint32 GetDataSize() const { return mDataSize; }

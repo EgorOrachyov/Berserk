@@ -235,6 +235,12 @@ Ref<RHICommandList> GLDevice::GetCoreCommandList() {
     return mCoreCommandList.As<RHICommandList>();
 }
 
+void GLDevice::UpdateResourceSet_RT(const Ref<RHIResourceSet> &set, const RHIResourceSetDesc &desc) {
+    assert(set.IsNotNull());
+    auto native = (GLResourceSet *) set.Get();
+    native->Update(desc);
+}
+
 #undef BRK_GL_CREATE_RESOURCE
 
 GLDevice::MakeContextCurrentFunc &GLDevice::GetContextFunc() {

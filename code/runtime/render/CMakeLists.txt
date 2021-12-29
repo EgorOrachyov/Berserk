@@ -1,5 +1,7 @@
 set(BERSERK_RENDER_HEADER
         render/RenderEngine.hpp
+        render/material/Material.hpp
+        render/material/MaterialParams.hpp
         render/shader/Shader.hpp
         render/shader/ShaderArchetype.hpp
         render/shader/ShaderCompiler.hpp
@@ -13,6 +15,8 @@ set(BERSERK_RENDER_HEADER
 
 set(BERSERK_RENDER_SRC
         render/RenderEngine.cpp
+        render/material/Material.cpp
+        render/material/MaterialParams.cpp
         render/shader/Shader.cpp
         render/shader/ShaderArchetype.cpp
         render/shader/ShaderCompiler.cpp

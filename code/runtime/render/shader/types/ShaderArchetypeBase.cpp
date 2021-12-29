@@ -53,22 +53,27 @@ void ShaderArchetypeBase::DefineVariation(const ShaderCompileOptions &options, S
 
 void ShaderArchetypeBase::DefineDeclaration(const ShaderCompileOptions &options, Ref<RHIVertexDeclaration> &declaration) {
     RHIVertexDeclarationDesc vertexDeclarationDesc;
-    vertexDeclarationDesc.resize(3);
+    vertexDeclarationDesc.resize(4);
     vertexDeclarationDesc[0].type = RHIVertexElementType::Float3;
     vertexDeclarationDesc[0].frequency = RHIVertexFrequency::PerVertex;
     vertexDeclarationDesc[0].buffer = 0;
-    vertexDeclarationDesc[0].offset = sizeof(float) * (0 + 0 + 0);
-    vertexDeclarationDesc[0].stride = sizeof(float) * (3 + 3 + 2);
+    vertexDeclarationDesc[0].offset = sizeof(float) * (0 + 0 + 0 + 0);
+    vertexDeclarationDesc[0].stride = sizeof(float) * (3 + 3 + 3 + 2);
     vertexDeclarationDesc[1].type = RHIVertexElementType::Float3;
     vertexDeclarationDesc[1].frequency = RHIVertexFrequency::PerVertex;
     vertexDeclarationDesc[1].buffer = 0;
-    vertexDeclarationDesc[1].offset = sizeof(float) * (3 + 0 + 0);
-    vertexDeclarationDesc[1].stride = sizeof(float) * (3 + 3 + 2);
-    vertexDeclarationDesc[2].type = RHIVertexElementType::Float2;
+    vertexDeclarationDesc[1].offset = sizeof(float) * (3 + 0 + 0 + 0);
+    vertexDeclarationDesc[1].stride = sizeof(float) * (3 + 3 + 3 + 2);
+    vertexDeclarationDesc[2].type = RHIVertexElementType::Float3;
     vertexDeclarationDesc[2].frequency = RHIVertexFrequency::PerVertex;
     vertexDeclarationDesc[2].buffer = 0;
-    vertexDeclarationDesc[2].offset = sizeof(float) * (3 + 3 + 0);
-    vertexDeclarationDesc[2].stride = sizeof(float) * (3 + 3 + 2);
+    vertexDeclarationDesc[2].offset = sizeof(float) * (3 + 3 + 0 + 0);
+    vertexDeclarationDesc[2].stride = sizeof(float) * (3 + 3 + 3 + 2);
+    vertexDeclarationDesc[3].type = RHIVertexElementType::Float2;
+    vertexDeclarationDesc[3].frequency = RHIVertexFrequency::PerVertex;
+    vertexDeclarationDesc[3].buffer = 0;
+    vertexDeclarationDesc[3].offset = sizeof(float) * (3 + 3 + 3 + 0);
+    vertexDeclarationDesc[3].stride = sizeof(float) * (3 + 3 + 3 + 2);
     declaration = Engine::Instance().GetRHIDevice().CreateVertexDeclaration(vertexDeclarationDesc);
 }
 
@@ -77,23 +82,27 @@ void ShaderArchetypeBase::Process(const ShaderArchetype::InputData &inputData, S
 
     vs << "#version 410 core\n"
        << "layout (location = 0) in vec3 _vPos;\n"
-       << "layout (location = 1) in vec3 _vColor;\n"
-       << "layout (location = 2) in vec2 _vUV;\n";
+       << "layout (location = 1) in vec3 _vNorm;\n"
+       << "layout (location = 2) in vec3 _vColor;\n"
+       << "layout (location = 3) in vec2 _vUV;\n";
 
     UtilsGLSL::GenerateDefines(*inputData.options, vs);
 
     vs << "out vec3 _fsWorldPos;\n"
+       << "out vec3 _fsWorldNorm;\n"
        << "out vec3 _fsColor;\n"
        << "out vec2 _fsUV;\n";
 
     vs << "struct Params {\n"
        << "  vec4 projPos;\n"
-          "  vec3 worldPos;"
+       << "  vec3 worldPos;\n"
+       << "  vec3 worldNorm;\n"
        << "  vec3 color;\n"
        << "  vec2 uv;\n"
        << "};\n";
 
     vs << "vec3 getPos() { return _vPos; }\n"
+       << "vec3 getNorm() { return _vNorm; }\n"
        << "vec3 getColor() { return _vColor; }\n"
        << "vec2 getUV() { return _vUV; }\n";
 
@@ -104,11 +113,13 @@ void ShaderArchetypeBase::Process(const ShaderArchetype::InputData &inputData, S
        << "  Params params;\n"
        << "  params.projPos = vec4(_vPos, 1.0f);\n"
        << "  params.worldPos = _vPos;\n"
+       << "  params.worldNorm = _vNorm;\n"
        << "  params.color = _vColor;\n"
        << "  params.uv = _vUV;\n"
        << "  vertex(params);\n"
        << "  gl_Position = params.projPos;\n"
-          "  _fsWorldPos = params.worldPos;\n"
+       << "  _fsWorldPos = params.worldPos;\n"
+       << "  _fsWorldNorm = params.worldNorm;\n"
        << "  _fsColor = params.color;\n"
        << "  _fsUV = params.uv;\n"
        << "}\n";
@@ -121,6 +132,7 @@ void ShaderArchetypeBase::Process(const ShaderArchetype::InputData &inputData, S
     UtilsGLSL::GenerateDefines(*inputData.options, fs);
 
     fs << "in vec3 _fsWorldPos;\n"
+       << "in vec3 _fsWorldNorm;\n"
        << "in vec3 _fsColor;\n"
        << "in vec2 _fsUV;\n";
 
@@ -129,6 +141,7 @@ void ShaderArchetypeBase::Process(const ShaderArchetype::InputData &inputData, S
        << "};\n";
 
     fs << "vec3 getWorldPos() { return _fsWorldPos; }\n"
+       << "vec3 getWorldNorm() { return _fsWorldNorm; }\n"
        << "vec3 getColor() { return _fsColor; }\n"
        << "vec2 getUV() { return _fsUV; }\n";
 

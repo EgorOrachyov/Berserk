@@ -25,11 +25,51 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <GameApplication.hpp>
-#include <TestMaterialShader.hpp>
-#include <TestRHISimpleQuad.hpp>
+#ifndef BERSERK_MATERIALPARAMS_HPP
+#define BERSERK_MATERIALPARAMS_HPP
 
-int main(int argc, const char *const *argv) {
-    TestMaterialShader application;
-    return application.Run(argc, argv);
-}
+#include <core/Config.hpp>
+#include <core/Typedefs.hpp>
+#include <rhi/RHIBuffer.hpp>
+#include <rhi/RHIResourceSet.hpp>
+#include <rhi/RHITexture.hpp>
+
+#include <vector>
+
+BRK_NS_BEGIN
+
+/**
+ * @addtogroup render
+ * @{
+ */
+
+/**
+ * @class MaterialParams
+ * @brief Packed material params ready for rendering usage
+ */
+class MaterialParams final : public RefCnt {
+public:
+    static constexpr const char *const SHADER_PARAMS_BLOCK = BRK_TEXT("ShaderParams");
+
+    /** Creates material params for material (uses material technique) */
+    BRK_API explicit MaterialParams(class Material &material);
+    BRK_API ~MaterialParams() override = default;
+
+    /** Updates material params set */
+    BRK_API void Update(class Material &material);
+
+    /** @return Resources sets of material for each pass */
+    BRK_API const std::vector<Ref<RHIResourceSet>> &GetResourceSets() const { return mResourceSets; }
+
+private:
+    std::vector<Ref<RHIUniformBuffer>> mUniformBuffers; /** GPU-uniform buffers for each pass */
+    std::vector<Ref<RHIResourceSet>> mResourceSets;     /** Sets for each pass */
+};
+
+/**
+ * @}
+ */
+
+BRK_NS_END
+
+#endif//BERSERK_MATERIALPARAMS_HPP

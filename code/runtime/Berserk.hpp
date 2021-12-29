@@ -130,6 +130,8 @@
  */
 
 #include <render/RenderEngine.hpp>
+#include <render/material/Material.hpp>
+#include <render/material/MaterialParams.hpp>
 #include <render/shader/Shader.hpp>
 #include <render/shader/ShaderManager.hpp>
 #include <render/shader/ShaderPass.hpp>

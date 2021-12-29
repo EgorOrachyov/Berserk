@@ -122,6 +122,9 @@ public:
     /** Update resource set */
     BRK_API virtual void UpdateResourceSet(const Ref<RHIResourceSet> &set, const RHIResourceSetDesc &desc);
 
+    /** Update resource set */
+    BRK_API virtual void UpdateResourceSet_RT(const Ref<RHIResourceSet> &set, const RHIResourceSetDesc &desc) = 0;
+
     /** Generate mip maps for the texture (2d, 2d array, cube) */
     BRK_API virtual void GenerateMipMaps(const Ref<RHITexture> &texture);
 

@@ -66,6 +66,8 @@ public:
     BRK_API Ref<RHIGraphicsPipeline> CreateGraphicsPipeline(const RHIGraphicsPipelineDesc &desc) override;
     BRK_API Ref<RHICommandList> GetCoreCommandList() override;
 
+    BRK_API void UpdateResourceSet_RT(const Ref<RHIResourceSet> &set, const RHIResourceSetDesc &desc) override;
+
     BRK_API MakeContextCurrentFunc &GetContextFunc();
     BRK_API SwapBuffersFunc &GetSwapFunc();
 

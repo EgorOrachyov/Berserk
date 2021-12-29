@@ -565,6 +565,39 @@ inline uint32 RHIGetVectorComponentsCount(RHIShaderDataType type) {
     }
 }
 
+inline uint32 RHIGetBaseElementsCount(RHIShaderDataType type) {
+    switch (type) {
+        case RHIShaderDataType::Float1:
+        case RHIShaderDataType::Int1:
+        case RHIShaderDataType::Uint1:
+        case RHIShaderDataType::Bool1:
+            return 1;
+        case RHIShaderDataType::Float2:
+        case RHIShaderDataType::Int2:
+        case RHIShaderDataType::Uint2:
+        case RHIShaderDataType::Bool2:
+            return 2;
+        case RHIShaderDataType::Float3:
+        case RHIShaderDataType::Int3:
+        case RHIShaderDataType::Uint3:
+        case RHIShaderDataType::Bool3:
+            return 3;
+        case RHIShaderDataType::Float4:
+        case RHIShaderDataType::Int4:
+        case RHIShaderDataType::Uint4:
+        case RHIShaderDataType::Bool4:
+            return 4;
+        case RHIShaderDataType::Mat2:
+            return 2 * 2;
+        case RHIShaderDataType::Mat3:
+            return 3 * 3;
+        case RHIShaderDataType::Mat4:
+            return 4 * 4;
+        default:
+            return 0;
+    }
+}
+
 inline void RHIGetMatrixSize(RHIShaderDataType type, uint32 &rows, uint32 &cols) {
     switch (type) {
         case RHIShaderDataType::Mat2:

@@ -73,6 +73,7 @@ public:
         uint16 elementSize;
         uint16 arraySize;
         uint16 arrayStride;
+        uint16 matrixStride;
         uint16 blockSlot;
         uint32 blockOffset;
         RHIShaderDataType type;
