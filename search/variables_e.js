@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['quarter_5fpi_2826',['QUARTER_PI',['../classMathUtils.html#a06ac086417bbf394161d62437fc88a81',1,'MathUtils']]],
-  ['quarter_5fpif_2827',['QUARTER_PIf',['../classMathUtils.html#a47aa9b8d9fd398169dac28b8f4a09625',1,'MathUtils']]]
+  ['quarter_5fpi_2946',['QUARTER_PI',['../classMathUtils.html#a06ac086417bbf394161d62437fc88a81',1,'MathUtils']]],
+  ['quarter_5fpif_2947',['QUARTER_PIf',['../classMathUtils.html#a47aa9b8d9fd398169dac28b8f4a09625',1,'MathUtils']]]
 ];

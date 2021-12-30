@@ -1,0 +1,4 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classWindowManager.html" title="Manager for OS windows." alt="" coords="5,5,124,32"/>
+<area shape="rect" id="node2" href="$classGlfwWindowManager.html" title="Glfw window manager implementation." alt="" coords="172,5,317,32"/>
+</map>

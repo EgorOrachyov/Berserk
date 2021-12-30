@@ -1,0 +1,5 @@
+<map id="Resource" name="Resource">
+<area shape="rect" id="node1" title="Base class for any engine resource object." alt="" coords="11,80,88,107"/>
+<area shape="rect" id="node3" href="$classResTexture.html" title="2d texture resource for rendering" alt="" coords="5,155,93,181"/>
+<area shape="rect" id="node2" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="18,5,81,32"/>
+</map>

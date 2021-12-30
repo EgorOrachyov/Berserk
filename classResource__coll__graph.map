@@ -1,0 +1,4 @@
+<map id="Resource" name="Resource">
+<area shape="rect" id="node1" title="Base class for any engine resource object." alt="" coords="5,80,83,107"/>
+<area shape="rect" id="node2" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="13,5,75,32"/>
+</map>

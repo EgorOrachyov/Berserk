@@ -67,6 +67,9 @@ $(function() {
 <li>GC()
 : <a class="el" href="classGLVaoCache.html#a7377da024b611b96b3d7fb81a1b38bf6">GLVaoCache</a>
 </li>
+<li>Generate()
+: <a class="el" href="classUUID.html#aa65f9b1820560e804fa1212e7ef921ef">UUID</a>
+</li>
 <li>GenerateDefines()
 : <a class="el" href="classUtilsGLSL.html#a4e430b800b563202bcec6cb10094ff60">UtilsGLSL</a>
 </li>
@@ -217,7 +220,7 @@ $(function() {
 <li>GetData()
 : <a class="el" href="classData.html#a4173539b18cf066f3ca212040abe8dac">Data</a>
 , <a class="el" href="classTMatMxN.html#a494c07671cb0f323bb3b908f3bc1d6fb">TMatMxN&lt; T, M, N &gt;</a>
-, <a class="el" href="classTVecN.html#a049b13c2c0a95d45450b478ab32590ca">TVecN&lt; T, N &gt;</a>
+, <a class="el" href="classTVecN.html#a2ef28bd56b9f1963307d68b5de4fa440">TVecN&lt; T, N &gt;</a>
 </li>
 <li>GetDataParamsInfo()
 : <a class="el" href="group__render.html#ga2def94bec5429156c315792b79df2be0">ShaderParams</a>
@@ -320,8 +323,9 @@ $(function() {
 : <a class="el" href="classEventWindow.html#ab53e54796b76c1c216d1eca21c577f21">EventWindow</a>
 </li>
 <li>GetFormat()
-: <a class="el" href="classImage.html#a32b0f2119a7e1afab4f40026125c4b6d">Image</a>
+: <a class="el" href="classImage.html#aafb3efdc9745f6b61340e42be9f4504a">Image</a>
 , <a class="el" href="classMesh.html#afbed294ff8fc2fd38663ef820ef64625">Mesh</a>
+, <a class="el" href="classResTexture.html#a29293d0e086b5b9632ac3f57c119fbfd">ResTexture</a>
 , <a class="el" href="classShader.html#ada98ac284dbee25acc8aacb5d3cf3db2">Shader</a>
 </li>
 <li>GetFramebufferSize()
@@ -353,12 +357,16 @@ $(function() {
 , <a class="el" href="classStringName.html#ae5835d09cdacde3421233b1eaa561234">StringName</a>
 </li>
 <li>GetHeight()
-: <a class="el" href="classImage.html#a5937e8a39e37281b94d8f725a73ef3f0">Image</a>
+: <a class="el" href="classImage.html#a96f30c86177859d589c40e5d912e0958">Image</a>
+, <a class="el" href="classResTexture.html#a55b455a48dd02ea3f8bd3f60b21d2ed2">ResTexture</a>
 , <a class="el" href="classRHIFramebuffer.html#a4c1e894ef539ce5e40a49f607e0aed2b">RHIFramebuffer</a>
 , <a class="el" href="classRHITexture.html#a15375f23eca328fe65e3665a133c43ea">RHITexture</a>
 </li>
 <li>GetHND()
 : <a class="el" href="classGlfwJoystick.html#ad3a61d923a481517b0badc68e5ac5124">GlfwJoystick</a>
+</li>
+<li>GetImage()
+: <a class="el" href="classResTexture.html#a77c6363d2874122ecbcf99595811d513">ResTexture</a>
 </li>
 <li>GetIndexBuffer()
 : <a class="el" href="classSubMesh.html#af0cd94ca877338f105ece711109e74ca">SubMesh</a>
@@ -451,6 +459,7 @@ $(function() {
 , <a class="el" href="classMaterial.html#ac8e5cfcf831ab766bd9d09e9bbdcecdf">Material</a>
 , <a class="el" href="classMesh.html#aa302650feff3601b8018f26261c4e13b">Mesh</a>
 , <a class="el" href="classMouse.html#a6283f3a1fa2402bec14706625f2eb34f">Mouse</a>
+, <a class="el" href="classResource.html#a601f3e66e1e64618b734793b57d07672">Resource</a>
 , <a class="el" href="classRHIFramebuffer.html#afbd7079045bd48db056440a296668ff0">RHIFramebuffer</a>
 , <a class="el" href="classRHITexture.html#a23e1ab0baa3e3aa2ee7c73e8c9c595b5">RHITexture</a>
 , <a class="el" href="classShader.html#ac274c2ddb0b29b36929b89506147e2aa">Shader</a>
@@ -487,7 +496,7 @@ $(function() {
 : <a class="el" href="group__render.html#gadbb5a3d6fc92e38bb3943ddc50e91178">ShaderParams</a>
 </li>
 <li>GetParamLight()
-: <a class="el" href="group__render.html#ga35c856382130c337b7669dd184972e06">ShaderParams</a>
+: <a class="el" href="group__render.html#gaf6eb455bd4fb67eee25092e49dc57421">ShaderParams</a>
 </li>
 <li>GetParamLookUp()
 : <a class="el" href="group__render.html#ga7b45437d13ecf0c90a38881f4bbe643b">ShaderParams</a>
@@ -508,11 +517,14 @@ $(function() {
 <li>GetPassesCount()
 : <a class="el" href="classShaderTechnique.html#ad1f9584acb6684dd43969bd5036e9bfc">ShaderTechnique</a>
 </li>
+<li>GetPath()
+: <a class="el" href="classResource.html#a5f6263bee20bc3a8a4061ef9ff9f60c0">Resource</a>
+</li>
 <li>GetPaths()
 : <a class="el" href="classEventDropInput.html#a4809ab0e7fe0e35c4dce8561b31cdb81">EventDropInput</a>
 </li>
 <li>GetPixelData()
-: <a class="el" href="classImage.html#a78566536aa41efffefbdb5f950a88e52">Image</a>
+: <a class="el" href="classImage.html#a0b98984af56ae20e7acb8bb10698cd0e">Image</a>
 </li>
 <li>GetPixelRatio()
 : <a class="el" href="classEventWindow.html#a0aa74c875690844bd7ab19d45609f8ab">EventWindow</a>
@@ -520,7 +532,7 @@ $(function() {
 , <a class="el" href="classWindow.html#aab6a86bb5e04579bfb00ad6f6604420d">Window</a>
 </li>
 <li>GetPixelSize()
-: <a class="el" href="classImage.html#a1cb65f93d89cdda760f9d802d6d279b4">Image</a>
+: <a class="el" href="classImage.html#ab6fa2a430b1dd559564c687005cc6eb1">Image</a>
 , <a class="el" href="classImageUtil.html#a39fe055306d1d3a75e8d80e342f5de87">ImageUtil</a>
 </li>
 <li>GetPoints()
@@ -551,7 +563,7 @@ $(function() {
 , <a class="el" href="classSubMesh.html#a617d2fb6e80653f80233107d4a770871">SubMesh</a>
 </li>
 <li>GetProperty()
-: <a class="el" href="classConfig.html#a4361a79158c4809583d8635c3b482d00">Config</a>
+: <a class="el" href="classConfig.html#ae8bbe61f2448fa2772588d18d7fb6b84">Config</a>
 </li>
 <li>GetRefs()
 : <a class="el" href="classRefCnt.html#a3c663af8e6b3a4cbaa26d5a4f83591a9">RefCnt</a>
@@ -559,14 +571,30 @@ $(function() {
 <li>GetRenderEngine()
 : <a class="el" href="classEngine.html#ae44b3f779adb33fbba32ac95dfb45113">Engine</a>
 </li>
+<li>GetResourceManager()
+: <a class="el" href="classEngine.html#acd451387978e9f713f0a72ce0b59f8c6">Engine</a>
+</li>
 <li>GetResourceSets()
 : <a class="el" href="classMaterialParams.html#a9d23118f43d1961c4fbcb33ceac7230a">MaterialParams</a>
+</li>
+<li>GetResourceType()
+: <a class="el" href="classResource.html#a03ad61f8ee40e319689ef3650b3a91d6">Resource</a>
+, <a class="el" href="classResTexture.html#a80d17d7a1068a46123190460a464323a">ResTexture</a>
+</li>
+<li>GetResourceTypeStatic()
+: <a class="el" href="classResTexture.html#a785bab6366035b804f023ef027d10fa4">ResTexture</a>
 </li>
 <li>GetRHIDevice()
 : <a class="el" href="classEngine.html#abbff564e320c8b3014bf50b03d44764c">Engine</a>
 </li>
 <li>GetRHILanguage()
 : <a class="el" href="classShaderTechnique.html#a47f27dd8d5a7628da6b49347d2fc5232">ShaderTechnique</a>
+</li>
+<li>GetRHISampler()
+: <a class="el" href="classResTexture.html#ab4d68ad1aee78d458ac88333d45d147d">ResTexture</a>
+</li>
+<li>GetRHITexture()
+: <a class="el" href="classResTexture.html#a2cf07024eecf83f1de12ee9f112861c6">ResTexture</a>
 </li>
 <li>GetRHIThread()
 : <a class="el" href="classEngine.html#ad9553211b94f84f3bf9b9a14a4098ded">Engine</a>
@@ -637,7 +665,7 @@ $(function() {
 , <a class="el" href="classWindow.html#a7e331833f8e58d69a3c2a8b21fae26cf">Window</a>
 </li>
 <li>GetSizeBytes()
-: <a class="el" href="classImage.html#a2a88ea581c2bcd488e954365bbe3f5d0">Image</a>
+: <a class="el" href="classImage.html#a65fca91337ee37b82d23e7018c2f6f0c">Image</a>
 </li>
 <li>GetSkinningData()
 : <a class="el" href="classMesh.html#a2832a473b1d1e28b2643c4a57dc2b3c4">Mesh</a>
@@ -660,7 +688,7 @@ $(function() {
 : <a class="el" href="classStringName.html#aa233d92f56539f7b858123fef2f9ba51">StringName</a>
 </li>
 <li>GetStride()
-: <a class="el" href="classImage.html#a8556f5468be7b64ee4096ebf533ceeae">Image</a>
+: <a class="el" href="classImage.html#ac1f7eaf1e127bf4e1cc8bd95816788bf">Image</a>
 , <a class="el" href="classMeshFormats.html#ae9450f4ef93c28da5b1871921a4ac84f">MeshFormats</a>
 , <a class="el" href="classTMatMxN.html#a72c7435f86029fafa751e20575ac8bfb">TMatMxN&lt; T, M, N &gt;</a>
 </li>
@@ -669,6 +697,10 @@ $(function() {
 </li>
 <li>GetSubMeshLookUp()
 : <a class="el" href="classMesh.html#a6e194467af61a9e9218354486c11b938">Mesh</a>
+</li>
+<li>GetSupportedExtensions()
+: <a class="el" href="classResourceImporter.html#af63d539030fd8581871f121dcee65899">ResourceImporter</a>
+, <a class="el" href="classTextureImporter.html#aac4fa9f4bd239cd39c034b59422dbdbf">TextureImporter</a>
 </li>
 <li>GetSupportedFormats()
 : <a class="el" href="classRHIDevice.html#a6a25ea43b1183b691f04838943863539">RHIDevice</a>
@@ -747,6 +779,9 @@ $(function() {
 <li>GetType()
 : <a class="el" href="classEventWindow.html#a6ba129d6300fe944d4ba6f799172d027">EventWindow</a>
 </li>
+<li>GetUUID()
+: <a class="el" href="classResource.html#adc2b491c5bbce21a199965dc62ffba6e">Resource</a>
+</li>
 <li>GetVariation()
 : <a class="el" href="classMaterial.html#ab0ac739812d6cdaaa05076a650989e9a">Material</a>
 , <a class="el" href="classShader.html#a70b46bfc262fb02a00f15c070189a430">Shader</a>
@@ -762,7 +797,8 @@ $(function() {
 , <a class="el" href="classSubMesh.html#a8bc92a3bd828d3adc5cc7fdcf09d15ea">SubMesh</a>
 </li>
 <li>GetWidth()
-: <a class="el" href="classImage.html#ad3583ebde1eb0efdb5030c303834bfd1">Image</a>
+: <a class="el" href="classImage.html#a4d4b1dbe95782e73ee2820c75e0aa792">Image</a>
+, <a class="el" href="classResTexture.html#af8f609250c04aaab34773e18ebb88456">ResTexture</a>
 , <a class="el" href="classRHIFramebuffer.html#ac71360bf1da0fd4943f8f5db2bf3a884">RHIFramebuffer</a>
 , <a class="el" href="classRHITexture.html#aa0f026a589b0a15745461ae27af183be">RHITexture</a>
 </li>
