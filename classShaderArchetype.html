@@ -64,6 +64,7 @@ $(function() {
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classShaderArchetype-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">ShaderArchetype Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group__render.html">Render</a></div></div>  </div>
@@ -107,10 +108,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6fb673894fc327271c8991270111f8a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad9c7bf99c6b0fd9ee9b4f3b30346b4c"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classShaderArchetype.html#aad9c7bf99c6b0fd9ee9b4f3b30346b4c">DefineVariation</a> (const <a class="el" href="classShaderCompileOptions.html">ShaderCompileOptions</a> &amp;options, <a class="el" href="classShaderVariation.html">ShaderVariation</a> &amp;variation)=0</td></tr>
 <tr class="separator:aad9c7bf99c6b0fd9ee9b4f3b30346b4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b94ff96939b7d9e154d2dee5b3f6942"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classShaderArchetype.html#a3b94ff96939b7d9e154d2dee5b3f6942">DefineDeclaration</a> (const <a class="el" href="classShaderCompileOptions.html">ShaderCompileOptions</a> &amp;options, <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIVertexDeclaration.html">RHIVertexDeclaration</a> &gt; &amp;declaration)=0</td></tr>
-<tr class="separator:a3b94ff96939b7d9e154d2dee5b3f6942"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2de2cf02f2e31e4b1043983b17567a19"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classShaderArchetype.html#a2de2cf02f2e31e4b1043983b17567a19">DefineFormat</a> (const <a class="el" href="classShaderCompileOptions.html">ShaderCompileOptions</a> &amp;options, <a class="el" href="classMeshFormat.html">MeshFormat</a> &amp;format)=0</td></tr>
+<tr class="separator:a2de2cf02f2e31e4b1043983b17567a19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a919b18e4864c8e7e7a84923c99b73207"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classShaderArchetype.html#a919b18e4864c8e7e7a84923c99b73207">Process</a> (const <a class="el" href="structShaderArchetype_1_1InputData.html">InputData</a> &amp;inputData, <a class="el" href="structShaderArchetype_1_1OutputData.html">OutputData</a> &amp;outputData)=0</td></tr>
 <tr class="separator:a919b18e4864c8e7e7a84923c99b73207"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:abd3bb2124c3d62e3d52257b778c71504"><td class="memItemLeft" align="right" valign="top">static constexpr const char *const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classShaderArchetype.html#abd3bb2124c3d62e3d52257b778c71504">SHADER_PARAMS_BLOCK</a> = <a class="el" href="Config_8hpp.html#a35ebc73f0ab9c13f9e04f5de26da530d">BRK_TEXT</a>(&quot;ShaderParams&quot;)</td></tr>
+<tr class="separator:abd3bb2124c3d62e3d52257b778c71504"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Handles source code pre-processing of shaders with this archetype. </p>
@@ -141,8 +147,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a3b94ff96939b7d9e154d2dee5b3f6942"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b94ff96939b7d9e154d2dee5b3f6942">&#9670;&nbsp;</a></span>DefineDeclaration()</h2>
+<a id="a2de2cf02f2e31e4b1043983b17567a19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2de2cf02f2e31e4b1043983b17567a19">&#9670;&nbsp;</a></span>DefineFormat()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -151,7 +157,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void ShaderArchetype::DefineDeclaration </td>
+          <td class="memname">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void ShaderArchetype::DefineFormat </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classShaderCompileOptions.html">ShaderCompileOptions</a> &amp;&#160;</td>
           <td class="paramname"><em>options</em>, </td>
@@ -159,8 +165,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIVertexDeclaration.html">RHIVertexDeclaration</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>declaration</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="classMeshFormat.html">MeshFormat</a> &amp;&#160;</td>
+          <td class="paramname"><em>format</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -175,7 +181,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classShaderArchetypeBase.html#a044a7dc2bd19cefa953bf68cbfb3f6be">ShaderArchetypeBase</a>.</p>
+<p>Implemented in <a class="el" href="classShaderArchetypeBase.html#a59888376758bbb2a63be7b00f6947ba5">ShaderArchetypeBase</a>.</p>
 
 </div>
 </div>
@@ -360,6 +366,30 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implemented in <a class="el" href="classShaderArchetypeBase.html#ab3df201b536e9967df7ef98ec1b7c2c7">ShaderArchetypeBase</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="abd3bb2124c3d62e3d52257b778c71504"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd3bb2124c3d62e3d52257b778c71504">&#9670;&nbsp;</a></span>SHADER_PARAMS_BLOCK</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const char* const ShaderArchetype::SHADER_PARAMS_BLOCK = <a class="el" href="Config_8hpp.html#a35ebc73f0ab9c13f9e04f5de26da530d">BRK_TEXT</a>(&quot;ShaderParams&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Name of params block generated from material params </p>
 
 </div>
 </div>

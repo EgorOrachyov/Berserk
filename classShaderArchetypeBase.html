@@ -101,8 +101,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a05a46c46e3343a7d5f64a8023f78f046"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e8c36048707751c06f29d3033f858d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classShaderArchetypeBase.html#a6e8c36048707751c06f29d3033f858d4">DefineVariation</a> (const <a class="el" href="classShaderCompileOptions.html">ShaderCompileOptions</a> &amp;options, <a class="el" href="classShaderVariation.html">ShaderVariation</a> &amp;variation) override</td></tr>
 <tr class="separator:a6e8c36048707751c06f29d3033f858d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a044a7dc2bd19cefa953bf68cbfb3f6be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classShaderArchetypeBase.html#a044a7dc2bd19cefa953bf68cbfb3f6be">DefineDeclaration</a> (const <a class="el" href="classShaderCompileOptions.html">ShaderCompileOptions</a> &amp;options, <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIVertexDeclaration.html">RHIVertexDeclaration</a> &gt; &amp;declaration) override</td></tr>
-<tr class="separator:a044a7dc2bd19cefa953bf68cbfb3f6be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59888376758bbb2a63be7b00f6947ba5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classShaderArchetypeBase.html#a59888376758bbb2a63be7b00f6947ba5">DefineFormat</a> (const <a class="el" href="classShaderCompileOptions.html">ShaderCompileOptions</a> &amp;options, <a class="el" href="classMeshFormat.html">MeshFormat</a> &amp;format) override</td></tr>
+<tr class="separator:a59888376758bbb2a63be7b00f6947ba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3df201b536e9967df7ef98ec1b7c2c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classShaderArchetypeBase.html#ab3df201b536e9967df7ef98ec1b7c2c7">Process</a> (const <a class="el" href="structShaderArchetype_1_1InputData.html">InputData</a> &amp;inputData, <a class="el" href="structShaderArchetype_1_1OutputData.html">OutputData</a> &amp;outputData) override</td></tr>
 <tr class="separator:ab3df201b536e9967df7ef98ec1b7c2c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classShaderArchetype"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classShaderArchetype')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classShaderArchetype.html">ShaderArchetype</a></td></tr>
@@ -110,6 +110,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a42b9fc027e75315190025e321da1af82 inherit pub_methods_classShaderArchetype"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd177c357965418a9395a3b3647394f6 inherit pub_methods_classShaderArchetype"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classShaderArchetype.html#abd177c357965418a9395a3b3647394f6">IsSupportedLanguage</a> (<a class="el" href="group__rhi.html#gaf8c98a3f2cef867026ae99b59eeebf94">RHIShaderLanguage</a> language) const</td></tr>
 <tr class="separator:abd177c357965418a9395a3b3647394f6 inherit pub_methods_classShaderArchetype"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_static_attribs_classShaderArchetype"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classShaderArchetype')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classShaderArchetype.html">ShaderArchetype</a></td></tr>
+<tr class="memitem:abd3bb2124c3d62e3d52257b778c71504 inherit pub_static_attribs_classShaderArchetype"><td class="memItemLeft" align="right" valign="top">static constexpr const char *const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classShaderArchetype.html#abd3bb2124c3d62e3d52257b778c71504">SHADER_PARAMS_BLOCK</a> = <a class="el" href="Config_8hpp.html#a35ebc73f0ab9c13f9e04f5de26da530d">BRK_TEXT</a>(&quot;ShaderParams&quot;)</td></tr>
+<tr class="separator:abd3bb2124c3d62e3d52257b778c71504 inherit pub_static_attribs_classShaderArchetype"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac807ce84e566c469a9b5193728f82e77"></a>
@@ -138,8 +144,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a044a7dc2bd19cefa953bf68cbfb3f6be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a044a7dc2bd19cefa953bf68cbfb3f6be">&#9670;&nbsp;</a></span>DefineDeclaration()</h2>
+<a id="a59888376758bbb2a63be7b00f6947ba5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59888376758bbb2a63be7b00f6947ba5">&#9670;&nbsp;</a></span>DefineFormat()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -148,7 +154,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void ShaderArchetypeBase::DefineDeclaration </td>
+          <td class="memname">void ShaderArchetypeBase::DefineFormat </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classShaderCompileOptions.html">ShaderCompileOptions</a> &amp;&#160;</td>
           <td class="paramname"><em>options</em>, </td>
@@ -156,8 +162,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classRHIVertexDeclaration.html">RHIVertexDeclaration</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>declaration</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="classMeshFormat.html">MeshFormat</a> &amp;&#160;</td>
+          <td class="paramname"><em>format</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -172,7 +178,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="classShaderArchetype.html#a3b94ff96939b7d9e154d2dee5b3f6942">ShaderArchetype</a>.</p>
+<p>Implements <a class="el" href="classShaderArchetype.html#a2de2cf02f2e31e4b1043983b17567a19">ShaderArchetype</a>.</p>
 
 </div>
 </div>
@@ -335,8 +341,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>code/runtime/render/shader/types/<a class="el" href="ShaderArchetypeBase_8hpp_source.html">ShaderArchetypeBase.hpp</a></li>
-<li>code/runtime/render/shader/types/<a class="el" href="ShaderArchetypeBase_8cpp.html">ShaderArchetypeBase.cpp</a></li>
+<li>code/runtime/render/archetypes/<a class="el" href="ShaderArchetypeBase_8hpp_source.html">ShaderArchetypeBase.hpp</a></li>
+<li>code/runtime/render/archetypes/<a class="el" href="ShaderArchetypeBase_8cpp.html">ShaderArchetypeBase.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -209,6 +209,7 @@ Enumerations</h2></td></tr>
 <tr class="separator:ga4899c6c2577595cb9018a75a29ef26fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga3da6175a7c7a65fd73a500a02061e929"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__rhi.html#ga3da6175a7c7a65fd73a500a02061e929">RHIIndexType</a> : uint8 { <a class="el" href="group__rhi.html#gga3da6175a7c7a65fd73a500a02061e929a2f3a46e0add3a07937412cbeb8f95727">Uint32</a>
 , <a class="el" href="group__rhi.html#gga3da6175a7c7a65fd73a500a02061e929a3167337450665ae9b3b34004d33cafe8">Uint16</a>
+, <a class="el" href="group__rhi.html#gga3da6175a7c7a65fd73a500a02061e929a88183b946cc5f0e8c96b2e66e1c74a7e">Unknown</a>
  }</td></tr>
 <tr class="separator:ga3da6175a7c7a65fd73a500a02061e929"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga29dff8ee197f866de66e715fff252cf1"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__rhi.html#ga29dff8ee197f866de66e715fff252cf1">RHIVertexFrequency</a> : uint8 { <a class="el" href="group__rhi.html#gga29dff8ee197f866de66e715fff252cf1a47e73954b650524c96a2c612bfda4029">PerVertex</a> = 0
@@ -478,6 +479,8 @@ Functions</h2></td></tr>
 <tr class="separator:gabc2111d0813d07a4a9b22fa9b54bb66d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2edb517e6d5a9e6a9b6ecafc6569a620"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__rhi.html#gaf8c98a3f2cef867026ae99b59eeebf94">RHIShaderLanguage</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__rhi.html#ga2edb517e6d5a9e6a9b6ecafc6569a620">RHIParseShaderLanguage</a> (const char *language)</td></tr>
 <tr class="separator:ga2edb517e6d5a9e6a9b6ecafc6569a620"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab75d8572ba60045ca362b055eba91382"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__rhi.html#gab75d8572ba60045ca362b055eba91382">RHIGetIndexSize</a> (<a class="el" href="group__rhi.html#ga3da6175a7c7a65fd73a500a02061e929">RHIIndexType</a> type)</td></tr>
+<tr class="separator:gab75d8572ba60045ca362b055eba91382"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Rendering hardware interface. </p>
@@ -663,6 +666,7 @@ Functions</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="gga3da6175a7c7a65fd73a500a02061e929a2f3a46e0add3a07937412cbeb8f95727"></a>Uint32&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga3da6175a7c7a65fd73a500a02061e929a3167337450665ae9b3b34004d33cafe8"></a>Uint16&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="gga3da6175a7c7a65fd73a500a02061e929a88183b946cc5f0e8c96b2e66e1c74a7e"></a>Unknown&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -1356,6 +1360,32 @@ Functions</h2></td></tr>
           <td class="memname"><a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> RHIGetBaseElementsCount </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="group__rhi.html#ga157ffde2a43be835ef6f06bc1adec446">RHIShaderDataType</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="gab75d8572ba60045ca362b055eba91382"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab75d8572ba60045ca362b055eba91382">&#9670;&nbsp;</a></span>RHIGetIndexSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> RHIGetIndexSize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__rhi.html#ga3da6175a7c7a65fd73a500a02061e929">RHIIndexType</a>&#160;</td>
           <td class="paramname"><em>type</em></td><td>)</td>
           <td></td>
         </tr>
