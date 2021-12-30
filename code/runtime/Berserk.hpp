@@ -159,6 +159,7 @@
  * uses special `Res` prefix, to distinguish them from other classes.
  */
 
+#include <resource/ResTexture.hpp>
 #include <resource/Resource.hpp>
 #include <resource/ResourceImporter.hpp>
 #include <resource/ResourceManager.hpp>

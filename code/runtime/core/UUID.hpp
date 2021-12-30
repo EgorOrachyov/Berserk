@@ -47,6 +47,7 @@ BRK_NS_BEGIN
  */
 class UUID final {
 public:
+    BRK_API UUID() = default;
     BRK_API explicit UUID(uint32 a, uint32 b, uint32 c, uint32 d);
     BRK_API explicit UUID(const String &uuid);
 
@@ -58,7 +59,7 @@ public:
     static BRK_API UUID Generate();
 
 private:
-    uint32 mWords[4];
+    uint32 mWords[4] = {0, 0, 0, 0};
 };
 
 /**

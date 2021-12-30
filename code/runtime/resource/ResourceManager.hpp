@@ -58,7 +58,7 @@ BRK_NS_BEGIN
  */
 class ResourceManager {
 public:
-    BRK_API ResourceManager() = default;
+    BRK_API ResourceManager();
     BRK_API ~ResourceManager() = default;
 
     /**

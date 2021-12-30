@@ -29,7 +29,7 @@
 
 BRK_NS_BEGIN
 
-void Resource::SetName(StringName name) {
+void Resource::SetName(String name) {
     mName = std::move(name);
 }
 

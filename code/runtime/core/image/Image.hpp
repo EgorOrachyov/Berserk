@@ -74,15 +74,17 @@ public:
     BRK_API Image &operator=(const Image &) = default;
     BRK_API Image &operator=(Image &&) noexcept = default;
 
-    bool Empty() const { return mWidth * mHeight == 0; }
+    BRK_API Image Resize(uint32 newWidth, uint32 newHeight) const;
 
-    uint32 GetWidth() const { return mWidth; }
-    uint32 GetHeight() const { return mHeight; }
-    uint32 GetStride() const { return mStride; }
-    uint32 GetPixelSize() const { return mPixelSize; }
-    uint32 GetSizeBytes() const { return mStride * mHeight; }
-    Format GetFormat() const { return mFormat; }
-    const Ref<Data> &GetPixelData() const { return mPixelData; }
+    BRK_API bool Empty() const { return mWidth * mHeight == 0; }
+
+    BRK_API uint32 GetWidth() const { return mWidth; }
+    BRK_API uint32 GetHeight() const { return mHeight; }
+    BRK_API uint32 GetStride() const { return mStride; }
+    BRK_API uint32 GetPixelSize() const { return mPixelSize; }
+    BRK_API uint32 GetSizeBytes() const { return mStride * mHeight; }
+    BRK_API Format GetFormat() const { return mFormat; }
+    BRK_API const Ref<Data> &GetPixelData() const { return mPixelData; }
 
     /**
      * @brief Save rgba image to the file

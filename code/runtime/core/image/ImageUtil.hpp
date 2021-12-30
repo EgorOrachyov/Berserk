@@ -51,6 +51,7 @@ public:
     BRK_API static uint32 GetChannelsCount(Image::Format format);
     BRK_API static bool CanAccept(Image::Format format);
     BRK_API static bool CanSaveRgba(Image::Format format);
+    BRK_API static bool CanResize(Image::Format format);
 };
 
 /**

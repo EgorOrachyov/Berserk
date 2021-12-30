@@ -32,9 +32,11 @@
 #define STBI_WINDOWS_UTF8
 #define STBIW_WINDOWS_UTF8
 #define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_RESIZE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
 #include <stbimage/stb_image.hpp>
+#include <stbimage/stb_image_resize.hpp>
 #include <stbimage/stb_image_write.hpp>
 
 BRK_NS_BEGIN
@@ -54,6 +56,43 @@ Image::Image(uint32 width, uint32 height, Format format) {
 
 Image::Image(uint32 width, uint32 height, uint32 stride, uint32 pixelSize, Format format, Ref<Data> pixelData)
     : mWidth(width), mHeight(height), mStride(stride), mPixelSize(pixelSize), mFormat(format), mPixelData(std::move(pixelData)) {
+}
+
+Image Image::Resize(uint32 newWidth, uint32 newHeight) const {
+    if (!ImageUtil::CanResize(GetFormat())) {
+        BRK_ERROR("Cannot resize image of this format " << static_cast<int>(GetFormat()));
+        return Image();
+    }
+    if (Empty()) {
+        BRK_ERROR("Cannot resize empty image");
+        return Image();
+    }
+
+    auto chCount = static_cast<int>(ImageUtil::GetChannelsCount(GetFormat()));
+
+    Image image;
+    image.mWidth = newWidth;
+    image.mHeight = newHeight;
+    image.mPixelSize = mPixelSize;
+    image.mStride = mPixelSize * newWidth;
+    image.mFormat = mFormat;
+    image.mPixelData = Data::Make(image.GetSizeBytes());
+
+    int success;
+
+    if (GetFormat() == RHITextureFormat::SRGB8 || GetFormat() == RHITextureFormat::SRGB8_ALPHA8)
+        success = stbir_resize_uint8_srgb(reinterpret_cast<const unsigned char *>(mPixelData->GetData()), GetWidth(), GetHeight(), GetStride(),
+                                          reinterpret_cast<unsigned char *>(image.mPixelData->GetDataWrite()), image.GetWidth(), image.GetHeight(), image.GetStride(), chCount, 3, 0);
+    else
+        success = stbir_resize_uint8(reinterpret_cast<const unsigned char *>(mPixelData->GetData()), GetWidth(), GetHeight(), GetStride(),
+                                     reinterpret_cast<unsigned char *>(image.mPixelData->GetDataWrite()), image.GetWidth(), image.GetHeight(), image.GetStride(), chCount);
+
+    if (!success) {
+        BRK_ERROR("Failed to resize image");
+        return Image();
+    }
+
+    return image;
 }
 
 bool Image::SaveRgba(const String &filepath, FileFormat fileFormat, int quality) const {

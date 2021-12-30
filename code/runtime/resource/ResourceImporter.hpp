@@ -70,6 +70,13 @@ public:
     BRK_API virtual ~ResourceImporter() = default;
 
     /**
+     * @brief Creates default importer options for import
+     *
+     * @return Options
+     */
+    BRK_API virtual Ref<ResourceImportOptions> CreateDefaultOptions() const = 0;
+
+    /**
      * @brief Get list of supported file extensions for import
      *
      * @return List of extensions

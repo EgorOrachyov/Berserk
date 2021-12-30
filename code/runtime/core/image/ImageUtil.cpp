@@ -202,4 +202,22 @@ bool ImageUtil::CanSaveRgba(Image::Format format) {
     }
 }
 
+bool ImageUtil::CanResize(Image::Format format) {
+    switch (format) {
+        case Image::Format::R8:
+        case Image::Format::R8_SNORM:
+        case Image::Format::RG8:
+        case Image::Format::RG8_SNORM:
+        case Image::Format::RGB8:
+        case Image::Format::RGB8_SNORM:
+        case Image::Format::RGBA8:
+        case Image::Format::RGBA8_SNORM:
+        case Image::Format::SRGB8:
+        case Image::Format::SRGB8_ALPHA8:
+            return true;
+        default:
+            return false;
+    }
+}
+
 BRK_NS_END

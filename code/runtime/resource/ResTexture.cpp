@@ -25,51 +25,60 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RESOURCE_HPP
-#define BERSERK_RESOURCE_HPP
-
-#include <core/Config.hpp>
-#include <core/Typedefs.hpp>
-#include <core/UUID.hpp>
-#include <core/string/StringName.hpp>
-#include <core/templates/RefCnt.hpp>
+#include <core/Engine.hpp>
+#include <core/image/ImageUtil.hpp>
+#include <core/io/Logger.hpp>
+#include <resource/ResTexture.hpp>
 
 BRK_NS_BEGIN
 
-/**
- * @addtogroup resource
- * @{
- */
+const StringName &ResTexture::GetResourceType() const {
+    return GetResourceTypeStatic();
+}
 
-/**
- * @class Resource
- * @brief Base class for any engine resource object
- */
-class Resource : public RefCnt {
-public:
-    BRK_API ~Resource() override = default;
+const StringName &ResTexture::GetResourceTypeStatic() {
+    static StringName resourceType(BRK_TEXT("_brk_resource_texture"));
+    return resourceType;
+}
 
-    /** @return Unique resource type identifier */
-    virtual const StringName &GetResourceType() const = 0;
+void ResTexture::Create(const Image &image, bool mipmaps, bool cache) {
+    if (image.Empty()) {
+        BRK_ERROR("an attempt to create texture from empty image");
+        return;
+    }
+    if (cache) {
+        mImage = image;
+    }
 
-    BRK_API void SetName(String name);
-    BRK_API void SetPath(String path);
-    BRK_API void SetUUID(UUID uuid);
+    mWidth = image.GetWidth();
+    mHeight = image.GetHeight();
+    mFormat = image.GetFormat();
+    mMipmaps = mipmaps;
 
-    BRK_API const String &GetName() const { return mName; };
-    BRK_API const String &GetPath() const { return mPath; };
-    BRK_API const UUID &GetUUID() const { return mUUID; };
+    auto &device = Engine::Instance().GetRHIDevice();
 
-private:
-    String mName; /** Resource name */
-    String mPath; /** Load path */
-    UUID mUUID;   /** Unique id */
-};
+    RHITextureDesc textureDesc{};
+    textureDesc.name = std::move(StringName(GetName()));
+    textureDesc.width = GetWidth();
+    textureDesc.height = GetHeight();
+    textureDesc.depth = 1;
+    textureDesc.mipsCount = ImageUtil::GetMaxMipsCount(GetWidth(), GetHeight(), 1);
+    textureDesc.arraySlices = 1;
+    textureDesc.textureType = RHITextureType::Texture2d;
+    textureDesc.textureFormat = GetFormat();
+    textureDesc.textureUsage = {RHITextureUsage::Sampling};
+    mRHITexture = device.CreateTexture(textureDesc);
 
-/**
- * @}
- */
+    // Upload actual data
+    device.UpdateTexture2D(mRHITexture, 0, {0, 0, image.GetWidth(), image.GetHeight()}, image.GetPixelData());
+
+    // Generate mip maps if requried
+    if (MipMaps())
+        device.GenerateMipMaps(mRHITexture);
+}
+
+void ResTexture::SetSampler(Ref<RHISampler> sampler) {
+    mRHISampler = std::move(sampler);
+}
 
 BRK_NS_END
-
-#endif//BERSERK_RESOURCE_HPP

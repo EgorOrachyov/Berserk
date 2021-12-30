@@ -36,11 +36,10 @@ public:
     berserk::EventDispatcher *dispatcher = nullptr;
     berserk::RHIDevice *device = nullptr;
     berserk::FileSystem *fileSystem = nullptr;
+    berserk::ResourceManager *resourceManager = nullptr;
 
     berserk::Ref<berserk::Window> window;
 
-    berserk::Ref<berserk::RHISampler> sampler;
-    berserk::Ref<berserk::RHITexture> texture;
     berserk::Ref<berserk::RHIRenderPass> renderPass;
     berserk::Ref<berserk::RHIGraphicsPipeline> pipeline;
     berserk::Ref<berserk::RHICommandList> commandList;
@@ -48,6 +47,7 @@ public:
     berserk::Ref<const berserk::Shader> shader;
     berserk::Ref<berserk::Material> material;
     berserk::Ref<berserk::Mesh> mesh;
+    berserk::Ref<berserk::ResTexture> texture;
 
     float speed{};
     float angle{};
@@ -73,6 +73,7 @@ public:
 
     void OnInitialize() override {
         fileSystem = &engine->GetFileSystem();
+        resourceManager = &engine->GetResourceManager();
         device = &engine->GetRHIDevice();
         window = engine->GetWindowManager().GetPrimaryWindow();
         angle = 0.0f;
@@ -89,7 +90,6 @@ public:
 
     void OnFinalize() override {
         window.Reset();
-        sampler.Reset();
         texture.Reset();
         shader.Reset();
         material.Reset();
@@ -138,7 +138,7 @@ public:
 
         Vec3f lightColor(1, 1, 1);
 
-        material->SetTexture(ptDiffuse, texture, sampler);
+        material->SetTexture(ptDiffuse, texture->GetRHITexture(), texture->GetRHISampler());
         material->SetMat4(pMVP, projViewModel);
         material->SetMat3(pModel, model.SubMatrix<3, 3>(0, 0));
         material->SetFloat3(pLightColor, lightColor);
@@ -185,35 +185,15 @@ protected:
     void InitTexture() {
         using namespace berserk;
 
-        String imagePath = BRK_TEXT("../engine/resources/textures/background-32x8.png");
-        Image image = Image::LoadRgba(imagePath, 4);
+        String texturePath = BRK_TEXT("resources/textures/background-32x8.png");
+        Ref<ResTextureImportOptions> importOptions(new ResTextureImportOptions);
+        importOptions->width = 64;
+        importOptions->height = 64;
+        importOptions->cacheCPU = false;
+        importOptions->mipmaps = true;
+        importOptions->channels = 4;
 
-        assert(!image.Empty());
-
-        RHITextureDesc textureDesc;
-        textureDesc.name = StringName(imagePath);
-        textureDesc.width = image.GetWidth();
-        textureDesc.height = image.GetHeight();
-        textureDesc.depth = 1;
-        textureDesc.arraySlices = 1;
-        textureDesc.mipsCount = ImageUtil::GetMaxMipsCount(textureDesc.width, textureDesc.height, textureDesc.depth);
-        textureDesc.textureType = RHITextureType::Texture2d;
-        textureDesc.textureFormat = RHITextureFormat::RGBA8;
-        textureDesc.textureUsage = {RHITextureUsage::Sampling};
-        texture = device->CreateTexture(textureDesc);
-
-        commandList->UpdateTexture2D(texture, 0, {0, 0, image.GetWidth(), image.GetHeight()}, image.GetPixelData());
-        commandList->GenerateMipMaps(texture);
-
-        RHISamplerDesc samplerDesc;
-        samplerDesc.minFilter = RHISamplerMinFilter::LinearMipmapLinear;
-        samplerDesc.magFilter = RHISamplerMagFilter::Linear;
-        samplerDesc.maxAnisotropy = 16.0f;
-        samplerDesc.useAnisotropy = true;
-        samplerDesc.u = RHISamplerRepeatMode::Repeat;
-        samplerDesc.v = RHISamplerRepeatMode::Repeat;
-        samplerDesc.w = RHISamplerRepeatMode::Repeat;
-        sampler = device->CreateSampler(samplerDesc);
+        texture = resourceManager->Import(texturePath, importOptions.As<ResourceImportOptions>()).Cast<ResTexture>();
     }
 
     void InitMaterial() {

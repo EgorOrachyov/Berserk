@@ -27,10 +27,16 @@
 
 #include <core/Engine.hpp>
 #include <resource/ResourceManager.hpp>
+#include <resource/importers/TextureImporter.hpp>
 
 #include <algorithm>
 
 BRK_NS_BEGIN
+
+ResourceManager::ResourceManager() {
+    // Register default importers
+    RegisterImporter(std::make_shared<TextureImporter>());
+}
 
 Ref<Resource> ResourceManager::Import(const String &filepath, const Ref<ResourceImportOptions> &options, const UUID &uuid) {
     auto &fileSystem = Engine::Instance().GetFileSystem();
@@ -59,7 +65,14 @@ Ref<Resource> ResourceManager::Import(const String &filepath, const Ref<Resource
         return Ref<Resource>();
     }
 
+#ifdef BERSERK_DEBUG
+    BRK_INFO("Import " << filepath << " type=" << importResult.resource->GetResourceType() << " uuid=" << uuid);
+#endif
+
     importResult.resource->SetUUID(uuid);
+    importResult.resource->SetName(filepath);
+    importResult.resource->SetPath(std::move(path));
+
     return importResult.resource;
 }
 

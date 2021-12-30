@@ -67,7 +67,7 @@ UUID::UUID(uint32 a, uint32 b, uint32 c, uint32 d) {
     mWords[3] = d;
 }
 
-UUID::UUID(const String &uuid) : UUID(0, 0, 0, 0) {
+UUID::UUID(const String &uuid) : UUID() {
     // Parse string:
     // - mask: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
     // - exmp: 123e4567-e89b-12d3-a456-426614174000

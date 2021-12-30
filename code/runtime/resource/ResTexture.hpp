@@ -25,14 +25,15 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RESOURCE_HPP
-#define BERSERK_RESOURCE_HPP
+#ifndef BERSERK_RESTEXTURE_HPP
+#define BERSERK_RESTEXTURE_HPP
 
-#include <core/Config.hpp>
-#include <core/Typedefs.hpp>
-#include <core/UUID.hpp>
-#include <core/string/StringName.hpp>
-#include <core/templates/RefCnt.hpp>
+#include <core/image/Image.hpp>
+#include <resource/Resource.hpp>
+#include <resource/ResourceImporter.hpp>
+
+#include <rhi/RHISampler.hpp>
+#include <rhi/RHITexture.hpp>
 
 BRK_NS_BEGIN
 
@@ -41,29 +42,52 @@ BRK_NS_BEGIN
  * @{
  */
 
-/**
- * @class Resource
- * @brief Base class for any engine resource object
- */
-class Resource : public RefCnt {
+class ResTextureImportOptions : public ResourceImportOptions {
 public:
-    BRK_API ~Resource() override = default;
+    BRK_API ResTextureImportOptions() = default;
+    BRK_API ~ResTextureImportOptions() override = default;
 
-    /** @return Unique resource type identifier */
-    virtual const StringName &GetResourceType() const = 0;
+    int width = -1;        /** Desired width; -1 use native from file */
+    int height = -1;       /** Desired height; -1 use native from file */
+    bool mipmaps = false;  /** Generate mip maps for texture */
+    bool cacheCPU = false; /** Cache loaded image data on cpu */
+    uint32 channels = 4;   /** Number of color channels to load */
+};
 
-    BRK_API void SetName(String name);
-    BRK_API void SetPath(String path);
-    BRK_API void SetUUID(UUID uuid);
+/**
+ * @class ResTexture
+ * @brief 2d texture resource for rendering
+ */
+class ResTexture final : public Resource {
+public:
+    BRK_API ResTexture() = default;
+    BRK_API ~ResTexture() override = default;
 
-    BRK_API const String &GetName() const { return mName; };
-    BRK_API const String &GetPath() const { return mPath; };
-    BRK_API const UUID &GetUUID() const { return mUUID; };
+    BRK_API const StringName &GetResourceType() const override;
+    BRK_API static const StringName &GetResourceTypeStatic();
+
+    BRK_API void Create(const Image &image, bool mipmaps, bool cache);
+    BRK_API void SetSampler(Ref<RHISampler> sampler);
+
+    BRK_API uint32 GetWidth() const { return mWidth; }
+    BRK_API uint32 GetHeight() const { return mHeight; }
+    BRK_API Image::Format GetFormat() const { return mFormat; }
+    BRK_API bool MipMaps() const { return mMipmaps; }
+
+    BRK_API const Image &GetImage() const { return mImage; }
+    BRK_API const Ref<RHITexture> &GetRHITexture() const { return mRHITexture; };
+    BRK_API const Ref<RHISampler> &GetRHISampler() const { return mRHISampler; };
 
 private:
-    String mName; /** Resource name */
-    String mPath; /** Load path */
-    UUID mUUID;   /** Unique id */
+    Ref<RHITexture> mRHITexture; /** GPU texture handle */
+    Ref<RHISampler> mRHISampler; /** GPU sampler to filter texture */
+
+    Image mImage;                                   /** Cached CPU data; may be empty */
+    Image::Format mFormat = Image::Format::Unknown; /** Data format */
+
+    uint32 mWidth = 0;     /** Size in pixels */
+    uint32 mHeight = 0;    /** Size in pixels */
+    bool mMipmaps = false; /** If mip maps generated */
 };
 
 /**
@@ -72,4 +96,4 @@ private:
 
 BRK_NS_END
 
-#endif//BERSERK_RESOURCE_HPP
+#endif//BERSERK_RESTEXTURE_HPP

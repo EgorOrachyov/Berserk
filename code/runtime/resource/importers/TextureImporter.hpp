@@ -25,14 +25,10 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RESOURCE_HPP
-#define BERSERK_RESOURCE_HPP
+#ifndef BERSERK_TEXTUREIMPORTER_HPP
+#define BERSERK_TEXTUREIMPORTER_HPP
 
-#include <core/Config.hpp>
-#include <core/Typedefs.hpp>
-#include <core/UUID.hpp>
-#include <core/string/StringName.hpp>
-#include <core/templates/RefCnt.hpp>
+#include <resource/ResourceImporter.hpp>
 
 BRK_NS_BEGIN
 
@@ -42,28 +38,19 @@ BRK_NS_BEGIN
  */
 
 /**
- * @class Resource
- * @brief Base class for any engine resource object
+ * @class TextureImporter
+ * @brief Texture resources importer
  */
-class Resource : public RefCnt {
+class TextureImporter final : public ResourceImporter {
 public:
-    BRK_API ~Resource() override = default;
-
-    /** @return Unique resource type identifier */
-    virtual const StringName &GetResourceType() const = 0;
-
-    BRK_API void SetName(String name);
-    BRK_API void SetPath(String path);
-    BRK_API void SetUUID(UUID uuid);
-
-    BRK_API const String &GetName() const { return mName; };
-    BRK_API const String &GetPath() const { return mPath; };
-    BRK_API const UUID &GetUUID() const { return mUUID; };
+    BRK_API TextureImporter();
+    BRK_API ~TextureImporter() override = default;
+    Ref<ResourceImportOptions> CreateDefaultOptions() const override;
+    const std::vector<String> &GetSupportedExtensions() const override;
+    void Import(const String &fullpath, const Ref<ResourceImportOptions> &options, ResourceImportResult &result) override;
 
 private:
-    String mName; /** Resource name */
-    String mPath; /** Load path */
-    UUID mUUID;   /** Unique id */
+    std::vector<String> mExtensions;
 };
 
 /**
@@ -72,4 +59,4 @@ private:
 
 BRK_NS_END
 
-#endif//BERSERK_RESOURCE_HPP
+#endif//BERSERK_TEXTUREIMPORTER_HPP
