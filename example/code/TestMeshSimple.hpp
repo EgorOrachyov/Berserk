@@ -118,7 +118,7 @@ public:
         float fov = MathUtils::DegToRad(60.0f);
         float near = 0.1f, far = 10.0f;
 
-        Mat4x4f model = Quatf(0.2 * angle, 0.5 * angle, 0.7 * angle).AsMatrix();
+        Mat4x4f model = Quatf(0.2f * angle, 0.5f * angle, 0.7f * angle).AsMatrix();
         Mat4x4f view = MathUtils3d::LookAt(eye, dir, up);
         Mat4x4f proj = MathUtils3d::Perspective(fov, window->GetAspectRatio(), near, far);
         Mat4x4f projViewModel = proj * view * model;

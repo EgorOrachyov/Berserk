@@ -38,6 +38,7 @@
 #include <platform/Output.hpp>
 #include <platform/WindowManager.hpp>
 #include <render/RenderEngine.hpp>
+#include <resource/ResourceManager.hpp>
 #include <rhi/RHIDevice.hpp>
 
 #include <atomic>
@@ -115,6 +116,9 @@ public:
     /** @return Rendering engine for game rendering */
     BRK_API RenderEngine &GetRenderEngine();
 
+    /** @return Resource manager for game resources */
+    BRK_API ResourceManager &GetResourceManager();
+
     /** @return Game thread id */
     BRK_API std::thread::id GetGameThreadId() const;
 
@@ -140,47 +144,26 @@ private:
     void Update(float t, float dt);
 
 private:
-    /** Engine config file */
-    Ref<Config> mConfig;
+    Ref<Config> mConfig; /** Engine config file */
 
-    /** Engine standard output */
-    std::unique_ptr<Output> mOutput;
+    std::unique_ptr<Output> mOutput;                   /** Engine standard output */
+    std::unique_ptr<FileSystem> mFileSystem;           /** Engine file system utils */
+    std::unique_ptr<Scheduler> mScheduler;             /** Engine scheduler for frame/timer events */
+    std::unique_ptr<EventDispatcher> mEventDispatcher; /** Engine event dispatch instance for events management */
 
-    /** Engine file system utils */
-    std::unique_ptr<FileSystem> mFileSystem;
+    std::shared_ptr<WindowManager> mWindowManager; /** Engine windows manager class */
+    std::shared_ptr<Input> mInput;                 /** Engine input manager */
+    std::shared_ptr<RHIDevice> mRHIDevice;         /** RHI Device for low-level rendering */
+    std::shared_ptr<Thread> mRHIThread;            /** RHI thread (for safe cmd submission) */
 
-    /** Engine scheduler for frame/timer events */
-    std::unique_ptr<Scheduler> mScheduler;
+    std::unique_ptr<RenderEngine> mRenderEngine;       /** Rendering engine for game rendering */
+    std::unique_ptr<ResourceManager> mResourceManager; /** Resource manager for game resources */
 
-    /** Engine event dispatch instance for events management */
-    std::unique_ptr<EventDispatcher> mEventDispatcher;
+    std::thread::id mGameThreadID;           /** Main game thread id */
+    std::atomic_bool mCloseRequested{false}; /** Close request */
 
-    /** Engine windows manager class */
-    std::shared_ptr<WindowManager> mWindowManager;
-
-    /** Engine input manager */
-    std::shared_ptr<Input> mInput;
-
-    /** RHI Device for low-level rendering */
-    std::shared_ptr<RHIDevice> mRHIDevice;
-
-    /** RHI thread (for safe cmd submission) */
-    std::shared_ptr<Thread> mRHIThread;
-
-    /** Rendering engine for game rendering */
-    std::unique_ptr<RenderEngine> mRenderEngine;
-
-    /** Main game thread id */
-    std::thread::id mGameThreadID;
-
-    /** Close request */
-    std::atomic_bool mCloseRequested{false};
-
-    /** Current delta-time */
-    float mDt = 0.0f;
-
-    /** Current time */
-    float mT = 0.0f;
+    float mDt = 0.0f; /** Current delta-time */
+    float mT = 0.0f;  /** Current time */
 
     /** Global instance */
     static Engine *gEngine;

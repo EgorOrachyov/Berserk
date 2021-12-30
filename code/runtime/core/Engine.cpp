@@ -33,6 +33,7 @@ BRK_NS_BEGIN
 
 Engine::~Engine() {
     // Release in reverse order
+    mResourceManager.reset();
     mRenderEngine.reset();
     mEventDispatcher.reset();
     mScheduler.reset();
@@ -95,6 +96,10 @@ RenderEngine &Engine::GetRenderEngine() {
     return *mRenderEngine;
 }
 
+ResourceManager &Engine::GetResourceManager() {
+    return *mResourceManager;
+}
+
 std::thread::id Engine::GetGameThreadId() const {
     return mGameThreadID;
 }
@@ -131,6 +136,7 @@ void Engine::InitCore() {
     mScheduler = std::unique_ptr<Scheduler>(new Scheduler());
     mEventDispatcher = std::unique_ptr<EventDispatcher>(new EventDispatcher());
     mRenderEngine = std::unique_ptr<RenderEngine>(new RenderEngine());
+    mResourceManager = std::unique_ptr<ResourceManager>(new ResourceManager());
 
     // Provide singleton
     gEngine = this;

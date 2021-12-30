@@ -8,6 +8,7 @@ set(BERSERK_CORE_HEADER
         core/Scheduler.hpp
         core/Thread.hpp
         core/Typedefs.hpp
+        core/UUID.hpp
         core/event/Event.hpp
         core/event/EventDropInput.hpp
         core/event/EventJoystick.hpp
@@ -45,6 +46,7 @@ set(BERSERK_CORE_SRC
         core/EventDispatcher.cpp
         core/Scheduler.cpp
         core/Thread.cpp
+        core/UUID.cpp
         core/event/EventDropInput.cpp
         core/event/EventJoystick.cpp
         core/event/EventKeyboard.cpp

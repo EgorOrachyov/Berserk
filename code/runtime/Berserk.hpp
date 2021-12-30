@@ -46,6 +46,7 @@
 #include <core/Scheduler.hpp>
 #include <core/Thread.hpp>
 #include <core/Typedefs.hpp>
+#include <core/UUID.hpp>
 #include <core/event/Event.hpp>
 #include <core/event/EventDropInput.hpp>
 #include <core/event/EventJoystick.hpp>
@@ -141,5 +142,25 @@
 #include <render/shader/ShaderManager.hpp>
 #include <render/shader/ShaderPass.hpp>
 #include <render/shader/ShaderTechnique.hpp>
+
+/**
+ * @defgroup resource
+ * @brief Resources management module
+ *
+ * Module provides access to engine resources.
+ * Defines base resource class, provides resource manager class
+ * for safe synchronized/async resources loading and importing.
+ *
+ * Also defines generic importer interface and import options,
+ * which allows to load or import arbitrary supported engine resources.
+ *
+ * All common built-in engine resources, such as Material, Shader,
+ * Texture, Mesh and etc. are defined in this module. Class names
+ * uses special `Res` prefix, to distinguish them from other classes.
+ */
+
+#include <resource/Resource.hpp>
+#include <resource/ResourceImporter.hpp>
+#include <resource/ResourceManager.hpp>
 
 #endif//BERSERK_BERSERK_HPP

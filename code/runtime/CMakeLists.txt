@@ -51,21 +51,24 @@ endfunction()
 
 include(core/CMakeLists.txt)
 include(platform/CMakeLists.txt)
-include(rhi/CMakeLists.txt)
 include(render/CMakeLists.txt)
+include(resource/CMakeLists.txt)
+include(rhi/CMakeLists.txt)
 
 set(BERSERK_RUNTIME_HEADER
         Berserk.hpp
         ${BERSERK_CORE_HEADER}
         ${BERSERK_PLATFORM_HEADER}
         ${BERSERK_RHI_HEADER}
-        ${BERSERK_RENDER_HEADER})
+        ${BERSERK_RENDER_HEADER}
+        ${BERSERK_RESOURCE_HEADER})
 
 set(BERSERK_RUNTIME_SRC
         ${BERSERK_CORE_SRC}
         ${BERSERK_PLATFORM_SRC}
         ${BERSERK_RHI_SRC}
-        ${BERSERK_RENDER_SRC})
+        ${BERSERK_RENDER_SRC}
+        ${BERSERK_RESOURCE_SRC})
 
 if (BERSERK_TARGET_WINDOWS)
     list(APPEND BERSERK_RUNTIME_SRC ${BERSERK_PLATFORM_WINDOWS_SRC})
