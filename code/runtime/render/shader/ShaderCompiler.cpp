@@ -112,12 +112,12 @@ bool ShaderCompiler::ParseShader(tinyxml2::XMLElement *element) {
     mShader->SetArchetype(std::move(archetypeName));
 
     ShaderVariation variation;
-    Ref<RHIVertexDeclaration> declaration;
+    MeshFormat format;
     mArchetype->DefineVariation(*mOptions, variation);
-    mArchetype->DefineDeclaration(*mOptions, declaration);
+    mArchetype->DefineFormat(*mOptions, format);
 
     mShader->SetVariation(variation);
-    mShader->SetDeclaration(std::move(declaration));
+    mShader->SetFormat(format);
 
     if (description)
         mShader->SetDescription(description->Value());

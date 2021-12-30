@@ -48,33 +48,14 @@ void ShaderArchetypeBase::DefineVariation(const ShaderCompileOptions &options, S
     variation = 0u;
 
     for (const auto &option : options.Get())
-        variation = variation | (static_cast<uint64>(1u) << static_cast<uint64>(mVariationHelper.GetOption(option)));
+        variation = variation | (static_cast<uint32>(1u) << static_cast<uint32>(mVariationHelper.GetOption(option)));
 }
 
-void ShaderArchetypeBase::DefineDeclaration(const ShaderCompileOptions &options, Ref<RHIVertexDeclaration> &declaration) {
-    RHIVertexDeclarationDesc vertexDeclarationDesc;
-    vertexDeclarationDesc.resize(4);
-    vertexDeclarationDesc[0].type = RHIVertexElementType::Float3;
-    vertexDeclarationDesc[0].frequency = RHIVertexFrequency::PerVertex;
-    vertexDeclarationDesc[0].buffer = 0;
-    vertexDeclarationDesc[0].offset = sizeof(float) * (0 + 0 + 0 + 0);
-    vertexDeclarationDesc[0].stride = sizeof(float) * (3 + 3 + 3 + 2);
-    vertexDeclarationDesc[1].type = RHIVertexElementType::Float3;
-    vertexDeclarationDesc[1].frequency = RHIVertexFrequency::PerVertex;
-    vertexDeclarationDesc[1].buffer = 0;
-    vertexDeclarationDesc[1].offset = sizeof(float) * (3 + 0 + 0 + 0);
-    vertexDeclarationDesc[1].stride = sizeof(float) * (3 + 3 + 3 + 2);
-    vertexDeclarationDesc[2].type = RHIVertexElementType::Float3;
-    vertexDeclarationDesc[2].frequency = RHIVertexFrequency::PerVertex;
-    vertexDeclarationDesc[2].buffer = 0;
-    vertexDeclarationDesc[2].offset = sizeof(float) * (3 + 3 + 0 + 0);
-    vertexDeclarationDesc[2].stride = sizeof(float) * (3 + 3 + 3 + 2);
-    vertexDeclarationDesc[3].type = RHIVertexElementType::Float2;
-    vertexDeclarationDesc[3].frequency = RHIVertexFrequency::PerVertex;
-    vertexDeclarationDesc[3].buffer = 0;
-    vertexDeclarationDesc[3].offset = sizeof(float) * (3 + 3 + 3 + 0);
-    vertexDeclarationDesc[3].stride = sizeof(float) * (3 + 3 + 3 + 2);
-    declaration = Engine::Instance().GetRHIDevice().CreateVertexDeclaration(vertexDeclarationDesc);
+void ShaderArchetypeBase::DefineFormat(const ShaderCompileOptions &options, MeshFormat &format) {
+    format.Set(MeshAttribute::Position);
+    format.Set(MeshAttribute::Normal);
+    format.Set(MeshAttribute::Color);
+    format.Set(MeshAttribute::UV);
 }
 
 void ShaderArchetypeBase::Process(const ShaderArchetype::InputData &inputData, ShaderArchetype::OutputData &outputData) {
@@ -160,7 +141,7 @@ void ShaderArchetypeBase::Process(const ShaderArchetype::InputData &inputData, S
     outputData.fragmentCode = fs.str();
     outputData.language = RHIShaderLanguage::GLSL410GL;
 
-#ifdef BERSERK_DEBUG
+#if 0
     auto &output = Engine::Instance().GetOutput();
     output.Write("Vertex shader code\n");
     output.Write(outputData.vertexCode);

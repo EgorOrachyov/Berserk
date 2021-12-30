@@ -59,6 +59,9 @@
 #include <core/math/MathUtils.hpp>
 #include <core/math/MathUtils2d.hpp>
 #include <core/math/MathUtils3d.hpp>
+#include <core/math/TMatMxN.hpp>
+#include <core/math/TQuat.hpp>
+#include <core/math/TVecN.hpp>
 #include <core/string/String.hpp>
 #include <core/string/String16u.hpp>
 #include <core/string/StringName.hpp>
@@ -132,6 +135,8 @@
 #include <render/RenderEngine.hpp>
 #include <render/material/Material.hpp>
 #include <render/material/MaterialParams.hpp>
+#include <render/mesh/Mesh.hpp>
+#include <render/mesh/MeshFormats.hpp>
 #include <render/shader/Shader.hpp>
 #include <render/shader/ShaderManager.hpp>
 #include <render/shader/ShaderPass.hpp>

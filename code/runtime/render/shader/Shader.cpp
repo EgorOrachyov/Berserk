@@ -49,6 +49,10 @@ void Shader::SetVariation(ShaderVariation variation) {
     mVariation = variation;
 }
 
+void Shader::SetFormat(MeshFormat format) {
+    mFormat = format;
+}
+
 void Shader::SetOptions(Ref<ShaderCompileOptions> options) {
     mOptions = std::move(options);
 }
@@ -63,10 +67,6 @@ void Shader::SetAllOptions(std::vector<ShaderOption> options) {
 
 void Shader::SetParams(Ref<ShaderParams> params) {
     mParams = std::move(params);
-}
-
-void Shader::SetDeclaration(Ref<RHIVertexDeclaration> declaration) {
-    mVertexDeclaration = std::move(declaration);
 }
 
 Ref<const ShaderTechnique> Shader::GetTechnique(const StringName &name) const {

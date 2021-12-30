@@ -29,13 +29,18 @@
 
 BRK_NS_BEGIN
 
+MeshFormats &RenderEngine::GetMeshFormats() const {
+    return *mMeshFormats;
+}
+
 ShaderManager &RenderEngine::GetShaderManager() const {
     return *mShaderManager;
 }
 
 
 void RenderEngine::Init() {
-    mShaderManager = std::make_shared<ShaderManager>();
+    mMeshFormats = std::unique_ptr<MeshFormats>(new MeshFormats);
+    mShaderManager = std::unique_ptr<ShaderManager>(new ShaderManager);
 }
 
 void RenderEngine::PreUpdate() {

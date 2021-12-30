@@ -151,11 +151,11 @@ void GLCommandList::Draw(uint32 verticesCount, uint32 baseVertex, uint32 instanc
     glBindVertexArray(mCurrentVao);
     BRK_GL_CATCH_ERR();
 
-    glDrawArraysInstanced(mPrimitivesType, static_cast<GLint>(baseVertex), static_cast<GLint>(verticesCount), instancesCount);
+    glDrawArraysInstanced(mPrimitivesType, static_cast<GLint>(baseVertex), static_cast<GLint>(verticesCount), static_cast<GLsizei>(instancesCount));
     BRK_GL_CATCH_ERR();
 }
 
-void GLCommandList::DrawIndexed(uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) {
+void GLCommandList::DrawIndexed(uint32 indexCount, uint32 baseVertex, uint32 instanceCount) {
     assert(mPipelineBound);
 
     if (mNeedUpdateVao) {

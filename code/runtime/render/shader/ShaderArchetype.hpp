@@ -30,6 +30,7 @@
 
 #include <core/Config.hpp>
 #include <core/Typedefs.hpp>
+#include <render/mesh/MeshFormats.hpp>
 #include <render/shader/Shader.hpp>
 
 BRK_NS_BEGIN
@@ -103,7 +104,7 @@ public:
     BRK_API virtual bool IsSupportedLanguage(RHIShaderLanguage language) const;
     BRK_API virtual void DefineOptions(std::vector<ShaderOption> &options) const = 0;
     BRK_API virtual void DefineVariation(const ShaderCompileOptions &options, ShaderVariation &variation) = 0;
-    BRK_API virtual void DefineDeclaration(const ShaderCompileOptions &options, Ref<RHIVertexDeclaration> &declaration) = 0;
+    BRK_API virtual void DefineFormat(const ShaderCompileOptions &options, MeshFormat &format) = 0;
     BRK_API virtual void Process(const InputData &inputData, OutputData &outputData) = 0;
 };
 

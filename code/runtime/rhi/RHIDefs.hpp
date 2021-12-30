@@ -56,7 +56,8 @@ enum class RHIBufferUsage : uint8 {
 
 enum class RHIIndexType : uint8 {
     Uint32,
-    Uint16
+    Uint16,
+    Unknown
 };
 
 /** Iterating of the elements in the vertex buffer */
@@ -627,6 +628,17 @@ inline RHIShaderLanguage RHIParseShaderLanguage(const char *language) {
         return RHIShaderLanguage::GLSL450VK;
     else
         return RHIShaderLanguage::Unknown;
+}
+
+inline uint32 RHIGetIndexSize(RHIIndexType type) {
+    switch (type) {
+        case RHIIndexType::Uint32:
+            return sizeof(uint32);
+        case RHIIndexType::Uint16:
+            return sizeof(uint16);
+        default:
+            return 0;
+    }
 }
 
 /**

@@ -23,6 +23,7 @@ set(BERSERK_CORE_HEADER
         core/math/MathUtils.hpp
         core/math/MathUtils2d.hpp
         core/math/MathUtils3d.hpp
+        core/math/TAabb.hpp
         core/math/TMatMxN.hpp
         core/math/TQuat.hpp
         core/math/Transformf.hpp

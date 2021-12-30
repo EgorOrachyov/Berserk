@@ -48,6 +48,7 @@ public:
 
     std::vector<berserk::Ref<berserk::RHIVertexBuffer>> vertexBuffers;
     berserk::Ref<berserk::RHIIndexBuffer> indexBuffer;
+    berserk::Ref<berserk::RHIVertexDeclaration> declaration;
     berserk::Ref<berserk::RHISampler> sampler;
     berserk::Ref<berserk::RHITexture> texture;
     berserk::Ref<berserk::RHIRenderPass> renderPass;
@@ -90,6 +91,7 @@ public:
 
         InitTexture();
         InitMaterial();
+        InitDeclaration();
         InitBuffers();
         InitRenderPass();
         InitPipeline();
@@ -99,6 +101,7 @@ public:
         window.Reset();
         vertexBuffers.clear();
         indexBuffer.Reset();
+        declaration.Reset();
         sampler.Reset();
         texture.Reset();
         shader.Reset();
@@ -170,7 +173,7 @@ public:
         commandList->BindResourceSet(material->GetPackedParams()->GetResourceSets()[0], 0);
         commandList->BindVertexBuffers(vertexBuffers);
         commandList->BindIndexBuffer(indexBuffer, RHIIndexType::Uint32);
-        commandList->DrawIndexed(6, 0, 0, 1);
+        commandList->DrawIndexed(6, 0, 1);
         commandList->EndRenderPass();
         commandList->SwapBuffers(window);
         commandList->Submit();
@@ -227,6 +230,35 @@ protected:
         material->SetDescription(BRK_TEXT("Tiled polygon with diffuse lightning"));
     }
 
+    void InitDeclaration() {
+        using namespace berserk;
+
+        RHIVertexDeclarationDesc vertexDeclarationDesc;
+        vertexDeclarationDesc.resize(4);
+        vertexDeclarationDesc[0].type = RHIVertexElementType::Float3;
+        vertexDeclarationDesc[0].frequency = RHIVertexFrequency::PerVertex;
+        vertexDeclarationDesc[0].buffer = 0;
+        vertexDeclarationDesc[0].offset = sizeof(float) * (0 + 0 + 0 + 0);
+        vertexDeclarationDesc[0].stride = sizeof(float) * (3 + 3 + 3 + 2);
+        vertexDeclarationDesc[1].type = RHIVertexElementType::Float3;
+        vertexDeclarationDesc[1].frequency = RHIVertexFrequency::PerVertex;
+        vertexDeclarationDesc[1].buffer = 0;
+        vertexDeclarationDesc[1].offset = sizeof(float) * (3 + 0 + 0 + 0);
+        vertexDeclarationDesc[1].stride = sizeof(float) * (3 + 3 + 3 + 2);
+        vertexDeclarationDesc[2].type = RHIVertexElementType::Float3;
+        vertexDeclarationDesc[2].frequency = RHIVertexFrequency::PerVertex;
+        vertexDeclarationDesc[2].buffer = 0;
+        vertexDeclarationDesc[2].offset = sizeof(float) * (3 + 3 + 0 + 0);
+        vertexDeclarationDesc[2].stride = sizeof(float) * (3 + 3 + 3 + 2);
+        vertexDeclarationDesc[3].type = RHIVertexElementType::Float2;
+        vertexDeclarationDesc[3].frequency = RHIVertexFrequency::PerVertex;
+        vertexDeclarationDesc[3].buffer = 0;
+        vertexDeclarationDesc[3].offset = sizeof(float) * (3 + 3 + 3 + 0);
+        vertexDeclarationDesc[3].stride = sizeof(float) * (3 + 3 + 3 + 2);
+
+        declaration = device->CreateVertexDeclaration(vertexDeclarationDesc);
+    }
+
     void InitBuffers() {
         using namespace berserk;
 
@@ -275,7 +307,7 @@ protected:
         RHIGraphicsPipelineDesc pipelineDesc{};
         pipelineDesc.primitivesType = RHIPrimitivesType::Triangles;
         pipelineDesc.shader = material->GetTechnique()->GetPass(0)->GetShader();
-        pipelineDesc.declaration = material->GetShader()->GetVertexDeclaration();
+        pipelineDesc.declaration = declaration;
         pipelineDesc.depthStencilState = RHIDepthStencilState::CreateDepthState(false);
         pipelineDesc.blendState.attachments.resize(1);
         pipelineDesc.renderPass = renderPass;

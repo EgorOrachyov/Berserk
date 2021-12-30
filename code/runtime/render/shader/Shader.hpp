@@ -30,6 +30,7 @@
 
 #include <core/Config.hpp>
 #include <core/Typedefs.hpp>
+#include <render/mesh/MeshFormats.hpp>
 #include <render/shader/ShaderParams.hpp>
 #include <render/shader/ShaderPass.hpp>
 #include <render/shader/ShaderTechnique.hpp>
@@ -48,7 +49,7 @@ BRK_NS_BEGIN
  * @class ShaderVariation
  * @brief Describes variation of compiled shader of the single type (max 64 flags)
  */
-using ShaderVariation = uint64;
+using ShaderVariation = uint32;
 
 /**
  * @class ShaderOption
@@ -91,11 +92,11 @@ public:
     BRK_API void SetLoadPath(String loadPath);
     BRK_API void SetDescription(String description);
     BRK_API void SetVariation(ShaderVariation variation);
+    BRK_API void SetFormat(MeshFormat format);
     BRK_API void SetOptions(Ref<ShaderCompileOptions> options);
     BRK_API void SetTechniques(std::vector<Ref<ShaderTechnique>> techniques);
     BRK_API void SetAllOptions(std::vector<ShaderOption> options);
     BRK_API void SetParams(Ref<ShaderParams> params);
-    BRK_API void SetDeclaration(Ref<RHIVertexDeclaration> declaration);
 
     BRK_API Ref<const ShaderTechnique> GetTechnique(const StringName &name) const;
     BRK_API Ref<const ShaderTechnique> GetTechnique(uint32 id) const;
@@ -107,33 +108,25 @@ public:
     BRK_API const String &GetLoadPath() const { return mLoadPath; }
     BRK_API const String &GetDescription() const { return mDescription; }
     BRK_API const ShaderVariation &GetVariation() const { return mVariation; }
+    BRK_API const MeshFormat &GetFormat() const { return mFormat; }
     BRK_API const std::vector<Ref<ShaderTechnique>> &GetTechniques() const { return mTechniques; }
     BRK_API const std::vector<ShaderOption> &GetAllOptions() const { return mAllOptions; }
-    BRK_API const Ref<RHIVertexDeclaration> &GetVertexDeclaration() const { return mVertexDeclaration; }
     BRK_API const Ref<ShaderParams> &GetParams() const { return mParams; }
     BRK_API const Ref<ShaderCompileOptions> &GetOptions() const { return mOptions; }
 
 private:
-    /** Shader name */
-    StringName mName;
-    /** Shader archetype */
-    StringName mArchetype;
-    /** Cached loading path of the file */
-    String mLoadPath;
-    /** Optional description */
-    String mDescription;
-    /** Variation, used to compile this shader */
-    ShaderVariation mVariation = 0;
-    /** List of shader techniques */
-    std::vector<Ref<ShaderTechnique>> mTechniques;
-    /** List of all available (potentially) options */
-    std::vector<ShaderOption> mAllOptions;
-    /** Input configuration (common for all techniques/passes) */
-    Ref<RHIVertexDeclaration> mVertexDeclaration;
-    /** Shader params with packing info */
-    Ref<ShaderParams> mParams;
-    /** List of shader options passed through compilation */
-    Ref<ShaderCompileOptions> mOptions;
+    StringName mName;               /** Shader name */
+    StringName mArchetype;          /** Shader archetype */
+    String mLoadPath;               /** Cached loading path of the file */
+    String mDescription;            /** Optional description */
+    ShaderVariation mVariation = 0; /** Variation, used to compile this shader */
+    MeshFormat mFormat;             /** Input configuration (common for all techniques/passes) */
+
+    std::vector<Ref<ShaderTechnique>> mTechniques; /** List of shader techniques */
+    std::vector<ShaderOption> mAllOptions;         /** List of all available (potentially) options */
+
+    Ref<ShaderParams> mParams;          /** Shader params with packing info */
+    Ref<ShaderCompileOptions> mOptions; /** List of shader options passed through compilation */
 };
 
 /**

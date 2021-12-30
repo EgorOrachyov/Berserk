@@ -25,17 +25,92 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_GAMEAPPLICATION_HPP
-#define BERSERK_GAMEAPPLICATION_HPP
+#ifndef BERSERK_TAABB_HPP
+#define BERSERK_TAABB_HPP
 
-#include <Berserk.hpp>
+#include <core/Config.hpp>
+#include <core/math/MathUtils.hpp>
+#include <core/math/TVecN.hpp>
 
-class GameApplication final : public berserk::Application {
+BRK_NS_BEGIN
+
+/**
+ * @addtogroup core
+ * @{
+ */
+
+template<typename T>
+class TAabb {
 public:
-    ~GameApplication() override = default;
-    void OnWindowCreate() override;
-    void OnInitialize() override;
-    void OnFinalize() override;
+    TAabb() = default;
+
+    TAabb(const TVecN<T, 3> &minv, const TVecN<T, 3> &maxv) {
+        min = minv;
+        max = maxv;
+    }
+
+    TAabb(const TVecN<T, 3> &center, T radius) {
+        TVecN<T, 3> offset = {radius, radius, radius};
+        min = center - offset;
+        max = center + radius;
+    }
+
+    void Fit(const TVecN<T, 3> &p) {
+        min = TVecN<T, 3>::min(min, p);
+        max = TVecN<T, 3>::max(max, p);
+    }
+
+    void Fit(const TAabb &aabb) {
+        min = TVecN<T, 3>::min(min, aabb.min);
+        max = TVecN<T, 3>::max(max, aabb.max);
+    }
+
+    bool Contains(const TVecN<T, 3> &p) const {
+        return min <= p && p <= max;
+    }
+
+    bool Contains(const TAabb<T> &aabb) const {
+        return min <= aabb.min && aabb.max <= max;
+    }
+
+    void GetPoints(T *points) const {
+        points[0] = TVecN<T, 3>(min[0], min[1], min[2]);
+        points[1] = TVecN<T, 3>(min[0], min[1], max[2]);
+        points[2] = TVecN<T, 3>(min[0], max[1], min[2]);
+        points[3] = TVecN<T, 3>(min[0], max[1], max[2]);
+        points[4] = TVecN<T, 3>(max[0], min[1], min[2]);
+        points[5] = TVecN<T, 3>(max[0], min[1], max[2]);
+        points[6] = TVecN<T, 3>(max[0], max[1], min[2]);
+        points[7] = TVecN<T, 3>(max[0], max[1], max[2]);
+    }
+
+    TVecN<T, 3> GetCenter() const {
+        return (max + min) * static_cast<T>(0.5);
+    }
+
+    TVecN<T, 3> GetExtent() const {
+        return (max - min) * static_cast<T>(0.5);
+    }
+
+    const TVecN<T, 3> &GetMin() const {
+        return min;
+    }
+
+    const TVecN<T, 3> &GetMax() const {
+        return max;
+    }
+
+private:
+    TVecN<T, 3> min{0, 0, 0};
+    TVecN<T, 3> max{0, 0, 0};
 };
 
-#endif//BERSERK_GAMEAPPLICATION_HPP
+using Aabbf = TAabb<float>;
+
+/**
+ * @}
+ */
+
+BRK_NS_END
+
+#endif//BERSERK_TAABB_HPP

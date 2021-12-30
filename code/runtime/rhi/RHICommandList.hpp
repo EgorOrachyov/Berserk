@@ -95,7 +95,7 @@ public:
     BRK_API virtual void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) = 0;
 
     /** Issue draw call for indexed data rendering only */
-    BRK_API virtual void DrawIndexed(uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) = 0;
+    BRK_API virtual void DrawIndexed(uint32 indexCount, uint32 baseVertex, uint32 instanceCount) = 0;
 
     /** End render pass (must be called in the end after begin render pass) */
     BRK_API virtual void EndRenderPass() = 0;

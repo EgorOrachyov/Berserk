@@ -4,6 +4,8 @@ set(BERSERK_RENDER_HEADER
         render/archetypes/UtilsGLSL.hpp
         render/material/Material.hpp
         render/material/MaterialParams.hpp
+        render/mesh/Mesh.hpp
+        render/mesh/MeshFormats.hpp
         render/shader/Shader.hpp
         render/shader/ShaderArchetype.hpp
         render/shader/ShaderCompiler.hpp
@@ -18,6 +20,8 @@ set(BERSERK_RENDER_SRC
         render/archetypes/ShaderArchetypeBase.cpp
         render/material/Material.cpp
         render/material/MaterialParams.cpp
+        render/mesh/Mesh.cpp
+        render/mesh/MeshFormats.cpp
         render/shader/Shader.cpp
         render/shader/ShaderArchetype.cpp
         render/shader/ShaderCompiler.cpp

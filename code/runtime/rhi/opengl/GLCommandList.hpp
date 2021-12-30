@@ -68,7 +68,7 @@ public:
     BRK_API void BindIndexBuffer(const Ref<RHIIndexBuffer> &buffer, RHIIndexType indexType) override;
     BRK_API void BindResourceSet(const Ref<RHIResourceSet> &resourceSet, uint32 set) override;
     BRK_API void Draw(uint32 verticesCount, uint32 baseVertex, uint32 instancesCount) override;
-    BRK_API void DrawIndexed(uint32 indexCount, uint32 baseVertex, uint32 baseIndex, uint32 instanceCount) override;
+    BRK_API void DrawIndexed(uint32 indexCount, uint32 baseVertex, uint32 instanceCount) override;
     BRK_API void EndRenderPass() override;
 
     BRK_API void SwapBuffers(const Ref<Window> &window) override;

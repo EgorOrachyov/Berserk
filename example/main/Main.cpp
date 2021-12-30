@@ -25,11 +25,12 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <GameApplication.hpp>
+#include <TestGameApplication.hpp>
 #include <TestMaterialShader.hpp>
+#include <TestMeshSimple.hpp>
 #include <TestRHISimpleQuad.hpp>
 
 int main(int argc, const char *const *argv) {
-    TestMaterialShader application;
+    TestMeshSimple application;
     return application.Run(argc, argv);
 }

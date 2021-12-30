@@ -71,13 +71,13 @@ list(APPEND GAME_SRC main/Main.cpp)
 
 # Head files
 list(APPEND GAME_HEADERS
-        code/GameApplication.hpp
+        code/TestGameApplication.hpp
         code/TestMaterialShader.hpp
+        code/TestMeshSimple.hpp
         code/TestRHISimpleQuad.hpp)
 
 # Source file
-list(APPEND GAME_SRC
-        code/GameApplication.cpp)
+list(APPEND GAME_SRC)
 
 # All game sources
 set(GAME_ALL_SOURCES ${GAME_HEADERS} ${GAME_SRC})

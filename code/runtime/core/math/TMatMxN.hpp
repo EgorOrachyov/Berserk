@@ -355,52 +355,6 @@ public:
         return result;
     }
 
-private:
-    template<typename D, uint32 DM, uint32 DN>
-    struct TDetMxN;
-
-    template<typename D>
-    struct TDetMxN<D, 1, 1> {
-        T operator()(const TMatMxN<T, 1, 1> &m) const {
-            return m.values[0];
-        }
-    };
-
-    template<typename D>
-    struct TDetMxN<D, 2, 2> {
-        T operator()(const TMatMxN<T, 2, 2> &m) const {
-            return m.values[0] * m.values[3] - m.values[1] * m.values[2];
-        }
-    };
-
-    template<typename D, uint32 DN>
-    struct TDetMxN<D, DN, DN> {
-        T operator()(const TMatMxN<T, DN, DN> &m) const {
-            T result = 0;
-            TMatMxN<T, DN - 1, DN> sub;
-            m.Submatrix(sub, 1, 0);
-
-            for (uint32 i = 0; i < DN; i++) {
-                result += (i % 2 ? -1 : 1) * m.values[i] * sub.ExcludeColumn(i).Det();
-            }
-
-            return result;
-        }
-    };
-
-    template<typename D, uint32 DM, uint32 DN>
-    struct TDetMxN {
-        T operator()(const TMatMxN<T, DM, DN> &m) const {
-            return 0;
-        }
-    };
-
-public:
-    T Det() const {
-        TDetMxN<void, M, N> det;
-        return det(*this);
-    }
-
     void Zero() {
         for (auto &v : values) {
             v = 0;
@@ -412,14 +366,6 @@ public:
 
     T *GetData() { return values; }
     const T *GetData() const { return values; }
-
-    void CopyTransposed(T *buffer) const {
-        for (uint32 i = 0; i < M; i++) {
-            for (uint32 j = 0; j < N; j++) {
-                buffer[j * M + i] = values[i * N + j];
-            }
-        }
-    }
 
     constexpr static uint32 GetStride() { return N * sizeof(T); }
     constexpr static uint32 GetSize() { return N * M; }

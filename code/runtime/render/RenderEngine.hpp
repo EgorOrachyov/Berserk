@@ -30,6 +30,8 @@
 
 #include <core/Config.hpp>
 #include <core/Typedefs.hpp>
+
+#include <render/mesh/MeshFormats.hpp>
 #include <render/shader/ShaderManager.hpp>
 
 #include <memory>
@@ -50,6 +52,9 @@ public:
     BRK_API RenderEngine() = default;
     BRK_API ~RenderEngine() = default;
 
+    /** @return Mesh formats manager */
+    BRK_API MeshFormats &GetMeshFormats() const;
+
     /** @return Shader manager */
     BRK_API ShaderManager &GetShaderManager() const;
 
@@ -61,8 +66,8 @@ private:
     BRK_API void PostUpdate();
 
 private:
-    /** Shader manager */
-    std::shared_ptr<ShaderManager> mShaderManager;
+    std::unique_ptr<MeshFormats> mMeshFormats;     /** Mesh formats manager */
+    std::unique_ptr<ShaderManager> mShaderManager; /** Shader manager */
 };
 
 /**

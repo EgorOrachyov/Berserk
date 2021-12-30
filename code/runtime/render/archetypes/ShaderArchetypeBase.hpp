@@ -46,7 +46,7 @@ public:
     const std::vector<RHIShaderLanguage> &GetSupportedLanguages() const override;
     void DefineOptions(std::vector<ShaderOption> &options) const override;
     void DefineVariation(const ShaderCompileOptions &options, ShaderVariation &variation) override;
-    void DefineDeclaration(const ShaderCompileOptions &options, Ref<RHIVertexDeclaration> &declaration) override;
+    void DefineFormat(const ShaderCompileOptions &options, MeshFormat &format) override;
     void Process(const InputData &inputData, OutputData &outputData) override;
 
 private:
