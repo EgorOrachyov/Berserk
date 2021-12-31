@@ -56,12 +56,25 @@ std::FILE *FileSystem::OpenFile(const String &filepath, const String &mode) {
     return nullptr;
 }
 
-String FileSystem::GetFileName(const String &filename) {
+String FileSystem::GetFileName(const String &filename, bool withoutExtension) {
     auto file = PathToUnixStyle(filename);
     auto pos = file.find_last_of('/');
+    auto dest = String::npos;
+
     if (pos != String::npos)
-        return file.substr(pos + 1);
-    return file;
+        pos += 1;
+    else
+        pos = 0;
+
+    if (withoutExtension) {
+        dest = file.find_last_of('.');
+
+        if (dest != String::npos) {
+            dest = dest - pos;
+        }
+    }
+
+    return file.substr(pos, dest);
 }
 
 bool FileSystem::IsAbsolutePath(const String &filename) {

@@ -8,10 +8,10 @@
         <param name="ptDiffuse" uiName="Diffuse" type="texture2d" default="white"/>
         <param name="pMVP" uiName="MVP matrix" type="mat4"/>
         <param name="pModel" uiName="Model matrix" type="mat3"/>
+        <param name="pCameraPos" uiName="Camera world pos" type="float3" default="0 0 6"/>
         <param name="pLightPos" uiName="Light pos" type="float3" default="0 0 10"/>
         <param name="pLightColor" uiName="Light color" type="float3" default="1 1 1"/>
-        <param name="pLightDir" uiName="Light direction" type="float3" default="0 0 -1"/>
-        <param name="pLightAmbient" uiName="Light ambient" type="float3" default="0.1 0.1 0.1"/>
+        <param name="pLightAmbient" uiName="Light ambient" type="float3" default="0.05 0.05 0.05"/>
         <param name="pTime" uiName="Time" type="float1" description="Time used to animate texture" default="0.1"/>
     </params>
     <techniques>
@@ -22,7 +22,7 @@
                         void vertex(inout Params params) {
                             params.projPos = pMVP * vec4(getPos(), 1.0f);
                             params.worldPos = pModel * getPos();
-                            params.worldNorm = pModel * getNorm();
+                            params.worldNorm = normalize(pModel * getNorm());
                             params.color = getColor();
                             params.uv = getUV();
                         }
@@ -38,13 +38,19 @@
                             if (!gl_FrontFacing)
                                 norm = -norm;
                             vec3 toL = normalize(pLightPos - pos);
-                            float dotLN = max(0.0f, dot(toL, norm));
-                            vec3 color = getColor();
-                            vec3 diffuse = texture(ptDiffuse, uv).rgb;
-                            vec3 result = color * diffuse * (pLightAmbient + pLightColor * dotLN);
+                            vec3 toV = normalize(pCameraPos - pos);
+                            float dotLN = dot(toL, norm);
+                            vec3 color = getColor() * texture(ptDiffuse, uv).rgb;
+                            vec3 diffuse = color * max(dotLN, 0.0f);
+                            vec3 specular = vec3(0);
+                            if (dotLN > 0.0f) {
+                                float dotVR = max(0.0f, dot(toV, reflect(-toL, norm)));
+                                specular = vec3(1) * pow(dotVR, 8.0f);
+                            }
+                            vec3 result = color * pLightAmbient + diffuse + specular;
                             params.outColor = vec4(result, 1.0f);
                         #ifdef D_DEBUG_COLOR
-                            params.outColor = vec4(diffuse * vec3(1, 0.1f, 0.1f), 1);
+                            params.outColor = vec4(color * (vec3(0.5) + norm * 0.5f), 1.0f);
                         #endif //D_DEBUG_COLOR
                         }
                     </fragment>

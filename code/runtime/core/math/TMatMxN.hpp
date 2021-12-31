@@ -382,6 +382,53 @@ using Mat3x3f = TMatMxN<float, 3, 3>;
 using Mat4x4f = TMatMxN<float, 4, 4>;
 
 /**
+ * @class TDetMxN
+ * @brief Matrix det evaluation helper
+ *
+ * @tparam T Type of matrix values
+ * @tparam DM Number of rows
+ * @tparam DN Number of columns
+ */
+template<typename T, uint32 DM, uint32 DN>
+struct TDetMxN;
+
+template<typename T>
+struct TDetMxN<T, 1, 1> {
+    T operator()(const TMatMxN<T, 1, 1> &m) const {
+        return m.values[0];
+    }
+};
+
+template<typename T>
+struct TDetMxN<T, 2, 2> {
+    T operator()(const TMatMxN<T, 2, 2> &m) const {
+        return m.values[0] * m.values[3] - m.values[1] * m.values[2];
+    }
+};
+
+template<typename T, uint32 DN>
+struct TDetMxN<T, DN, DN> {
+    T operator()(const TMatMxN<T, DN, DN> &m) const {
+        T result = 0;
+        TMatMxN<T, DN - 1, DN> sub;
+        m.Submatrix(sub, 1, 0);
+
+        for (uint32 i = 0; i < DN; i++) {
+            result += (i % 2 ? -1 : 1) * m.values[i] * sub.ExcludeColumn(i).Det();
+        }
+
+        return result;
+    }
+};
+
+template<typename T, uint32 DM, uint32 DN>
+struct TDetMxN {
+    T operator()(const TMatMxN<T, DM, DN> &m) const {
+        return 0;
+    }
+};
+
+/**
  * @}
  */
 

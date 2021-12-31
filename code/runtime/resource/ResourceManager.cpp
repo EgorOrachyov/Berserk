@@ -72,7 +72,6 @@ Ref<Resource> ResourceManager::Import(const String &filepath, const Ref<Resource
 #endif
 
     importResult.resource->SetUUID(uuid);
-    importResult.resource->SetName(StringName(filepath));
     importResult.resource->SetPath(std::move(path));
 
     return importResult.resource;

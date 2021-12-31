@@ -73,6 +73,7 @@ void ImporterTexture::Import(const String &fullpath, const Ref<ResourceImportOpt
     }
 
     Ref<ResTexture> texture(new ResTexture());
+    texture->SetName(StringName(Engine::Instance().GetFileSystem().GetFileName(fullpath, true)));
     texture->CreateFromImage(image, ops->mipmaps, ops->cacheCPU);
 
     // todo: remove

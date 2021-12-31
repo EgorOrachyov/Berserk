@@ -62,13 +62,13 @@ public:
     }
 
     void Fit(const TVecN<T, 3> &p) {
-        min = TVecN<T, 3>::min(min, p);
-        max = TVecN<T, 3>::max(max, p);
+        min = TVecN<T, 3>::Min(min, p);
+        max = TVecN<T, 3>::Max(max, p);
     }
 
     void Fit(const TAabb &aabb) {
-        min = TVecN<T, 3>::min(min, aabb.min);
-        max = TVecN<T, 3>::max(max, aabb.max);
+        min = TVecN<T, 3>::Min(min, aabb.min);
+        max = TVecN<T, 3>::Max(max, aabb.max);
     }
 
     bool Contains(const TVecN<T, 3> &p) const {

@@ -126,14 +126,12 @@ public:
         Mat4x4f lightRotation = MathUtils3d::RotateY(-2.0f * angle);
 
         Vec3f lightPos = MathUtils3d::Multiply(lightRotation, Vec3f(0, 0, 5));
-        Vec3f lightDir = MathUtils3d::Multiply(lightRotation, Vec3f(0, 0, -1));
 
         static StringName ptDiffuse("ptDiffuse");
         static StringName pMVP("pMVP");
         static StringName pModel("pModel");
         static StringName pLightColor("pLightColor");
         static StringName pLightPos("pLightPos");
-        static StringName pLightDir("pLightDir");
         static StringName pTime("pTime");
 
         Vec3f lightColor(1, 1, 1);
@@ -143,7 +141,6 @@ public:
         material->SetMat3(pModel, model.SubMatrix<3, 3>(0, 0));
         material->SetFloat3(pLightColor, lightColor);
         material->SetFloat3(pLightPos, lightPos);
-        material->SetFloat3(pLightDir, lightDir);
         material->SetFloat1(pTime, engine->GetTime());
         material->UpdatePack();
     }
@@ -222,59 +219,34 @@ protected:
         //  | /  | /
         //  v1---v2
 
-        // clang-format off
-        float vertexData_VN[] = {
-                -1, 1, 1, 0, 0, 1,
-                -1, -1, 1, 0, 0, 1,
-                1, -1, 1, 0, 0, 1,
-                1, 1, 1, 0, 0, 1,
-                1, 1, 1, 1, 0, 0,
-                1, -1, 1, 1, 0, 0,
-                1, -1, -1, 1, 0, 0,
-                1, 1, -1, 1, 0, 0,
-                1, 1, -1, 0, 0, -1,
-                1, -1, -1, 0, 0, -1,
-                -1, -1, -1, 0, 0, -1,
-                -1, 1, -1, 0, 0, -1,
-                -1, 1, -1, -1, 0, 0,
-                -1, -1, -1, -1, 0, 0,
-                -1, -1, 1, -1, 0, 0,
-                -1, 1, 1, -1, 0, 0,
-                -1, 1, -1, 0, 1, 0,
-                -1, 1, 1, 0, 1, 0,
-                1, 1, 1, 0, 1, 0,
-                1, 1, -1, 0, 1, 0,
-                1, -1, -1, 0, -1, 0,
-                1, -1, 1, 0, -1, 0,
-                -1, -1, 1, 0, -1, 0,
-                -1, -1, -1, 0, -1, 0};
-
-        float attributeData_CUV[] = {
-                1, 1, 1, 0, 1,
-                1, 1, 1, 0, 0,
-                1, 1, 1, 1, 0,
-                1, 1, 1, 1, 1,
-                1, 1, 1, 0, 1,
-                1, 1, 1, 0, 0,
-                1, 1, 1, 1, 0,
-                1, 1, 1, 1, 1,
-                1, 1, 1, 0, 1,
-                1, 1, 1, 0, 0,
-                1, 1, 1, 1, 0,
-                1, 1, 1, 1, 1,
-                1, 1, 1, 0, 1,
-                1, 1, 1, 0, 0,
-                1, 1, 1, 1, 0,
-                1, 1, 1, 1, 1,
-                1, 1, 1, 0, 1,
-                1, 1, 1, 0, 0,
-                1, 1, 1, 1, 0,
-                1, 1, 1, 1, 1,
-                1, 1, 1, 0, 1,
-                1, 1, 1, 0, 0,
-                1, 1, 1, 1, 0,
-                1, 1, 1, 1, 1};
-
+        float positions[] = {
+                -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1,
+                1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
+                1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1,
+                -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1,
+                -1, 1, -1, -1, 1, 1, 1, 1, 1, 1, 1, -1,
+                1, -1, -1, 1, -1, 1, -1, -1, 1, -1, -1, -1};
+        float normals[] = {
+                0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
+                1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+                0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1,
+                -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0,
+                0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+                0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0};
+        float colors[] = {
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+        float uvs[] = {
+                0, 1, 0, 0, 1, 0, 1, 1,
+                0, 1, 0, 0, 1, 0, 1, 1,
+                0, 1, 0, 0, 1, 0, 1, 1,
+                0, 1, 0, 0, 1, 0, 1, 1,
+                0, 1, 0, 0, 1, 0, 1, 1,
+                0, 1, 0, 0, 1, 0, 1, 1};
         uint32 indices[] = {
                 0, 1, 2, 2, 3, 0,
                 4, 5, 6, 6, 7, 4,
@@ -282,11 +254,15 @@ protected:
                 12, 13, 14, 14, 15, 12,
                 16, 17, 18, 18, 19, 16,
                 20, 21, 22, 22, 23, 20};
-        // clang-format on
 
         MeshFormat format = {MeshAttribute::Position, MeshAttribute::Normal, MeshAttribute::Color, MeshAttribute::UV};
+        MeshArrays arrays;
+        arrays.positions = positions;
+        arrays.normals = normals;
+        arrays.colors = colors;
+        arrays.uvs = uvs;
 
-        mesh = Ref<Mesh>(new Mesh(format, 24, Data::Make(vertexData_VN, sizeof(vertexData_VN)), Data::Make(attributeData_CUV, sizeof(attributeData_CUV)), Ref<Data>()));
+        mesh = Ref<Mesh>(new Mesh(format, 24, arrays));
         mesh->SetAabb(Aabbf(Vec3f(0, 0, 0), 1));
         mesh->AddSubMesh(StringName("box"), berserk::RHIPrimitivesType::Triangles, Aabbf(Vec3f(0, 0, 0), 1), 0, berserk::RHIIndexType::Uint32, 6 * 6, Data::Make(indices, sizeof(indices)));
         mesh->AddMaterial(material);

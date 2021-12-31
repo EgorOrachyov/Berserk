@@ -34,6 +34,7 @@
 #include <rhi/RHIDefs.hpp>
 #include <rhi/RHIVertexDeclaration.hpp>
 
+#include <mutex>
 #include <unordered_map>
 
 BRK_NS_BEGIN
@@ -100,6 +101,7 @@ public:
 
 private:
     std::unordered_map<String, Ref<RHIVertexDeclaration>> mCached;
+    mutable std::mutex mMutex;
 };
 
 /** @return Attribute info */

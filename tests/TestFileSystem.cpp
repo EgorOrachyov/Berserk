@@ -68,7 +68,10 @@ TEST(Berserk, GetFileName) {
 
     FileSystem fs;
 
-    std::cout << fs.GetFileName("some/very/fancy/GetFileName.ext");
+    std::cout << fs.GetFileName("some/very/fancy/GetFileName.ext") << std::endl;
+    std::cout << fs.GetFileName("some/very/fancy/GetFileName.ext", true) << std::endl;
+    std::cout << fs.GetFileName("GetFileName.ext") << std::endl;
+    std::cout << fs.GetFileName("GetFileName.ext", true) << std::endl;
 }
 
 TEST(Berserk, ListDir) {

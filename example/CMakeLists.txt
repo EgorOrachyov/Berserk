@@ -73,6 +73,7 @@ list(APPEND GAME_SRC main/Main.cpp)
 list(APPEND GAME_HEADERS
         code/TestGameApplication.hpp
         code/TestMaterialShader.hpp
+        code/TestMeshModel.hpp
         code/TestMeshSimple.hpp
         code/TestRHISimpleQuad.hpp)
 

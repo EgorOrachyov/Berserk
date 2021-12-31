@@ -25,13 +25,46 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <TestGameApplication.hpp>
-#include <TestMaterialShader.hpp>
-#include <TestMeshModel.hpp>
-#include <TestMeshSimple.hpp>
-#include <TestRHISimpleQuad.hpp>
+#ifndef BERSERK_GEOMETRY_HPP
+#define BERSERK_GEOMETRY_HPP
 
-int main(int argc, const char *const *argv) {
-    TestMeshModel application;
-    return application.Run(argc, argv);
-}
+#include <core/math/MathUtils.hpp>
+#include <core/math/TVecN.hpp>
+
+#include <array>
+
+BRK_NS_BEGIN
+
+/**
+ * @addtogroup core
+ * @{
+ */
+
+/**
+ * @class Geometry
+ * @brief Util class to manipulate 3d geometry
+ */
+class Geometry {
+public:
+    /**
+     * @brief Generates tangent vectors from provided vertex data
+     *
+     * @note cross(tangent,bitangent) = normal
+     * @note cross(normal,tangent) = bitangent
+     *
+     * @param positions Counterclockwise vertices positions
+     * @param normals Counterclockwise vertices positions
+     * @param texCoords Counterclockwise vertices texture coords
+     * @param tangents Output tangents vector
+     * @param bitangents Output bitangents vector
+     */
+    BRK_API static void GenTangentSpace(const std::array<Vec3f, 3> &positions, const std::array<Vec3f, 3> &normals, const std::array<Vec2f, 3> &texCoords, std::array<Vec3f, 3> &tangents, std::array<Vec3f, 3> &bitangents);
+};
+
+/**
+ * @}
+ */
+
+BRK_NS_END
+
+#endif//BERSERK_GEOMETRY_HPP

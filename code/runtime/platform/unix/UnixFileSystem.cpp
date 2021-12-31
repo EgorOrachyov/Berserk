@@ -45,11 +45,24 @@ std::FILE *FileSystem::OpenFile(const String &filepath, const String &mode) {
     return std::fopen(filepath.c_str(), mode.c_str());
 }
 
-String FileSystem::GetFileName(const String &filename) {
-    auto pos = filename.find_last_of('/');
+String FileSystem::GetFileName(const String &file, bool withoutExtension) {
+    auto pos = file.find_last_of('/');
+    auto dest = String::npos;
+
     if (pos != String::npos)
-        return filename.substr(pos + 1);
-    return filename;
+        pos += 1;
+    else
+        pos = 0;
+
+    if (withoutExtension) {
+        dest = file.find_last_of('.');
+
+        if (dest != String::npos) {
+            dest = dest - pos;
+        }
+    }
+
+    return file.substr(pos, dest);
 }
 
 bool FileSystem::IsAbsolutePath(const String &filename) {

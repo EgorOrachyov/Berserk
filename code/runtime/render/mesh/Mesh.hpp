@@ -99,6 +99,21 @@ private:
 };
 
 /**
+ * @class MeshArrays
+ * @brief Struct describing mesh data per attribute
+ */
+struct MeshArrays {
+    const float *positions = nullptr;
+    const float *normals = nullptr;
+    const float *tangents = nullptr;
+    const float *colors = nullptr;
+    const float *uvs = nullptr;
+    const float *uvs2 = nullptr;
+    const float *weights = nullptr;
+    const int32 *bones = nullptr;
+};
+
+/**
  * @class Mesh
  * @brief Contains vertex array-based geometry
  *
@@ -117,13 +132,25 @@ public:
     /**
      * @brief Creates mesh from raw vertex data
      *
-     * @param format Format of the vertex
+     * @param format Format of the vertex data
      * @param verticesCount Number of vertices in the mesh
      * @param vertexData Packed vertex data
      * @param attributeData Packed attribute data
      * @param skinningData Packed skinning data
      */
     BRK_API Mesh(MeshFormat format, uint32 verticesCount, const Ref<Data> &vertexData, const Ref<Data> &attributeData, const Ref<Data> &skinningData);
+
+    /**
+     * @brief Creates mesh from arrays of attributes
+     *
+     * Automatically packs data accordingly to mesh format.
+     *
+     * @param format Format of the vertex data
+     * @param verticesCount Number of vertices in the mesh
+     * @param meshArrays Structure with pointers to attributes
+     */
+    BRK_API Mesh(MeshFormat format, uint32 verticesCount, const MeshArrays &meshArrays);
+
     BRK_API ~Mesh() override = default;
 
     /** Set name of the mesh */
@@ -145,7 +172,7 @@ public:
      * @param indicesCount Number of indices
      * @param indexData Index data
      */
-    BRK_API void AddSubMesh(const StringName &name, RHIPrimitivesType primitivesType, const Aabbf& aabb, uint32 baseVertex, RHIIndexType indexType, uint32 indicesCount, const Ref<Data> &indexData);
+    BRK_API void AddSubMesh(const StringName &name, RHIPrimitivesType primitivesType, const Aabbf &aabb, uint32 baseVertex, RHIIndexType indexType, uint32 indicesCount, const Ref<Data> &indexData);
 
     /**
      * @brief Set sub-mesh material
@@ -188,6 +215,9 @@ public:
     BRK_API bool HasVertexData() const { return mVertexData.IsNotNull(); }
     BRK_API bool HasAttributeData() const { return mAttributeData.IsNotNull(); }
     BRK_API bool HasSkinningData() const { return mSkinningData.IsNotNull(); }
+
+private:
+    void InitFromData(MeshFormat format, uint32 verticesCount, const Ref<Data> &vertexData, const Ref<Data> &attributeData, const Ref<Data> &skinningData);
 
 private:
     StringName mName;   /** Name of the mesh */

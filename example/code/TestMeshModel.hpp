@@ -25,46 +25,37 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_TESTMATERIALSHADER_HPP
-#define BERSERK_TESTMATERIALSHADER_HPP
+#ifndef BERSERK_TESTMESHSIMPLE_HPP
+#define BERSERK_TESTMESHSIMPLE_HPP
 
 #include <Berserk.hpp>
 
-class TestMaterialShader final : public berserk::Application {
+class TestMeshModel final : public berserk::Application {
 public:
-    struct Vertex {
-        berserk::Vec3f pos;
-        berserk::Vec3f norm;
-        berserk::Vec3f color;
-        berserk::Vec2f texCoords;
-    };
-
     berserk::Engine *engine = nullptr;
     berserk::EventDispatcher *dispatcher = nullptr;
     berserk::RHIDevice *device = nullptr;
     berserk::FileSystem *fileSystem = nullptr;
+    berserk::ResourceManager *resourceManager = nullptr;
 
     berserk::Ref<berserk::Window> window;
 
-    std::vector<berserk::Ref<berserk::RHIVertexBuffer>> vertexBuffers;
-    berserk::Ref<berserk::RHIIndexBuffer> indexBuffer;
-    berserk::Ref<berserk::RHIVertexDeclaration> declaration;
-    berserk::Ref<berserk::RHISampler> sampler;
-    berserk::Ref<berserk::RHITexture> texture;
     berserk::Ref<berserk::RHIRenderPass> renderPass;
     berserk::Ref<berserk::RHIGraphicsPipeline> pipeline;
     berserk::Ref<berserk::RHICommandList> commandList;
 
     berserk::Ref<const berserk::Shader> shader;
     berserk::Ref<berserk::Material> material;
+    berserk::Ref<berserk::ResMesh> mesh;
+    berserk::Ref<berserk::ResTexture> texture;
 
     float speed{};
     float angle{};
     float gamma{};
 
 public:
-    TestMaterialShader() = default;
-    ~TestMaterialShader() override = default;
+    TestMeshModel() = default;
+    ~TestMeshModel() override = default;
 
     void OnWindowCreate() override {
         BRK_INFO("Initialize game window");
@@ -82,30 +73,27 @@ public:
 
     void OnInitialize() override {
         fileSystem = &engine->GetFileSystem();
+        resourceManager = &engine->GetResourceManager();
         device = &engine->GetRHIDevice();
         window = engine->GetWindowManager().GetPrimaryWindow();
         angle = 0.0f;
-        speed = 0.5f;
+        speed = 0.25f;
         gamma = device->GetDriverType() == berserk::RHIType::Vulkan ? 2.2f : 1.0f;
         commandList = device->GetCoreCommandList();
 
         InitTexture();
         InitMaterial();
-        InitDeclaration();
-        InitBuffers();
+        InitMesh();
         InitRenderPass();
         InitPipeline();
     }
 
     void OnFinalize() override {
         window.Reset();
-        vertexBuffers.clear();
-        indexBuffer.Reset();
-        declaration.Reset();
-        sampler.Reset();
         texture.Reset();
         shader.Reset();
         material.Reset();
+        mesh.Reset();
         renderPass.Reset();
         pipeline.Reset();
         commandList.Reset();
@@ -124,34 +112,38 @@ public:
         angle += speed * engine->GetDeltaTime();
         angle = angle > berserk::MathUtils::PIf * 2 ? angle - berserk::MathUtils::PIf * 2 : angle;
 
-        auto color1 = 0.5f + 0.5f * berserk::MathUtils::Sin(2 * angle);
-        auto color2 = 0.5f + 0.5f * berserk::MathUtils::Sin(3 * angle);
-        auto color3 = 0.5f + 0.5f * berserk::MathUtils::Sin(5 * angle);
-
-        Vec3f eye(0, 0, 6);
+        Vec3f eye(0, 0, 2);
         Vec3f dir(0, 0, -1);
         Vec3f up(0, 1, 0);
         float fov = MathUtils::DegToRad(60.0f);
         float near = 0.1f, far = 10.0f;
 
-        Mat4x4f model = MathUtils3d::RotateY(angle);
+        Mat4x4f model = MathUtils3d::IdentityMatrix();
         Mat4x4f view = MathUtils3d::LookAt(eye, dir, up);
         Mat4x4f proj = MathUtils3d::Perspective(fov, window->GetAspectRatio(), near, far);
         Mat4x4f projViewModel = proj * view * model;
 
+        Mat4x4f lightRotation = MathUtils3d::RotateY(angle);
+
+        Vec3f lightPos = MathUtils3d::Multiply(lightRotation, Vec3f(0, 0, 2));
+
         static StringName ptDiffuse("ptDiffuse");
         static StringName pMVP("pMVP");
         static StringName pModel("pModel");
+        static StringName pCameraPos("pCameraPos");
         static StringName pLightColor("pLightColor");
+        static StringName pLightPos("pLightPos");
         static StringName pTime("pTime");
 
-        Vec3f lightColor(color1 * 0.8f + 2.0f, 1.0f - color2, color3);
+        Vec3f lightColor(1, 1, 1);
 
-        material->SetTexture(ptDiffuse, texture, sampler);
+        material->SetTexture(ptDiffuse, texture->GetRHITexture(), texture->GetRHISampler());
         material->SetMat4(pMVP, projViewModel);
         material->SetMat3(pModel, model.SubMatrix<3, 3>(0, 0));
+        material->SetFloat3(pCameraPos, eye);
         material->SetFloat3(pLightColor, lightColor);
-        material->SetFloat1(pTime, engine->GetTime());
+        material->SetFloat3(pLightPos, lightPos);
+        material->SetFloat1(pTime, 0.5f * engine->GetTime());
         material->UpdatePack();
     }
 
@@ -168,12 +160,22 @@ public:
         beginInfo.stencilClear = 0;
         beginInfo.clearColors[0] = Vec4f(0.198f, 0.092f, 0.121f, 1.0f).Pow(gamma);
 
+        std::vector<Ref<RHIVertexBuffer>> vertexBuffers;
+        auto gpuMesh = mesh->GetMesh();
+        if (gpuMesh->HasVertexData()) vertexBuffers.push_back(gpuMesh->GetVertexData());
+        if (gpuMesh->HasAttributeData()) vertexBuffers.push_back(gpuMesh->GetAttributeData());
+        if (gpuMesh->HasSkinningData()) vertexBuffers.push_back(gpuMesh->GetSkinningData());
+
         commandList->BeginRenderPass(renderPass, beginInfo);
         commandList->BindGraphicsPipeline(pipeline);
         commandList->BindResourceSet(material->GetPackedParams()->GetResourceSets()[0], 0);
         commandList->BindVertexBuffers(vertexBuffers);
-        commandList->BindIndexBuffer(indexBuffer, RHIIndexType::Uint32);
-        commandList->DrawIndexed(6, 0, 1);
+
+        for (auto &subMesh : gpuMesh->GetSubMeshes()) {
+            commandList->BindIndexBuffer(subMesh->GetIndexBuffer(), subMesh->GetIndexType());
+            commandList->DrawIndexed(subMesh->GetIndicesCount(), subMesh->GetBaseVertex(), 1);
+        }
+
         commandList->EndRenderPass();
         commandList->SwapBuffers(window);
         commandList->Submit();
@@ -183,35 +185,15 @@ protected:
     void InitTexture() {
         using namespace berserk;
 
-        String imagePath = BRK_TEXT("../engine/resources/textures/background-32x8.png");
-        Image image = Image::LoadRgba(imagePath, 4);
+        String texturePath = BRK_TEXT("resources/textures/background-32x8.png");
+        Ref<ResTextureImportOptions> importOptions(new ResTextureImportOptions);
+        importOptions->width = 64;
+        importOptions->height = 64;
+        importOptions->cacheCPU = false;
+        importOptions->mipmaps = true;
+        importOptions->channels = 4;
 
-        assert(!image.Empty());
-
-        RHITextureDesc textureDesc;
-        textureDesc.name = StringName(imagePath);
-        textureDesc.width = image.GetWidth();
-        textureDesc.height = image.GetHeight();
-        textureDesc.depth = 1;
-        textureDesc.arraySlices = 1;
-        textureDesc.mipsCount = ImageUtil::GetMaxMipsCount(textureDesc.width, textureDesc.height, textureDesc.depth);
-        textureDesc.textureType = RHITextureType::Texture2d;
-        textureDesc.textureFormat = RHITextureFormat::RGBA8;
-        textureDesc.textureUsage = {RHITextureUsage::Sampling};
-        texture = device->CreateTexture(textureDesc);
-
-        commandList->UpdateTexture2D(texture, 0, {0, 0, image.GetWidth(), image.GetHeight()}, image.GetPixelData());
-        commandList->GenerateMipMaps(texture);
-
-        RHISamplerDesc samplerDesc;
-        samplerDesc.minFilter = RHISamplerMinFilter::LinearMipmapLinear;
-        samplerDesc.magFilter = RHISamplerMagFilter::Linear;
-        samplerDesc.maxAnisotropy = 16.0f;
-        samplerDesc.useAnisotropy = true;
-        samplerDesc.u = RHISamplerRepeatMode::Repeat;
-        samplerDesc.v = RHISamplerRepeatMode::Repeat;
-        samplerDesc.w = RHISamplerRepeatMode::Repeat;
-        sampler = device->CreateSampler(samplerDesc);
+        texture = resourceManager->Import(texturePath, importOptions.As<ResourceImportOptions>()).Cast<ResTexture>();
     }
 
     void InitMaterial() {
@@ -226,73 +208,29 @@ protected:
         shader = shaderManager.Load("shaders/forward-lit.shader.xml", options);
         material = berserk::Ref<berserk::Material>(new berserk::Material(shader));
 
-        material->SetName(berserk::StringName("mat-tiled-polygon"));
+        material->SetName(berserk::StringName("mat-tiled-diffuse"));
         material->SetDescription(BRK_TEXT("Tiled polygon with diffuse lightning"));
     }
 
-    void InitDeclaration() {
+    void InitMesh() {
         using namespace berserk;
 
-        RHIVertexDeclarationDesc vertexDeclarationDesc;
-        vertexDeclarationDesc.resize(4);
-        vertexDeclarationDesc[0].type = RHIVertexElementType::Float3;
-        vertexDeclarationDesc[0].frequency = RHIVertexFrequency::PerVertex;
-        vertexDeclarationDesc[0].buffer = 0;
-        vertexDeclarationDesc[0].offset = sizeof(float) * (0 + 0 + 0 + 0);
-        vertexDeclarationDesc[0].stride = sizeof(float) * (3 + 3 + 3 + 2);
-        vertexDeclarationDesc[1].type = RHIVertexElementType::Float3;
-        vertexDeclarationDesc[1].frequency = RHIVertexFrequency::PerVertex;
-        vertexDeclarationDesc[1].buffer = 0;
-        vertexDeclarationDesc[1].offset = sizeof(float) * (3 + 0 + 0 + 0);
-        vertexDeclarationDesc[1].stride = sizeof(float) * (3 + 3 + 3 + 2);
-        vertexDeclarationDesc[2].type = RHIVertexElementType::Float3;
-        vertexDeclarationDesc[2].frequency = RHIVertexFrequency::PerVertex;
-        vertexDeclarationDesc[2].buffer = 0;
-        vertexDeclarationDesc[2].offset = sizeof(float) * (3 + 3 + 0 + 0);
-        vertexDeclarationDesc[2].stride = sizeof(float) * (3 + 3 + 3 + 2);
-        vertexDeclarationDesc[3].type = RHIVertexElementType::Float2;
-        vertexDeclarationDesc[3].frequency = RHIVertexFrequency::PerVertex;
-        vertexDeclarationDesc[3].buffer = 0;
-        vertexDeclarationDesc[3].offset = sizeof(float) * (3 + 3 + 3 + 0);
-        vertexDeclarationDesc[3].stride = sizeof(float) * (3 + 3 + 3 + 2);
+        String meshPath = BRK_TEXT("resources/models/sphere.obj");
+        MeshFormat meshFormat = {MeshAttribute::Position, MeshAttribute::Normal, MeshAttribute::Color, MeshAttribute::UV};
+        Ref<ResMeshImportOptions> importOptions(new ResMeshImportOptions);
+        importOptions->meshFormat = meshFormat;
+        importOptions->flipUVs = true;
+        importOptions->triangulate = true;
+        importOptions->indexed = true;
 
-        declaration = device->CreateVertexDeclaration(vertexDeclarationDesc);
-    }
-
-    void InitBuffers() {
-        using namespace berserk;
-
-        // clang-format off
-        static Vertex vt[] = {
-                { Vec3f(-1, 1, 0),  Vec3f(0, 0, 1), Vec3f(1,1,1), Vec2f(0, 1), },
-                { Vec3f(-1, -1, 0), Vec3f(0, 0, 1), Vec3f(1,1,1), Vec2f(0, 0), },
-                { Vec3f(1, -1, 0),  Vec3f(0, 0, 1), Vec3f(1,1,1), Vec2f(1, 0), },
-                { Vec3f(1, 1, 0),   Vec3f(0, 0, 1), Vec3f(1,1,1), Vec2f(1, 1) }
-        };
-        // clang-format on
-        static uint32 id[] = {0, 1, 2, 2, 3, 0};
-
-        RHIBufferDesc vertexBufferDesc{};
-        vertexBufferDesc.size = sizeof(vt);
-        vertexBufferDesc.bufferUsage = RHIBufferUsage::Static;
-        vertexBuffers.resize(1);
-        vertexBuffers[0] = device->CreateVertexBuffer(vertexBufferDesc);
-
-        commandList->UpdateVertexBuffer(vertexBuffers[0], 0, sizeof(vt), Data::Make(vt, sizeof(vt)));
-
-        RHIBufferDesc indexBufferDesc{};
-        indexBufferDesc.size = sizeof(id);
-        indexBufferDesc.bufferUsage = RHIBufferUsage::Static;
-        indexBuffer = device->CreateIndexBuffer(indexBufferDesc);
-
-        commandList->UpdateIndexBuffer(indexBuffer, 0, sizeof(id), Data::Make(id, sizeof(id)));
+        mesh = resourceManager->Import(meshPath, importOptions.As<ResourceImportOptions>()).Cast<ResMesh>();
     }
 
     void InitRenderPass() {
         using namespace berserk;
 
         RHIRenderPassDesc renderPassDesc;
-        renderPassDesc.name = StringName("draw-rect-pass");
+        renderPassDesc.name = StringName("draw-mesh-pass");
         renderPassDesc.depthStencilAttachment.depthOption = RHIRenderTargetOption::ClearStore;
         renderPassDesc.depthStencilAttachment.stencilOption = RHIRenderTargetOption::DiscardDiscard;
         renderPassDesc.colorAttachments.resize(1);
@@ -305,9 +243,12 @@ protected:
         using namespace berserk;
 
         RHIGraphicsPipelineDesc pipelineDesc{};
+        pipelineDesc.rasterState.cullMode = berserk::RHIPolygonCullMode::Back;
+        pipelineDesc.rasterState.frontFace = berserk::RHIPolygonFrontFace::CounterClockwise;
+        pipelineDesc.rasterState.mode = berserk::RHIPolygonMode::Fill;
         pipelineDesc.primitivesType = RHIPrimitivesType::Triangles;
         pipelineDesc.shader = material->GetTechnique()->GetPass(0)->GetShader();
-        pipelineDesc.declaration = declaration;
+        pipelineDesc.declaration = mesh->GetMesh()->GetDeclaration();
         pipelineDesc.depthStencilState = RHIDepthStencilState::CreateDepthState(false);
         pipelineDesc.blendState.attachments.resize(1);
         pipelineDesc.renderPass = renderPass;
@@ -315,4 +256,4 @@ protected:
     }
 };
 
-#endif//BERSERK_TESTMATERIALSHADER_HPP
+#endif//BERSERK_TESTMESHSIMPLE_HPP

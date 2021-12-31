@@ -29,6 +29,7 @@
 #define BERSERK_TRANSFORMF_H
 
 #include <core/Config.hpp>
+#include <core/math/MathUtils3d.hpp>
 #include <core/math/TMatMxN.hpp>
 #include <core/math/TQuat.hpp>
 #include <core/math/TVecN.hpp>
@@ -116,8 +117,8 @@ public:
     /** @return 4x4 transform matrix with embedded rotation, scale and translate operations */
     Mat4x4f ToTransformMat() const {
         auto rotation = mRotation.AsMatrix();
-        auto scale = Utils3d::scale(mScale);
-        auto translation = Utils3d::Translate(mOffset);
+        auto scale = MathUtils3d::Scale(mScale);
+        auto translation = MathUtils3d::Translate(mOffset);
         return translation * scale * rotation;
     }
 
@@ -127,15 +128,15 @@ public:
      */
     Mat4x4f ToInverseTransformMat() const {
         auto rotation = mRotation.Conjugate().AsMatrix();
-        auto scale = Utils3d::scale(Vec3f(1.0f, 1.0f, 1.0f) / mScale);
-        auto translation = Utils3d::Translate(-mOffset);
+        auto scale = MathUtils3d::Scale(Vec3f(1.0f, 1.0f, 1.0f) / mScale);
+        auto translation = MathUtils3d::Translate(-mOffset);
         return rotation * scale * translation;
     }
 
     /** @return Normal matrix, required for proper normals transformation in the vertex shaders */
     Mat4x4f ToNormalMat() const {
         auto rotation = mRotation.AsMatrix();
-        auto scale = Utils3d::scale(Vec3f(1.0f, 1.0f, 1.0f) / mScale);
+        auto scale = MathUtils3d::Scale(Vec3f(1.0f, 1.0f, 1.0f) / mScale);
         return scale * rotation;
     }
 

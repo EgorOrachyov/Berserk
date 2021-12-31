@@ -168,9 +168,10 @@ public:
      * This function preserves file extension.
      *
      * @param filename Relative or absolute path
+     * @param withoutExtension Pass true to remove extension
      * @return File name
      */
-    BRK_API String GetFileName(const String &filename);
+    BRK_API String GetFileName(const String &filename, bool withoutExtension = false);
 
     /**
      * @brief Check is passed path is absolute

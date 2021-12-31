@@ -39,6 +39,13 @@ const StringName &ResMesh::GetResourceTypeStatic() {
     return resourceType;
 }
 
+void ResMesh::CreateFromArrays(MeshFormat format, uint32 verticesCount, const MeshArrays &arrays) {
+    mMesh.Reset();
+    mSubMeshes.clear();
+    mMesh = Ref<Mesh>(new Mesh(format, verticesCount, arrays));
+    mMesh->SetName(GetName());
+}
+
 void ResMesh::CreateFromData(MeshFormat format, uint32 verticesCount, const Ref<Data> &vertexData, const Ref<Data> &attributeData, const Ref<Data> &skinningData) {
     mMesh.Reset();
     mSubMeshes.clear();
@@ -46,7 +53,7 @@ void ResMesh::CreateFromData(MeshFormat format, uint32 verticesCount, const Ref<
     mMesh->SetName(GetName());
 }
 
-void ResMesh::AddSubMesh(const StringName &name, RHIPrimitivesType primitivesType, const Aabbf& aabb, uint32 baseVertex, RHIIndexType indexType, uint32 indicesCount, const Ref<Data> &indexData) {
+void ResMesh::AddSubMesh(const StringName &name, RHIPrimitivesType primitivesType, const Aabbf &aabb, uint32 baseVertex, RHIIndexType indexType, uint32 indicesCount, const Ref<Data> &indexData) {
     if (mMesh.IsNull()) {
         BRK_ERROR("No mesh object created in mesh " << GetName());
         return;
@@ -55,12 +62,21 @@ void ResMesh::AddSubMesh(const StringName &name, RHIPrimitivesType primitivesTyp
     mMesh->AddSubMesh(name, primitivesType, aabb, baseVertex, indexType, indicesCount, indexData);
     mSubMeshes.emplace_back();
 
-    auto& subMesh = mSubMeshes.back();
+    auto &subMesh = mSubMeshes.back();
     subMesh.baseVertex = baseVertex;
     subMesh.indicesCount = indicesCount;
     subMesh.indexType = indexType;
     subMesh.primitivesType = primitivesType;
     subMesh.aabb = aabb;
+}
+
+void ResMesh::SetAabb(const Aabbf &aabb) {
+    if (mMesh.IsNull()) {
+        BRK_ERROR("No mesh object created in mesh " << GetName());
+        return;
+    }
+
+    mMesh->SetAabb(aabb);
 }
 
 BRK_NS_END

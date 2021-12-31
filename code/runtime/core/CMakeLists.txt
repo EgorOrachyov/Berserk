@@ -21,6 +21,7 @@ set(BERSERK_CORE_HEADER
         core/io/Config.hpp
         core/io/Logger.hpp
         core/io/LoggerListenerOutput.hpp
+        core/math/Geometry.hpp
         core/math/MathUtils.hpp
         core/math/MathUtils2d.hpp
         core/math/MathUtils3d.hpp
@@ -58,6 +59,7 @@ set(BERSERK_CORE_SRC
         core/io/Config.cpp
         core/io/Logger.cpp
         core/io/LoggerListenerOutput.cpp
+        core/math/Geometry.cpp
         core/math/MathUtils.cpp
         core/string/String.cpp
         core/string/StringName.cpp

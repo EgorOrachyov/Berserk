@@ -40,6 +40,8 @@ static uint32 ATTRIBUTE_DATA_SIZE = 3;
 static uint32 SKINNING_DATA_SIZE = 2;
 
 Ref<RHIVertexDeclaration> MeshFormats::GetDeclaration(MeshFormat target, MeshFormat format) {
+    std::lock_guard<std::mutex> lock(mMutex);
+
     auto k1 = target.value.to_string();
     auto k2 = format.value.to_string();
 

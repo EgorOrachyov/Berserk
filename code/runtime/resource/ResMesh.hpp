@@ -82,8 +82,10 @@ public:
     BRK_API const StringName &GetResourceType() const override;
     BRK_API static const StringName &GetResourceTypeStatic();
 
+    BRK_API void CreateFromArrays(MeshFormat format, uint32 verticesCount, const MeshArrays &arrays);
     BRK_API void CreateFromData(MeshFormat format, uint32 verticesCount, const Ref<Data> &vertexData, const Ref<Data> &attributeData, const Ref<Data> &skinningData);
     BRK_API void AddSubMesh(const StringName &name, RHIPrimitivesType primitivesType, const Aabbf &aabb, uint32 baseVertex, RHIIndexType indexType, uint32 indicesCount, const Ref<Data> &indexData);
+    BRK_API void SetAabb(const Aabbf &aabb);
 
     BRK_API const Ref<Mesh> &GetMesh() const { return mMesh; }
     BRK_API const std::vector<SubMesh> &GetSubMeshes() const { return mSubMeshes; }
