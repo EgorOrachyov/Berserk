@@ -1,5 +1,5 @@
 <map id="GLCommandList" name="GLCommandList">
-<area shape="rect" id="node1" title=" " alt="" coords="8,229,129,256"/>
+<area shape="rect" id="node1" title="GL command list implementation (wrapper for context)" alt="" coords="8,229,129,256"/>
 <area shape="rect" id="node2" href="$classRHICommandList.html" title="Command list for commands capturing and submission." alt="" coords="5,155,132,181"/>
 <area shape="rect" id="node3" href="$classRHIResource.html" title="Base class for RHI resource." alt="" coords="19,80,119,107"/>
 <area shape="rect" id="node4" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="37,5,100,32"/>

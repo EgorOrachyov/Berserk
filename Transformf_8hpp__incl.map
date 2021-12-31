@@ -1,20 +1,21 @@
 <map id="code/runtime/core/math/Transformf.hpp" name="code/runtime/core/math/Transformf.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="451,5,610,47"/>
-<area shape="rect" id="node2" href="$Config_8hpp.html" title=" " alt="" coords="339,468,450,495"/>
-<area shape="rect" id="node3" href="$TMatMxN_8hpp.html" title=" " alt="" coords="359,169,524,196"/>
-<area shape="rect" id="node9" href="$TVecN_8hpp.html" title=" " alt="" coords="485,244,635,271"/>
-<area shape="rect" id="node18" href="$TQuat_8hpp.html" title=" " alt="" coords="633,95,777,121"/>
-<area shape="rect" id="node4" href="$Typedefs_8hpp.html" title=" " alt="" coords="647,393,775,420"/>
-<area shape="rect" id="node7" href="$MathUtils_8hpp.html" title=" " alt="" coords="94,319,258,345"/>
-<area shape="rect" id="node16" title=" " alt="" coords="357,244,408,271"/>
-<area shape="rect" id="node17" title=" " alt="" coords="267,244,333,271"/>
-<area shape="rect" id="node5" title=" " alt="" coords="673,468,748,495"/>
-<area shape="rect" id="node6" title=" " alt="" coords="553,468,621,495"/>
-<area shape="rect" id="node8" title=" " alt="" coords="140,393,199,420"/>
-<area shape="rect" id="node10" href="$Crc32_8hpp.html" title=" " alt="" coords="651,319,760,345"/>
-<area shape="rect" id="node11" href="$Memory_8hpp.html" title=" " alt="" coords="334,319,455,345"/>
-<area shape="rect" id="node14" title=" " alt="" coords="480,319,576,345"/>
-<area shape="rect" id="node15" title=" " alt="" coords="835,319,904,345"/>
-<area shape="rect" id="node12" title=" " alt="" coords="410,393,470,420"/>
-<area shape="rect" id="node13" title=" " alt="" coords="324,393,385,420"/>
+<area shape="rect" id="node1" title=" " alt="" coords="289,5,447,47"/>
+<area shape="rect" id="node2" href="$Config_8hpp.html" title=" " alt="" coords="386,468,497,495"/>
+<area shape="rect" id="node3" href="$MathUtils3d_8hpp.html" title=" " alt="" coords="279,95,457,121"/>
+<area shape="rect" id="node4" href="$TMatMxN_8hpp.html" title=" " alt="" coords="203,169,368,196"/>
+<area shape="rect" id="node10" href="$TVecN_8hpp.html" title=" " alt="" coords="583,244,732,271"/>
+<area shape="rect" id="node19" href="$TQuat_8hpp.html" title=" " alt="" coords="481,95,625,121"/>
+<area shape="rect" id="node5" href="$Typedefs_8hpp.html" title=" " alt="" coords="655,393,783,420"/>
+<area shape="rect" id="node8" href="$MathUtils_8hpp.html" title=" " alt="" coords="153,319,317,345"/>
+<area shape="rect" id="node17" title=" " alt="" coords="267,244,317,271"/>
+<area shape="rect" id="node18" title=" " alt="" coords="43,244,109,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="681,468,756,495"/>
+<area shape="rect" id="node7" title=" " alt="" coords="905,468,973,495"/>
+<area shape="rect" id="node9" title=" " alt="" coords="205,393,264,420"/>
+<area shape="rect" id="node11" href="$Crc32_8hpp.html" title=" " alt="" coords="443,319,552,345"/>
+<area shape="rect" id="node12" href="$Memory_8hpp.html" title=" " alt="" coords="942,319,1063,345"/>
+<area shape="rect" id="node15" title=" " alt="" coords="627,319,723,345"/>
+<area shape="rect" id="node16" title=" " alt="" coords="797,319,867,345"/>
+<area shape="rect" id="node13" title=" " alt="" coords="965,393,1025,420"/>
+<area shape="rect" id="node14" title=" " alt="" coords="879,393,940,420"/>
 </map>

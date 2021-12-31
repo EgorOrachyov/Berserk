@@ -1,52 +1,52 @@
 <map id="code/runtime/render/material/Material.hpp" name="code/runtime/render/material/Material.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="935,5,1082,47"/>
-<area shape="rect" id="node2" href="$Config_8hpp.html" title=" " alt="" coords="2178,781,2289,808"/>
-<area shape="rect" id="node3" href="$Typedefs_8hpp.html" title=" " alt="" coords="1620,707,1748,733"/>
-<area shape="rect" id="node6" href="$TMatMxN_8hpp.html" title=" " alt="" coords="90,483,255,509"/>
-<area shape="rect" id="node9" href="$TVecN_8hpp.html" title=" " alt="" coords="528,557,678,584"/>
-<area shape="rect" id="node18" href="$MaterialParams_8hpp.html" title=" " alt="" coords="1046,244,1205,285"/>
-<area shape="rect" id="node30" href="$RHISampler_8hpp.html" title=" " alt="" coords="1373,408,1508,435"/>
-<area shape="rect" id="node31" href="$RHITexture_8hpp.html" title=" " alt="" coords="1020,408,1151,435"/>
-<area shape="rect" id="node38" title=" " alt="" coords="3406,557,3464,584"/>
-<area shape="rect" id="node39" href="$Shader_8hpp.html" title=" " alt="" coords="1690,95,1860,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="1647,781,1722,808"/>
-<area shape="rect" id="node5" title=" " alt="" coords="1532,781,1600,808"/>
-<area shape="rect" id="node7" href="$MathUtils_8hpp.html" title=" " alt="" coords="90,632,254,659"/>
-<area shape="rect" id="node16" title=" " alt="" coords="90,557,140,584"/>
-<area shape="rect" id="node17" title=" " alt="" coords="1420,781,1485,808"/>
-<area shape="rect" id="node8" title=" " alt="" coords="143,707,202,733"/>
-<area shape="rect" id="node10" href="$Crc32_8hpp.html" title=" " alt="" coords="527,632,636,659"/>
-<area shape="rect" id="node11" href="$Memory_8hpp.html" title=" " alt="" coords="330,632,452,659"/>
-<area shape="rect" id="node14" title=" " alt="" coords="964,632,1060,659"/>
-<area shape="rect" id="node15" title=" " alt="" coords="2026,632,2095,659"/>
-<area shape="rect" id="node12" title=" " alt="" coords="429,707,489,733"/>
-<area shape="rect" id="node13" title=" " alt="" coords="514,707,575,733"/>
-<area shape="rect" id="node19" href="$RHIBuffer_8hpp.html" title=" " alt="" coords="1176,408,1297,435"/>
-<area shape="rect" id="node27" href="$RHIResourceSet_8hpp.html" title=" " alt="" coords="1240,333,1403,360"/>
-<area shape="rect" id="node20" href="$RHIResource_8hpp.html" title=" " alt="" coords="1976,483,2118,509"/>
-<area shape="rect" id="node21" href="$Ref_8hpp.html" title=" " alt="" coords="2677,632,2833,659"/>
-<area shape="rect" id="node22" href="$RefCnt_8hpp.html" title=" " alt="" coords="2676,707,2852,733"/>
-<area shape="rect" id="node24" href="$RHIDefs_8hpp.html" title=" " alt="" coords="2234,557,2348,584"/>
-<area shape="rect" id="node23" title=" " alt="" coords="3432,781,3494,808"/>
-<area shape="rect" id="node25" href="$String_8hpp.html" title=" " alt="" coords="3222,632,3368,659"/>
-<area shape="rect" id="node26" title=" " alt="" coords="3268,707,3322,733"/>
-<area shape="rect" id="node28" href="$Data_8hpp.html" title=" " alt="" coords="2636,483,2738,509"/>
-<area shape="rect" id="node29" title=" " alt="" coords="3590,557,3669,584"/>
-<area shape="rect" id="node32" href="$StringName_8hpp.html" title=" " alt="" coords="2829,557,3009,584"/>
-<area shape="rect" id="node36" href="$Mask_8hpp.html" title=" " alt="" coords="1580,557,1748,584"/>
-<area shape="rect" id="node33" title=" " alt="" coords="3596,632,3653,659"/>
-<area shape="rect" id="node34" title=" " alt="" coords="2857,632,2968,659"/>
-<area shape="rect" id="node35" title=" " alt="" coords="3094,632,3146,659"/>
-<area shape="rect" id="node37" title=" " alt="" coords="1642,632,1697,659"/>
-<area shape="rect" id="node40" href="$MeshFormats_8hpp.html" title=" " alt="" coords="2027,333,2230,360"/>
-<area shape="rect" id="node42" href="$ShaderParams_8hpp.html" title=" " alt="" coords="2397,483,2612,509"/>
-<area shape="rect" id="node43" href="$ShaderPass_8hpp.html" title=" " alt="" coords="2727,251,2927,278"/>
-<area shape="rect" id="node49" href="$ShaderTechnique_8hpp.html" title=" " alt="" coords="2558,169,2789,196"/>
-<area shape="rect" id="node50" title=" " alt="" coords="1634,169,1738,196"/>
-<area shape="rect" id="node41" href="$RHIVertexDeclaration_8hpp.html" title=" " alt="" coords="2216,408,2406,435"/>
-<area shape="rect" id="node44" href="$RHIGraphicsPipeline_8hpp.html" title=" " alt="" coords="2905,333,3090,360"/>
-<area shape="rect" id="node47" href="$RHIShader_8hpp.html" title=" " alt="" coords="3488,408,3616,435"/>
-<area shape="rect" id="node45" href="$RHIRenderPass_8hpp.html" title=" " alt="" coords="2938,408,3097,435"/>
-<area shape="rect" id="node46" href="$Window_8hpp.html" title=" " alt="" coords="2966,483,3109,509"/>
-<area shape="rect" id="node48" href="$Logger_8hpp.html" title=" " alt="" coords="3793,483,3922,509"/>
+<area shape="rect" id="node1" title=" " alt="" coords="948,5,1095,47"/>
+<area shape="rect" id="node2" href="$Config_8hpp.html" title=" " alt="" coords="2297,781,2407,808"/>
+<area shape="rect" id="node3" href="$Typedefs_8hpp.html" title=" " alt="" coords="1431,707,1559,733"/>
+<area shape="rect" id="node6" href="$TMatMxN_8hpp.html" title=" " alt="" coords="151,483,316,509"/>
+<area shape="rect" id="node9" href="$TVecN_8hpp.html" title=" " alt="" coords="529,557,679,584"/>
+<area shape="rect" id="node18" href="$MaterialParams_8hpp.html" title=" " alt="" coords="1035,244,1194,285"/>
+<area shape="rect" id="node30" href="$RHISampler_8hpp.html" title=" " alt="" coords="957,408,1091,435"/>
+<area shape="rect" id="node31" href="$RHITexture_8hpp.html" title=" " alt="" coords="1312,408,1443,435"/>
+<area shape="rect" id="node38" title=" " alt="" coords="3561,557,3620,584"/>
+<area shape="rect" id="node39" href="$Shader_8hpp.html" title=" " alt="" coords="2455,95,2625,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="1457,781,1532,808"/>
+<area shape="rect" id="node5" title=" " alt="" coords="807,781,875,808"/>
+<area shape="rect" id="node7" href="$MathUtils_8hpp.html" title=" " alt="" coords="31,632,195,659"/>
+<area shape="rect" id="node16" title=" " alt="" coords="44,557,95,584"/>
+<area shape="rect" id="node17" title=" " alt="" coords="1563,781,1629,808"/>
+<area shape="rect" id="node8" title=" " alt="" coords="84,707,143,733"/>
+<area shape="rect" id="node10" href="$Crc32_8hpp.html" title=" " alt="" coords="569,632,679,659"/>
+<area shape="rect" id="node11" href="$Memory_8hpp.html" title=" " alt="" coords="271,632,393,659"/>
+<area shape="rect" id="node14" title=" " alt="" coords="1209,632,1305,659"/>
+<area shape="rect" id="node15" title=" " alt="" coords="2169,632,2239,659"/>
+<area shape="rect" id="node12" title=" " alt="" coords="407,707,467,733"/>
+<area shape="rect" id="node13" title=" " alt="" coords="321,707,383,733"/>
+<area shape="rect" id="node19" href="$RHIBuffer_8hpp.html" title=" " alt="" coords="1115,408,1237,435"/>
+<area shape="rect" id="node27" href="$RHIResourceSet_8hpp.html" title=" " alt="" coords="1152,333,1315,360"/>
+<area shape="rect" id="node20" href="$RHIResource_8hpp.html" title=" " alt="" coords="2029,483,2171,509"/>
+<area shape="rect" id="node21" href="$Ref_8hpp.html" title=" " alt="" coords="2567,632,2723,659"/>
+<area shape="rect" id="node22" href="$RefCnt_8hpp.html" title=" " alt="" coords="2785,707,2961,733"/>
+<area shape="rect" id="node24" href="$RHIDefs_8hpp.html" title=" " alt="" coords="2276,557,2391,584"/>
+<area shape="rect" id="node23" title=" " alt="" coords="3540,781,3601,808"/>
+<area shape="rect" id="node25" href="$String_8hpp.html" title=" " alt="" coords="3163,632,3309,659"/>
+<area shape="rect" id="node26" title=" " alt="" coords="3209,707,3263,733"/>
+<area shape="rect" id="node28" href="$Data_8hpp.html" title=" " alt="" coords="2349,483,2451,509"/>
+<area shape="rect" id="node29" title=" " alt="" coords="3695,557,3774,584"/>
+<area shape="rect" id="node32" href="$StringName_8hpp.html" title=" " alt="" coords="2871,557,3051,584"/>
+<area shape="rect" id="node36" href="$Mask_8hpp.html" title=" " alt="" coords="1532,557,1700,584"/>
+<area shape="rect" id="node33" title=" " alt="" coords="3486,632,3543,659"/>
+<area shape="rect" id="node34" title=" " alt="" coords="2799,632,2910,659"/>
+<area shape="rect" id="node35" title=" " alt="" coords="3087,632,3139,659"/>
+<area shape="rect" id="node37" title=" " alt="" coords="1634,632,1689,659"/>
+<area shape="rect" id="node40" href="$MeshFormats_8hpp.html" title=" " alt="" coords="2173,333,2376,360"/>
+<area shape="rect" id="node42" href="$ShaderParams_8hpp.html" title=" " alt="" coords="2527,483,2742,509"/>
+<area shape="rect" id="node43" href="$ShaderPass_8hpp.html" title=" " alt="" coords="2919,251,3119,278"/>
+<area shape="rect" id="node49" href="$ShaderTechnique_8hpp.html" title=" " alt="" coords="2614,169,2845,196"/>
+<area shape="rect" id="node50" title=" " alt="" coords="3847,169,3951,196"/>
+<area shape="rect" id="node41" href="$RHIVertexDeclaration_8hpp.html" title=" " alt="" coords="2247,408,2436,435"/>
+<area shape="rect" id="node44" href="$RHIGraphicsPipeline_8hpp.html" title=" " alt="" coords="3030,333,3215,360"/>
+<area shape="rect" id="node47" href="$RHIShader_8hpp.html" title=" " alt="" coords="3644,408,3772,435"/>
+<area shape="rect" id="node45" href="$RHIRenderPass_8hpp.html" title=" " alt="" coords="3163,408,3322,435"/>
+<area shape="rect" id="node46" href="$Window_8hpp.html" title=" " alt="" coords="3021,483,3163,509"/>
+<area shape="rect" id="node48" href="$Logger_8hpp.html" title=" " alt="" coords="3949,483,4078,509"/>
 </map>

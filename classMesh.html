@@ -97,6 +97,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aef2b096531950a4d19fbcce3ec8ed829"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMesh.html#aef2b096531950a4d19fbcce3ec8ed829">Mesh</a> (<a class="el" href="classMeshFormat.html">MeshFormat</a> format, <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> verticesCount, const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classData.html">Data</a> &gt; &amp;vertexData, const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classData.html">Data</a> &gt; &amp;attributeData, const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classData.html">Data</a> &gt; &amp;skinningData)</td></tr>
 <tr class="memdesc:aef2b096531950a4d19fbcce3ec8ed829"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates mesh from raw vertex data.  <a href="classMesh.html#aef2b096531950a4d19fbcce3ec8ed829">More...</a><br /></td></tr>
 <tr class="separator:aef2b096531950a4d19fbcce3ec8ed829"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa5200e8d1812f32eeb6b1e5a7cd340e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMesh.html#aaa5200e8d1812f32eeb6b1e5a7cd340e">Mesh</a> (<a class="el" href="classMeshFormat.html">MeshFormat</a> format, <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> verticesCount, const <a class="el" href="structMeshArrays.html">MeshArrays</a> &amp;meshArrays)</td></tr>
+<tr class="memdesc:aaa5200e8d1812f32eeb6b1e5a7cd340e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates mesh from arrays of attributes.  <a href="classMesh.html#aaa5200e8d1812f32eeb6b1e5a7cd340e">More...</a><br /></td></tr>
+<tr class="separator:aaa5200e8d1812f32eeb6b1e5a7cd340e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3e2045d082d2846bae0c57fd829613c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMesh.html#ab3e2045d082d2846bae0c57fd829613c">~Mesh</a> () override=default</td></tr>
 <tr class="separator:ab3e2045d082d2846bae0c57fd829613c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab52c67045bba9f118d03ce8122bef34b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMesh.html#ab52c67045bba9f118d03ce8122bef34b">SetName</a> (<a class="el" href="classStringName.html">StringName</a> name)</td></tr>
@@ -105,9 +108,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5fa737e1fe2b447dd60ed68c2bdce786"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a3dd468b6f39d91e18a95deb8fb39c9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMesh.html#a8a3dd468b6f39d91e18a95deb8fb39c9">AddMaterial</a> (<a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classMaterial.html">Material</a> &gt; material)</td></tr>
 <tr class="separator:a8a3dd468b6f39d91e18a95deb8fb39c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae79068ce320ea78a0ac13ff545ad507d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMesh.html#ae79068ce320ea78a0ac13ff545ad507d">AddSubMesh</a> (const <a class="el" href="classStringName.html">StringName</a> &amp;name, <a class="el" href="group__rhi.html#gadf1b58992126b98f829246f614acecd7">RHIPrimitivesType</a> primitivesType, <a class="el" href="group__core.html#gad96d0b5028f95fbf38abfd028f989b46">Aabbf</a> aabb, <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> baseVertex, <a class="el" href="group__rhi.html#ga3da6175a7c7a65fd73a500a02061e929">RHIIndexType</a> indexType, <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> indicesCount, const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classData.html">Data</a> &gt; &amp;indexData)</td></tr>
-<tr class="memdesc:ae79068ce320ea78a0ac13ff545ad507d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add new indexed sub-mesh to the mesh.  <a href="classMesh.html#ae79068ce320ea78a0ac13ff545ad507d">More...</a><br /></td></tr>
-<tr class="separator:ae79068ce320ea78a0ac13ff545ad507d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b4b54c95edb86790b18bf0612c2ac7a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMesh.html#a2b4b54c95edb86790b18bf0612c2ac7a">AddSubMesh</a> (const <a class="el" href="classStringName.html">StringName</a> &amp;name, <a class="el" href="group__rhi.html#gadf1b58992126b98f829246f614acecd7">RHIPrimitivesType</a> primitivesType, const <a class="el" href="group__core.html#gad96d0b5028f95fbf38abfd028f989b46">Aabbf</a> &amp;aabb, <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> baseVertex, <a class="el" href="group__rhi.html#ga3da6175a7c7a65fd73a500a02061e929">RHIIndexType</a> indexType, <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> indicesCount, const <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classData.html">Data</a> &gt; &amp;indexData)</td></tr>
+<tr class="memdesc:a2b4b54c95edb86790b18bf0612c2ac7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add new indexed sub-mesh to the mesh.  <a href="classMesh.html#a2b4b54c95edb86790b18bf0612c2ac7a">More...</a><br /></td></tr>
+<tr class="separator:a2b4b54c95edb86790b18bf0612c2ac7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f1551acc5fae12f672cd7b4400d42a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMesh.html#a4f1551acc5fae12f672cd7b4400d42a9">SetSubMeshMaterial</a> (const <a class="el" href="classStringName.html">StringName</a> &amp;name, <a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a> index)</td></tr>
 <tr class="memdesc:a4f1551acc5fae12f672cd7b4400d42a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set sub-mesh material.  <a href="classMesh.html#a4f1551acc5fae12f672cd7b4400d42a9">More...</a><br /></td></tr>
 <tr class="separator:a4f1551acc5fae12f672cd7b4400d42a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,7 +174,7 @@ Additional Inherited Members</h2></td></tr>
 <a class="el" href="classMeshAttribute.html" title="Available mesh vertex attributes.">MeshAttribute</a> </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aef2b096531950a4d19fbcce3ec8ed829"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aef2b096531950a4d19fbcce3ec8ed829">&#9670;&nbsp;</a></span>Mesh()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aef2b096531950a4d19fbcce3ec8ed829">&#9670;&nbsp;</a></span>Mesh() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -217,11 +220,56 @@ Additional Inherited Members</h2></td></tr>
 <p>Creates mesh from raw vertex data. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">format</td><td><a class="el" href="classFormat.html" title="Format of the image stored data.">Format</a> of the vertex </td></tr>
+    <tr><td class="paramname">format</td><td><a class="el" href="classFormat.html" title="Format of the image stored data.">Format</a> of the vertex data </td></tr>
     <tr><td class="paramname">verticesCount</td><td>Number of vertices in the mesh </td></tr>
     <tr><td class="paramname">vertexData</td><td>Packed vertex data </td></tr>
     <tr><td class="paramname">attributeData</td><td>Packed attribute data </td></tr>
     <tr><td class="paramname">skinningData</td><td>Packed skinning data </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aaa5200e8d1812f32eeb6b1e5a7cd340e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa5200e8d1812f32eeb6b1e5a7cd340e">&#9670;&nbsp;</a></span>Mesh() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Mesh::Mesh </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classMeshFormat.html">MeshFormat</a>&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="Typedefs_8hpp.html#a8f95e75e58492e87412191fabadd8ca8">uint32</a>&#160;</td>
+          <td class="paramname"><em>verticesCount</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structMeshArrays.html">MeshArrays</a> &amp;&#160;</td>
+          <td class="paramname"><em>meshArrays</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates mesh from arrays of attributes. </p>
+<p>Automatically packs data accordingly to mesh format.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">format</td><td><a class="el" href="classFormat.html" title="Format of the image stored data.">Format</a> of the vertex data </td></tr>
+    <tr><td class="paramname">verticesCount</td><td>Number of vertices in the mesh </td></tr>
+    <tr><td class="paramname">meshArrays</td><td>Structure with pointers to attributes </td></tr>
   </table>
   </dd>
 </dl>
@@ -273,8 +321,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="ae79068ce320ea78a0ac13ff545ad507d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae79068ce320ea78a0ac13ff545ad507d">&#9670;&nbsp;</a></span>AddSubMesh()</h2>
+<a id="a2b4b54c95edb86790b18bf0612c2ac7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b4b54c95edb86790b18bf0612c2ac7a">&#9670;&nbsp;</a></span>AddSubMesh()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -294,7 +342,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group__core.html#gad96d0b5028f95fbf38abfd028f989b46">Aabbf</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="group__core.html#gad96d0b5028f95fbf38abfd028f989b46">Aabbf</a> &amp;&#160;</td>
           <td class="paramname"><em>aabb</em>, </td>
         </tr>
         <tr>

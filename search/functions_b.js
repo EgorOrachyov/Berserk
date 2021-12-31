@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['needclearbefore_2486',['NeedClearBefore',['../classGLDefs.html#a70ef994c1b36a8939e76a7626b584ddb',1,'GLDefs']]],
-  ['normalize_2487',['Normalize',['../classTQuat.html#a3c2602dd2dac69e1a9c6a6125b7be074',1,'TQuat']]],
-  ['normalized_2488',['Normalized',['../classTQuat.html#ad738594dfb5e4a7ab9f92afaed39c207',1,'TQuat::Normalized()'],['../classTVecN.html#a9fc35364e05faa1c4eefa0bec7edbcf5',1,'TVecN::Normalized() const']]],
-  ['normalizethis_2489',['NormalizeThis',['../classTVecN.html#ae57d27495a8e930170439c00de3917e8',1,'TVecN']]]
+  ['needclearbefore_2558',['NeedClearBefore',['../classGLDefs.html#a70ef994c1b36a8939e76a7626b584ddb',1,'GLDefs']]],
+  ['normalize_2559',['Normalize',['../classTQuat.html#a3c2602dd2dac69e1a9c6a6125b7be074',1,'TQuat']]],
+  ['normalized_2560',['Normalized',['../classTQuat.html#ad738594dfb5e4a7ab9f92afaed39c207',1,'TQuat::Normalized()'],['../classTVecN.html#a9fc35364e05faa1c4eefa0bec7edbcf5',1,'TVecN::Normalized() const']]],
+  ['normalizethis_2561',['NormalizeThis',['../classTVecN.html#ae57d27495a8e930170439c00de3917e8',1,'TVecN']]]
 ];

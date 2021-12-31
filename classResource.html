@@ -78,9 +78,11 @@ Inheritance diagram for Resource:</div>
 <div class="dyncontent">
 <div class="center"><img src="classResource__inherit__graph.png" border="0" usemap="#aResource_inherit__map" alt="Inheritance graph"/></div>
 <map name="aResource_inherit__map" id="aResource_inherit__map">
-<area shape="rect" title="Base class for any engine resource object." alt="" coords="11,80,88,107"/>
-<area shape="rect" href="classResTexture.html" title="2d texture resource for rendering" alt="" coords="5,155,93,181"/>
-<area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="18,5,81,32"/>
+<area shape="rect" title="Base class for any engine resource object." alt="" coords="120,80,197,107"/>
+<area shape="rect" href="classResMaterial.html" title="3d mesh geometry for rendering" alt="" coords="5,155,96,181"/>
+<area shape="rect" href="classResMesh.html" title="3d mesh geometry for rendering" alt="" coords="120,155,197,181"/>
+<area shape="rect" href="classResTexture.html" title="2d texture resource for rendering" alt="" coords="221,155,309,181"/>
+<area shape="rect" href="classRefCnt.html" title="Reference counted base object." alt="" coords="127,5,190,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -99,14 +101,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a02f3e2ed3d1b2208aabdfb70e5246aa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03ad61f8ee40e319689ef3650b3a91d6"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classStringName.html">StringName</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classResource.html#a03ad61f8ee40e319689ef3650b3a91d6">GetResourceType</a> () const =0</td></tr>
 <tr class="separator:a03ad61f8ee40e319689ef3650b3a91d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3dede3b63983e76266e486c79e66b844"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classResource.html#a3dede3b63983e76266e486c79e66b844">SetName</a> (<a class="el" href="classString.html">String</a> name)</td></tr>
-<tr class="separator:a3dede3b63983e76266e486c79e66b844"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1151588de879e22ae48d021f37470e1c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classResource.html#a1151588de879e22ae48d021f37470e1c">SetName</a> (<a class="el" href="classStringName.html">StringName</a> name)</td></tr>
+<tr class="separator:a1151588de879e22ae48d021f37470e1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f3d1935c4f26aaeed637ce84f68cfd7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classResource.html#a5f3d1935c4f26aaeed637ce84f68cfd7">SetPath</a> (<a class="el" href="classString.html">String</a> path)</td></tr>
 <tr class="separator:a5f3d1935c4f26aaeed637ce84f68cfd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad94caf6769f4a5f4f432e1d9e6cd672a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classResource.html#ad94caf6769f4a5f4f432e1d9e6cd672a">SetUUID</a> (<a class="el" href="classUUID.html">UUID</a> uuid)</td></tr>
 <tr class="separator:ad94caf6769f4a5f4f432e1d9e6cd672a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a601f3e66e1e64618b734793b57d07672"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> const <a class="el" href="classString.html">String</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classResource.html#a601f3e66e1e64618b734793b57d07672">GetName</a> () const</td></tr>
-<tr class="separator:a601f3e66e1e64618b734793b57d07672"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a782f5ff17109422f9fc21d18a48b339d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> const <a class="el" href="classStringName.html">StringName</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classResource.html#a782f5ff17109422f9fc21d18a48b339d">GetName</a> () const</td></tr>
+<tr class="separator:a782f5ff17109422f9fc21d18a48b339d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f6263bee20bc3a8a4061ef9ff9f60c0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> const <a class="el" href="classString.html">String</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classResource.html#a5f6263bee20bc3a8a4061ef9ff9f60c0">GetPath</a> () const</td></tr>
 <tr class="separator:a5f6263bee20bc3a8a4061ef9ff9f60c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc2b491c5bbce21a199965dc62ffba6e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> const <a class="el" href="classUUID.html">UUID</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classResource.html#adc2b491c5bbce21a199965dc62ffba6e">GetUUID</a> () const</td></tr>
@@ -158,8 +160,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a601f3e66e1e64618b734793b57d07672"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a601f3e66e1e64618b734793b57d07672">&#9670;&nbsp;</a></span>GetName()</h2>
+<a id="a782f5ff17109422f9fc21d18a48b339d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a782f5ff17109422f9fc21d18a48b339d">&#9670;&nbsp;</a></span>GetName()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -168,7 +170,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> const <a class="el" href="classString.html">String</a>&amp; Resource::GetName </td>
+          <td class="memname"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> const <a class="el" href="classStringName.html">StringName</a>&amp; Resource::GetName </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -232,7 +234,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>Unique resource type identifier </dd></dl>
 
-<p>Implemented in <a class="el" href="classResTexture.html#a80d17d7a1068a46123190460a464323a">ResTexture</a>.</p>
+<p>Implemented in <a class="el" href="classResTexture.html#a80d17d7a1068a46123190460a464323a">ResTexture</a>, <a class="el" href="classResMesh.html#a4992e2015a8bd4687a93c5eabd113c3c">ResMesh</a>, and <a class="el" href="classResMaterial.html#ad80e60f6447a614fe7accfafe2b2b1c2">ResMaterial</a>.</p>
 
 </div>
 </div>
@@ -261,8 +263,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a3dede3b63983e76266e486c79e66b844"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3dede3b63983e76266e486c79e66b844">&#9670;&nbsp;</a></span>SetName()</h2>
+<a id="a1151588de879e22ae48d021f37470e1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1151588de879e22ae48d021f37470e1c">&#9670;&nbsp;</a></span>SetName()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -270,7 +272,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="Config_8hpp.html#a879e3b805923a7033431eed6bb5eddc1">BRK_NS_BEGIN</a> void Resource::SetName </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classString.html">String</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classStringName.html">StringName</a>&#160;</td>
           <td class="paramname"><em>name</em></td><td>)</td>
           <td></td>
         </tr>

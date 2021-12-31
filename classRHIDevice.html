@@ -169,7 +169,7 @@ Protected Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>RHI device. </p>
 <p>Device object exposes common object creation api.</p>
-<p>Device provided objects can be safely created from any thread. Create functions immediately return the created object reference, but actual object creation on the GPU side is deferred, until the RHI execution thread reaches object creation and does it its side.</p>
+<p>Device provided objects can be safely created from any thread. CreateFromImage functions immediately return the created object reference, but actual object creation on the GPU side is deferred, until the RHI execution thread reaches object creation and does it its side.</p>
 <p>From user side, created objects can be safely and immediately used in the drawing and update api via command buffers. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="abef052c08c9a7c3b0eb32e984e616dbb"></a>
@@ -221,7 +221,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>Create framebuffer from desc </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>CreateFromImage framebuffer from desc </dd></dl>
 
 <p>Implemented in <a class="el" href="classGLDevice.html#a819c9b2c6362dfc8930ee5e3378140e7">GLDevice</a>.</p>
 
@@ -250,7 +250,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>Create and compile pipeline from desc </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>CreateFromImage and compile pipeline from desc </dd></dl>
 
 <p>Implemented in <a class="el" href="classGLDevice.html#ae80cc8ed544cf3b4274f2b625d66027d">GLDevice</a>.</p>
 
@@ -279,7 +279,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>Create vertex buffer from desc </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>CreateFromImage vertex buffer from desc </dd></dl>
 
 <p>Implemented in <a class="el" href="classGLDevice.html#a92ed76a73c94bf6009b03289b5a7b08b">GLDevice</a>.</p>
 
@@ -308,7 +308,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>Create render pass from desc </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>CreateFromImage render pass from desc </dd></dl>
 
 <p>Implemented in <a class="el" href="classGLDevice.html#a126fe3c8aa39a7c632dbe1060fdcad2d">GLDevice</a>.</p>
 
@@ -337,7 +337,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>Create resource set from desc </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>CreateFromImage resource set from desc </dd></dl>
 
 <p>Implemented in <a class="el" href="classGLDevice.html#ab6374a67e13c47e0648bd8f1b01f55ed">GLDevice</a>.</p>
 
@@ -366,7 +366,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>Create sampler object from desc </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>CreateFromImage sampler object from desc </dd></dl>
 
 <p>Implemented in <a class="el" href="classGLDevice.html#a4f6b131117a4c78976529e1ca86ba3f9">GLDevice</a>.</p>
 
@@ -395,7 +395,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>Create and compile shader from desc </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>CreateFromImage and compile shader from desc </dd></dl>
 
 <p>Implemented in <a class="el" href="classGLDevice.html#a06f870c46ddc1307c1344a64027ddf3f">GLDevice</a>.</p>
 
@@ -424,7 +424,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>Create texture from desc </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>CreateFromImage texture from desc </dd></dl>
 
 <p>Implemented in <a class="el" href="classGLDevice.html#ab5d774c6e3864f8166d64ec4a9decbb0">GLDevice</a>.</p>
 
@@ -453,7 +453,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>Create vertex buffer from desc </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>CreateFromImage vertex buffer from desc </dd></dl>
 
 <p>Implemented in <a class="el" href="classGLDevice.html#abac27b07706476930ea414d2ed5e1132">GLDevice</a>.</p>
 
@@ -482,7 +482,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>Create vertex buffer from desc </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>CreateFromImage vertex buffer from desc </dd></dl>
 
 <p>Implemented in <a class="el" href="classGLDevice.html#ae89f411663f4a1b84481a67a78a580ba">GLDevice</a>.</p>
 
@@ -511,7 +511,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>Create vertex declaration from desc </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>CreateFromImage vertex declaration from desc </dd></dl>
 
 <p>Implemented in <a class="el" href="classGLDevice.html#ab0807dc6462181520ea075605b9ef161">GLDevice</a>.</p>
 

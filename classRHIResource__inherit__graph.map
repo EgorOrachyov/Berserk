@@ -17,7 +17,7 @@
 <area shape="rect" id="node5" href="$classGLIndexBuffer.html" title="GL index buffer implementation." alt="" coords="657,5,762,32"/>
 <area shape="rect" id="node7" href="$classGLUniformBuffer.html" title="GL uniform buffer implementation." alt="" coords="649,56,769,83"/>
 <area shape="rect" id="node9" href="$classGLVertexBuffer.html" title="GL vertex buffer implementation." alt="" coords="654,107,765,133"/>
-<area shape="rect" id="node11" href="$classGLCommandList.html" title=" " alt="" coords="469,157,591,184"/>
+<area shape="rect" id="node11" href="$classGLCommandList.html" title="GL command list implementation (wrapper for context)" alt="" coords="469,157,591,184"/>
 <area shape="rect" id="node13" href="$classGLFramebuffer.html" title="GL framebuffer implementation." alt="" coords="475,208,585,235"/>
 <area shape="rect" id="node15" href="$classGLGraphicsPipeline.html" title="GL graphics pipeline state." alt="" coords="461,259,599,285"/>
 <area shape="rect" id="node17" href="$classGLRenderPass.html" title="GL render pass state object." alt="" coords="475,309,585,336"/>

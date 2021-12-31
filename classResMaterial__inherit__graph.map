@@ -1,0 +1,5 @@
+<map id="ResMaterial" name="ResMaterial">
+<area shape="rect" id="node1" title="3d mesh geometry for rendering" alt="" coords="5,155,96,181"/>
+<area shape="rect" id="node2" href="$classResource.html" title="Base class for any engine resource object." alt="" coords="12,80,89,107"/>
+<area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="19,5,82,32"/>
+</map>

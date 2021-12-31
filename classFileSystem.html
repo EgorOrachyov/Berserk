@@ -122,9 +122,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a08bb542b69966cd52318fb9d41fd91cf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classString.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileSystem.html#a08bb542b69966cd52318fb9d41fd91cf">GetFileExtension</a> (const <a class="el" href="classString.html">String</a> &amp;filename)</td></tr>
 <tr class="memdesc:a08bb542b69966cd52318fb9d41fd91cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve file extension.  <a href="classFileSystem.html#a08bb542b69966cd52318fb9d41fd91cf">More...</a><br /></td></tr>
 <tr class="separator:a08bb542b69966cd52318fb9d41fd91cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4abdcfa97896dae44765b55d9b9d248"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classString.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileSystem.html#ae4abdcfa97896dae44765b55d9b9d248">GetFileName</a> (const <a class="el" href="classString.html">String</a> &amp;filename)</td></tr>
-<tr class="memdesc:ae4abdcfa97896dae44765b55d9b9d248"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get file name from file path.  <a href="classFileSystem.html#ae4abdcfa97896dae44765b55d9b9d248">More...</a><br /></td></tr>
-<tr class="separator:ae4abdcfa97896dae44765b55d9b9d248"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bf16bab934cdeeb1f9aace3c8d12d9d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classString.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileSystem.html#a9bf16bab934cdeeb1f9aace3c8d12d9d">GetFileName</a> (const <a class="el" href="classString.html">String</a> &amp;filename, bool withoutExtension=false)</td></tr>
+<tr class="memdesc:a9bf16bab934cdeeb1f9aace3c8d12d9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get file name from file path.  <a href="classFileSystem.html#a9bf16bab934cdeeb1f9aace3c8d12d9d">More...</a><br /></td></tr>
+<tr class="separator:a9bf16bab934cdeeb1f9aace3c8d12d9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bcdefd6fb10af9a37ad27e61dd141d4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFileSystem.html#a8bcdefd6fb10af9a37ad27e61dd141d4">IsAbsolutePath</a> (const <a class="el" href="classString.html">String</a> &amp;filename)</td></tr>
 <tr class="memdesc:a8bcdefd6fb10af9a37ad27e61dd141d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check is passed path is absolute.  <a href="classFileSystem.html#a8bcdefd6fb10af9a37ad27e61dd141d4">More...</a><br /></td></tr>
 <tr class="separator:a8bcdefd6fb10af9a37ad27e61dd141d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -346,8 +346,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae4abdcfa97896dae44765b55d9b9d248"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae4abdcfa97896dae44765b55d9b9d248">&#9670;&nbsp;</a></span>GetFileName()</h2>
+<a id="a9bf16bab934cdeeb1f9aace3c8d12d9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bf16bab934cdeeb1f9aace3c8d12d9d">&#9670;&nbsp;</a></span>GetFileName()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -356,8 +356,18 @@ Public Member Functions</h2></td></tr>
           <td class="memname"><a class="el" href="classString.html">String</a> FileSystem::GetFileName </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classString.html">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>withoutExtension</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -367,6 +377,7 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filename</td><td>Relative or absolute path </td></tr>
+    <tr><td class="paramname">withoutExtension</td><td>Pass true to remove extension </td></tr>
   </table>
   </dd>
 </dl>

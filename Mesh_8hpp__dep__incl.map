@@ -1,5 +1,8 @@
 <map id="code/runtime/render/mesh/Mesh.hpp" name="code/runtime/render/mesh/Mesh.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="111,5,249,47"/>
-<area shape="rect" id="node2" href="$Berserk_8hpp.html" title=" " alt="" coords="5,102,176,129"/>
-<area shape="rect" id="node3" href="$Mesh_8cpp.html" title=" " alt="" coords="201,95,338,136"/>
+<area shape="rect" id="node1" title=" " alt="" coords="94,5,231,47"/>
+<area shape="rect" id="node2" href="$Berserk_8hpp.html" title=" " alt="" coords="5,191,176,218"/>
+<area shape="rect" id="node3" href="$Mesh_8cpp.html" title=" " alt="" coords="94,95,231,136"/>
+<area shape="rect" id="node4" href="$ResMesh_8hpp.html" title=" " alt="" coords="255,95,406,136"/>
+<area shape="rect" id="node5" href="$ImporterMesh_8cpp.html" title=" " alt="" coords="218,184,406,225"/>
+<area shape="rect" id="node6" href="$ResMesh_8cpp.html" title=" " alt="" coords="430,184,581,225"/>
 </map>

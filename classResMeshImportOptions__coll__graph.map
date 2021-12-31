@@ -1,0 +1,6 @@
+<map id="ResMeshImportOptions" name="ResMeshImportOptions">
+<area shape="rect" id="node1" title="Texture import options." alt="" coords="100,171,259,197"/>
+<area shape="rect" id="node2" href="$classResourceImportOptions.html" title="Base class for import options to import specific resource." alt="" coords="5,81,164,108"/>
+<area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="53,5,116,32"/>
+<area shape="rect" id="node4" href="$classMask.html" title=" " alt="" coords="189,81,359,108"/>
+</map>

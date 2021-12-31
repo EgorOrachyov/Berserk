@@ -71,63 +71,64 @@ $(function() {
 <div class="contents">
 <div class="textblock"><code>#include &lt;<a class="el" href="Engine_8hpp_source.html">core/Engine.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="ResourceManager_8hpp_source.html">resource/ResourceManager.hpp</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="TextureImporter_8hpp_source.html">resource/importers/TextureImporter.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="ImporterMesh_8hpp_source.html">resource/importers/ImporterMesh.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="ImporterTexture_8hpp_source.html">resource/importers/ImporterTexture.hpp</a>&gt;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for ResourceManager.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="ResourceManager_8cpp__incl.png" border="0" usemap="#acode_2runtime_2resource_2ResourceManager_8cpp" alt=""/></div>
 <map name="acode_2runtime_2resource_2ResourceManager_8cpp" id="acode_2runtime_2resource_2ResourceManager_8cpp">
-<area shape="rect" title=" " alt="" coords="4553,5,4708,47"/>
-<area shape="rect" href="Engine_8hpp.html" title=" " alt="" coords="2343,95,2457,121"/>
-<area shape="rect" href="ResourceManager_8hpp.html" title=" " alt="" coords="4397,557,4603,584"/>
-<area shape="rect" href="TextureImporter_8hpp.html" title=" " alt="" coords="4643,244,4784,285"/>
-<area shape="rect" title=" " alt="" coords="4693,95,4768,121"/>
-<area shape="rect" href="Config_8hpp.html" title=" " alt="" coords="2642,856,2753,883"/>
-<area shape="rect" href="EventDispatcher_8hpp.html" title=" " alt="" coords="3651,632,3821,659"/>
-<area shape="rect" title=" " alt="" coords="149,856,217,883"/>
-<area shape="rect" title=" " alt="" coords="4131,856,4192,883"/>
-<area shape="rect" href="Scheduler_8hpp.html" title=" " alt="" coords="1576,632,1709,659"/>
-<area shape="rect" href="Thread_8hpp.html" title=" " alt="" coords="1197,632,1312,659"/>
-<area shape="rect" title=" " alt="" coords="1240,707,1299,733"/>
-<area shape="rect" href="io_2Config_8hpp.html" title=" " alt="" coords="541,632,667,659"/>
-<area shape="rect" href="FileSystem_8hpp.html" title=" " alt="" coords="1077,557,1240,584"/>
-<area shape="rect" href="Input_8hpp.html" title=" " alt="" coords="3833,557,3959,584"/>
-<area shape="rect" href="Output_8hpp.html" title=" " alt="" coords="691,632,827,659"/>
-<area shape="rect" href="WindowManager_8hpp.html" title=" " alt="" coords="4027,557,4221,584"/>
-<area shape="rect" href="RenderEngine_8hpp.html" title=" " alt="" coords="174,483,341,509"/>
-<area shape="rect" href="RHIDevice_8hpp.html" title=" " alt="" coords="2337,169,2463,196"/>
-<area shape="rect" title=" " alt="" coords="4144,169,4205,196"/>
-<area shape="rect" href="Typedefs_8hpp.html" title=" " alt="" coords="2187,781,2315,808"/>
-<area shape="rect" href="Event_8hpp.html" title=" " alt="" coords="3471,707,3615,733"/>
-<area shape="rect" title=" " alt="" coords="2491,707,2570,733"/>
-<area shape="rect" title=" " alt="" coords="1558,707,1669,733"/>
-<area shape="rect" title=" " alt="" coords="2979,707,3037,733"/>
-<area shape="rect" href="RefCnt_8hpp.html" title=" " alt="" coords="3395,781,3571,808"/>
-<area shape="rect" title=" " alt="" coords="1323,707,1381,733"/>
-<area shape="rect" title=" " alt="" coords="803,707,944,733"/>
-<area shape="rect" href="String_8hpp.html" title=" " alt="" coords="1019,707,1165,733"/>
-<area shape="rect" href="Data_8hpp.html" title=" " alt="" coords="2241,632,2343,659"/>
-<area shape="rect" href="Ref_8hpp.html" title=" " alt="" coords="2697,707,2853,733"/>
-<area shape="rect" title=" " alt="" coords="953,632,1010,659"/>
-<area shape="rect" href="InputDefs_8hpp.html" title=" " alt="" coords="3741,707,3894,733"/>
-<area shape="rect" href="InputDevices_8hpp.html" title=" " alt="" coords="3845,632,4019,659"/>
-<area shape="rect" href="Window_8hpp.html" title=" " alt="" coords="3331,632,3474,659"/>
-<area shape="rect" href="MeshFormats_8hpp.html" title=" " alt="" coords="403,557,605,584"/>
-<area shape="rect" href="ShaderManager_8hpp.html" title=" " alt="" coords="246,632,466,659"/>
-<area shape="rect" href="RHIDefs_8hpp.html" title=" " alt="" coords="1387,632,1501,659"/>
-<area shape="rect" href="Resource_8hpp.html" title=" " alt="" coords="4499,707,4653,733"/>
-<area shape="rect" href="ResourceImporter_8hpp.html" title=" " alt="" coords="4549,632,4752,659"/>
-<area shape="rect" href="TMatMxN_8hpp.html" title=" " alt="" coords="1693,707,1859,733"/>
-<area shape="rect" href="RHIBuffer_8hpp.html" title=" " alt="" coords="1937,483,2058,509"/>
-<area shape="rect" href="RHIResource_8hpp.html" title=" " alt="" coords="2353,557,2495,584"/>
-<area shape="rect" href="RHICommandList_8hpp.html" title=" " alt="" coords="2093,251,2261,278"/>
-<area shape="rect" href="RHIGraphicsPipeline_8hpp.html" title=" " alt="" coords="2570,333,2755,360"/>
-<area shape="rect" href="RHIRenderPass_8hpp.html" title=" " alt="" coords="2153,408,2311,435"/>
-<area shape="rect" href="RHIFramebuffer_8hpp.html" title=" " alt="" coords="2691,483,2847,509"/>
-<area shape="rect" href="RHIShader_8hpp.html" title=" " alt="" coords="3027,483,3155,509"/>
-<area shape="rect" href="RHIResourceSet_8hpp.html" title=" " alt="" coords="2437,408,2600,435"/>
-<area shape="rect" href="RHISampler_8hpp.html" title=" " alt="" coords="3179,483,3314,509"/>
+<area shape="rect" title=" " alt="" coords="3299,5,3453,47"/>
+<area shape="rect" href="Engine_8hpp.html" title=" " alt="" coords="3319,95,3433,121"/>
+<area shape="rect" href="ResourceManager_8hpp.html" title=" " alt="" coords="3751,572,3956,599"/>
+<area shape="rect" href="ImporterMesh_8hpp.html" title=" " alt="" coords="127,333,257,375"/>
+<area shape="rect" href="ImporterTexture_8hpp.html" title=" " alt="" coords="124,244,265,285"/>
+<area shape="rect" title=" " alt="" coords="4164,95,4239,121"/>
+<area shape="rect" href="Config_8hpp.html" title=" " alt="" coords="1486,871,1597,897"/>
+<area shape="rect" href="EventDispatcher_8hpp.html" title=" " alt="" coords="3316,647,3487,673"/>
+<area shape="rect" title=" " alt="" coords="4715,871,4783,897"/>
+<area shape="rect" title=" " alt="" coords="3251,871,3312,897"/>
+<area shape="rect" href="Scheduler_8hpp.html" title=" " alt="" coords="3953,647,4087,673"/>
+<area shape="rect" href="Thread_8hpp.html" title=" " alt="" coords="3561,647,3676,673"/>
+<area shape="rect" title=" " alt="" coords="3853,721,3912,748"/>
+<area shape="rect" href="io_2Config_8hpp.html" title=" " alt="" coords="3116,647,3241,673"/>
+<area shape="rect" href="FileSystem_8hpp.html" title=" " alt="" coords="2507,572,2669,599"/>
+<area shape="rect" href="Input_8hpp.html" title=" " alt="" coords="2990,572,3117,599"/>
+<area shape="rect" href="Output_8hpp.html" title=" " alt="" coords="1092,647,1228,673"/>
+<area shape="rect" href="WindowManager_8hpp.html" title=" " alt="" coords="657,572,850,599"/>
+<area shape="rect" href="RenderEngine_8hpp.html" title=" " alt="" coords="4477,497,4643,524"/>
+<area shape="rect" href="RHIDevice_8hpp.html" title=" " alt="" coords="1477,169,1603,196"/>
+<area shape="rect" title=" " alt="" coords="3151,169,3212,196"/>
+<area shape="rect" href="Typedefs_8hpp.html" title=" " alt="" coords="2192,796,2320,823"/>
+<area shape="rect" href="Event_8hpp.html" title=" " alt="" coords="3011,721,3155,748"/>
+<area shape="rect" title=" " alt="" coords="3433,721,3511,748"/>
+<area shape="rect" title=" " alt="" coords="4222,721,4333,748"/>
+<area shape="rect" title=" " alt="" coords="2344,721,2403,748"/>
+<area shape="rect" href="RefCnt_8hpp.html" title=" " alt="" coords="1849,796,2025,823"/>
+<area shape="rect" title=" " alt="" coords="4038,721,4095,748"/>
+<area shape="rect" title=" " alt="" coords="3637,721,3779,748"/>
+<area shape="rect" href="String_8hpp.html" title=" " alt="" coords="1358,721,1503,748"/>
+<area shape="rect" href="Data_8hpp.html" title=" " alt="" coords="1898,647,2001,673"/>
+<area shape="rect" href="Ref_8hpp.html" title=" " alt="" coords="1859,721,2015,748"/>
+<area shape="rect" title=" " alt="" coords="2583,647,2641,673"/>
+<area shape="rect" href="InputDefs_8hpp.html" title=" " alt="" coords="2731,721,2885,748"/>
+<area shape="rect" href="InputDevices_8hpp.html" title=" " alt="" coords="2817,647,2991,673"/>
+<area shape="rect" href="Window_8hpp.html" title=" " alt="" coords="597,647,739,673"/>
+<area shape="rect" href="MeshFormats_8hpp.html" title=" " alt="" coords="4200,572,4403,599"/>
+<area shape="rect" href="ShaderManager_8hpp.html" title=" " alt="" coords="4365,647,4585,673"/>
+<area shape="rect" href="RHIDefs_8hpp.html" title=" " alt="" coords="1505,647,1620,673"/>
+<area shape="rect" href="Resource_8hpp.html" title=" " alt="" coords="1579,721,1733,748"/>
+<area shape="rect" href="ResourceImporter_8hpp.html" title=" " alt="" coords="815,647,1017,673"/>
+<area shape="rect" href="TMatMxN_8hpp.html" title=" " alt="" coords="153,721,319,748"/>
+<area shape="rect" href="RHIBuffer_8hpp.html" title=" " alt="" coords="1322,497,1443,524"/>
+<area shape="rect" href="RHIResource_8hpp.html" title=" " alt="" coords="1413,572,1555,599"/>
+<area shape="rect" href="RHICommandList_8hpp.html" title=" " alt="" coords="1577,251,1745,278"/>
+<area shape="rect" href="RHIGraphicsPipeline_8hpp.html" title=" " alt="" coords="1910,341,2095,367"/>
+<area shape="rect" href="RHIRenderPass_8hpp.html" title=" " alt="" coords="2026,423,2185,449"/>
+<area shape="rect" href="RHIFramebuffer_8hpp.html" title=" " alt="" coords="2127,497,2283,524"/>
+<area shape="rect" href="RHIResourceSet_8hpp.html" title=" " alt="" coords="1519,423,1681,449"/>
+<area shape="rect" href="RHISampler_8hpp.html" title=" " alt="" coords="1111,497,1246,524"/>
 </map>
 </div>
 </div></div><!-- contents -->

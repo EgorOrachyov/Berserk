@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structShaderOption.html" title="Single option exposed by the shader." alt="" coords="5,5,107,32"/>
+<area shape="rect" id="node1" href="$classShaderArchetype.html" title="Handles source code pre&#45;processing of shaders with this archetype." alt="" coords="5,5,127,32"/>
+<area shape="rect" id="node2" href="$classShaderArchetypeBase.html" title="Base shader type to draw a mesh on screen." alt="" coords="175,5,325,32"/>
 </map>

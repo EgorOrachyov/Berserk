@@ -1,4 +1,5 @@
 <map id="ResourceImporter" name="ResourceImporter">
-<area shape="rect" id="node1" title="Base class responsible for importing a specific resource type." alt="" coords="5,5,131,32"/>
-<area shape="rect" id="node2" href="$classTextureImporter.html" title="Texture resources importer." alt="" coords="11,80,125,107"/>
+<area shape="rect" id="node1" title="Base class responsible for importing a specific resource type." alt="" coords="59,5,185,32"/>
+<area shape="rect" id="node2" href="$classImporterMesh.html" title="Raw simple mesh resources importer." alt="" coords="5,80,108,107"/>
+<area shape="rect" id="node3" href="$classImporterTexture.html" title="Texture resources importer." alt="" coords="132,80,245,107"/>
 </map>

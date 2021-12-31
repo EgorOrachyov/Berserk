@@ -88,7 +88,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac8e4cb97af0de96f2bd2e3b7b68d97ce"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWindowManager.html#ac8e4cb97af0de96f2bd2e3b7b68d97ce">~WindowManager</a> ()=default</td></tr>
 <tr class="separator:ac8e4cb97af0de96f2bd2e3b7b68d97ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4b089781360a08f6745ae36985aaae7"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classWindow.html">Window</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWindowManager.html#ab4b089781360a08f6745ae36985aaae7">CreateWindow</a> (const <a class="el" href="classStringName.html">StringName</a> &amp;name, const <a class="el" href="group__core.html#ga3e68552913c24144034c5e447a658ef0">Size2i</a> &amp;size, const <a class="el" href="classString.html">String</a> &amp;title)=0</td></tr>
-<tr class="memdesc:ab4b089781360a08f6745ae36985aaae7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create new OS native rendering window.  <a href="classWindowManager.html#ab4b089781360a08f6745ae36985aaae7">More...</a><br /></td></tr>
+<tr class="memdesc:ab4b089781360a08f6745ae36985aaae7"><td class="mdescLeft">&#160;</td><td class="mdescRight">CreateFromImage new OS native rendering window.  <a href="classWindowManager.html#ab4b089781360a08f6745ae36985aaae7">More...</a><br /></td></tr>
 <tr class="separator:ab4b089781360a08f6745ae36985aaae7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b63ed61b678eefd1226cf26355c34cc"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="Config_8hpp.html#a3a924191d1ccbaaa2df0885c249353f4">BRK_API</a> <a class="el" href="classRef.html">Ref</a>&lt; <a class="el" href="classWindow.html">Window</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWindowManager.html#a6b63ed61b678eefd1226cf26355c34cc">GetPrimaryWindow</a> ()=0</td></tr>
 <tr class="separator:a6b63ed61b678eefd1226cf26355c34cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,7 +162,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Create new OS native rendering window. </p>
+<p>CreateFromImage new OS native rendering window. </p>
 <p>Creates new window object with specified properties. Automatically initializes rendering context of window, so it is ready for actual rendering.</p>
 <dl class="section note"><dt>Note</dt><dd>Must be called on the main (game) thread</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
