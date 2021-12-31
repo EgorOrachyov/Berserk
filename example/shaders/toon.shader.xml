@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<shader name="toon" archetype="brk_shader_base" description="Forward toon shader">
+    <params>
+        <param name="pMVP" uiName="MVP matrix" type="mat4"/>
+        <param name="pModel" uiName="Model matrix" type="mat3"/>
+        <param name="pCameraPos" uiName="Camera world pos" type="float3" default="0 0 6"/>
+        <param name="pLightPos" uiName="Light pos" type="float3" default="0 0 10"/>
+        <param name="pLightColor" uiName="Light color" type="float3" default="1 1 1"/>
+        <param name="pLightAmbient" uiName="Light ambient" type="float1" default="0.05"/>
+        <param name="pShades" uiName="Toon shades" type="float1" default="10"/>
+        <param name="pTime" uiName="Time" type="float1" description="Time used to animate texture" default="0.1"/>
+    </params>
+    <techniques>
+        <technique name="default" language="GLSL410GL">
+            <passes>
+                <pass name="main">
+                    <vertex>
+                        void vertex(inout Params params) {
+                            params.projPos = pMVP * vec4(getPos(), 1.0f);
+                            params.worldPos = pModel * getPos();
+                            params.worldNorm = normalize(pModel * getNorm());
+                            params.color = getColor();
+                        }
+                    </vertex>
+                    <fragment>
+                        void fragment(inout Params params) {
+                            vec3 pos = getWorldPos();
+                            vec3 norm = getWorldNorm();
+                            vec3 color = getColor();
+                            vec3 L = normalize(pLightPos - pos);
+                            float NdotL = max(dot(norm, L), 0.0f);
+                            float toon = max(ceil(NdotL * pShades) / pShades, pLightAmbient);
+                            params.outColor = vec4(color * toon, 1.0f);
+                        }
+                    </fragment>
+                </pass>
+            </passes>
+        </technique>
+    </techniques>
+</shader>

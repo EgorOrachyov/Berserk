@@ -70,6 +70,7 @@ public:
     BRK_API ~ShaderCompileOptions() override = default;
 
     BRK_API void Set(const StringName &option) { mValues.emplace(option); }
+    BRK_API bool IsSet(const StringName &option) const { return mValues.find(option) != mValues.end(); }
     BRK_API void Clear() { mValues.clear(); }
     BRK_API size_t GetCount() const { return mValues.size(); }
     BRK_API const std::unordered_set<StringName> &Get() const { return mValues; }

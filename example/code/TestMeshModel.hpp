@@ -25,8 +25,8 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_TESTMESHSIMPLE_HPP
-#define BERSERK_TESTMESHSIMPLE_HPP
+#ifndef BERSERK_TESTMESHMODEL_HPP
+#define BERSERK_TESTMESHMODEL_HPP
 
 #include <Berserk.hpp>
 
@@ -118,7 +118,7 @@ public:
         float fov = MathUtils::DegToRad(60.0f);
         float near = 0.1f, far = 10.0f;
 
-        Mat4x4f model = MathUtils3d::IdentityMatrix();
+        Mat4x4f model = Transformf().Scale(0.08f).RotateY(-angle).ToTransformMat();
         Mat4x4f view = MathUtils3d::LookAt(eye, dir, up);
         Mat4x4f proj = MathUtils3d::Perspective(fov, window->GetAspectRatio(), near, far);
         Mat4x4f projViewModel = proj * view * model;
@@ -127,7 +127,6 @@ public:
 
         Vec3f lightPos = MathUtils3d::Multiply(lightRotation, Vec3f(0, 0, 2));
 
-        static StringName ptDiffuse("ptDiffuse");
         static StringName pMVP("pMVP");
         static StringName pModel("pModel");
         static StringName pCameraPos("pCameraPos");
@@ -137,7 +136,6 @@ public:
 
         Vec3f lightColor(1, 1, 1);
 
-        material->SetTexture(ptDiffuse, texture->GetRHITexture(), texture->GetRHISampler());
         material->SetMat4(pMVP, projViewModel);
         material->SetMat3(pModel, model.SubMatrix<3, 3>(0, 0));
         material->SetFloat3(pCameraPos, eye);
@@ -200,23 +198,20 @@ protected:
         auto &shaderManager = engine->GetRenderEngine().GetShaderManager();
         auto options = berserk::Ref<berserk::ShaderCompileOptions>(new berserk::ShaderCompileOptions);
 
-#ifdef BERSERK_DEBUG
-        options->Set(berserk::StringName("D_DEBUG_COLOR"));
-#endif
-        options->Set(berserk::StringName("D_ANIMATE"));
+        options->Set(berserk::StringName("D_NO_UV"));
 
-        shader = shaderManager.Load("shaders/forward-lit.shader.xml", options);
+        shader = shaderManager.Load("shaders/toon.shader.xml", options);
         material = berserk::Ref<berserk::Material>(new berserk::Material(shader));
 
-        material->SetName(berserk::StringName("mat-tiled-diffuse"));
-        material->SetDescription(BRK_TEXT("Tiled polygon with diffuse lightning"));
+        material->SetName(berserk::StringName("mat-toon-diffuse"));
+        material->SetDescription(BRK_TEXT("Tiled toon polygon"));
     }
 
     void InitMesh() {
         using namespace berserk;
 
-        String meshPath = BRK_TEXT("resources/models/sphere.obj");
-        MeshFormat meshFormat = {MeshAttribute::Position, MeshAttribute::Normal, MeshAttribute::Color, MeshAttribute::UV};
+        String meshPath = BRK_TEXT("resources/models/suzanne.obj");
+        MeshFormat meshFormat = {MeshAttribute::Position, MeshAttribute::Normal, MeshAttribute::Color};
         Ref<ResMeshImportOptions> importOptions(new ResMeshImportOptions);
         importOptions->meshFormat = meshFormat;
         importOptions->flipUVs = true;
@@ -249,11 +244,11 @@ protected:
         pipelineDesc.primitivesType = RHIPrimitivesType::Triangles;
         pipelineDesc.shader = material->GetTechnique()->GetPass(0)->GetShader();
         pipelineDesc.declaration = mesh->GetMesh()->GetDeclaration();
-        pipelineDesc.depthStencilState = RHIDepthStencilState::CreateDepthState(false);
+        pipelineDesc.depthStencilState = RHIDepthStencilState::CreateDepthState(true);
         pipelineDesc.blendState.attachments.resize(1);
         pipelineDesc.renderPass = renderPass;
         pipeline = device->CreateGraphicsPipeline(pipelineDesc);
     }
 };
 
-#endif//BERSERK_TESTMESHSIMPLE_HPP
+#endif//BERSERK_TESTMESHMODEL_HPP

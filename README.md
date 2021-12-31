@@ -40,6 +40,8 @@ decisions.
 * [googletest](https://github.com/google/googletest) for Unit-testing of the engine source code modules
 * [pfd](https://github.com/samhocevar/portable-file-dialogs) portable file dialogs for native OS dialogs access
 * [stbimage](https://github.com/nothings/stb) image utilities for images loading, writing and resizing
+* [tinyobj](https://github.com/tinyobjloader/tinyobjloader) for wavefront obj models importing
+* [tinyxml2](https://github.com/leethomason/tinyxml2) for utf-8 xml files processing
 * [vma](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator) vulkan library for memory allocation
 * [whereami](https://github.com/gpakosz/whereami) for executable location extracting
 * [yamc](https://github.com/yohhoy/yamc) for C++ locks implementation
@@ -140,9 +142,11 @@ Berserk
 │   ├── glew - for OpenGL functions and extensions loading
 │   ├── glfw - for cross-platform window and input management
 │   ├── glslang - for runtime glsl to spir-v shaders compilation
-│   ├── googletest - for Unit-testing of the engine source code modules
+│   ├── googletest - for unit-testing of the engine source code modules
 │   ├── pfd - portable file dialogs for native OS dialogs access
 │   ├── stbimage - image utilities for images loading, writing and resizing
+│   ├── tinyobj - for tiny wavefront obj models loading
+│   ├── tinyxml2 - for utf-8 xml files processing
 │   ├── vma - vulkan memory allocation library
 │   ├── whereami - for executable location extraction
 │   └── yamc - for C++ locks implementation

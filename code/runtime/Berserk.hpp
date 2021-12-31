@@ -63,6 +63,7 @@
 #include <core/math/TMatMxN.hpp>
 #include <core/math/TQuat.hpp>
 #include <core/math/TVecN.hpp>
+#include <core/math/Transformf.hpp>
 #include <core/string/String.hpp>
 #include <core/string/String16u.hpp>
 #include <core/string/StringName.hpp>

@@ -42,6 +42,7 @@ const std::vector<RHIShaderLanguage> &ShaderArchetypeBase::GetSupportedLanguages
 }
 
 void ShaderArchetypeBase::DefineOptions(std::vector<ShaderOption> &options) const {
+    options.emplace_back(ShaderOption{StringName("D_NO_UV"), String("No uv attribute in the mesh")});
 }
 
 void ShaderArchetypeBase::DefineVariation(const ShaderCompileOptions &options, ShaderVariation &variation) {
@@ -55,24 +56,30 @@ void ShaderArchetypeBase::DefineFormat(const ShaderCompileOptions &options, Mesh
     format.Set(MeshAttribute::Position);
     format.Set(MeshAttribute::Normal);
     format.Set(MeshAttribute::Color);
-    format.Set(MeshAttribute::UV);
+
+    if (!options.IsSet(StringName("D_NO_UV")))
+        format.Set(MeshAttribute::UV);
 }
 
 void ShaderArchetypeBase::Process(const ShaderArchetype::InputData &inputData, ShaderArchetype::OutputData &outputData) {
     std::stringstream vs;
 
+    bool hasUV = !inputData.options->IsSet(StringName("D_NO_UV"));
+
     vs << "#version 410 core\n"
        << "layout (location = 0) in vec3 _vPos;\n"
        << "layout (location = 1) in vec3 _vNorm;\n"
-       << "layout (location = 2) in vec3 _vColor;\n"
-       << "layout (location = 3) in vec2 _vUV;\n";
+       << "layout (location = 2) in vec3 _vColor;\n";
+    if (hasUV)
+        vs << "layout (location = 3) in vec2 _vUV;\n";
 
     UtilsGLSL::GenerateDefines(*inputData.options, vs);
 
     vs << "out vec3 _fsWorldPos;\n"
        << "out vec3 _fsWorldNorm;\n"
-       << "out vec3 _fsColor;\n"
-       << "out vec2 _fsUV;\n";
+       << "out vec3 _fsColor;\n";
+    if (hasUV)
+        vs << "out vec2 _fsUV;\n";
 
     vs << "struct Params {\n"
        << "  vec4 projPos;\n"
@@ -84,8 +91,9 @@ void ShaderArchetypeBase::Process(const ShaderArchetype::InputData &inputData, S
 
     vs << "vec3 getPos() { return _vPos; }\n"
        << "vec3 getNorm() { return _vNorm; }\n"
-       << "vec3 getColor() { return _vColor; }\n"
-       << "vec2 getUV() { return _vUV; }\n";
+       << "vec3 getColor() { return _vColor; }\n";
+    if (hasUV)
+        vs << "vec2 getUV() { return _vUV; }\n";
 
     UtilsGLSL::GenerateStruct(SHADER_PARAMS_BLOCK, "std140", *inputData.params, vs);
     UtilsGLSL::GenerateUserCode(inputData.vertexCode, vs);
@@ -95,15 +103,19 @@ void ShaderArchetypeBase::Process(const ShaderArchetype::InputData &inputData, S
        << "  params.projPos = vec4(_vPos, 1.0f);\n"
        << "  params.worldPos = _vPos;\n"
        << "  params.worldNorm = _vNorm;\n"
-       << "  params.color = _vColor;\n"
-       << "  params.uv = _vUV;\n"
-       << "  vertex(params);\n"
+       << "  params.color = _vColor;\n";
+
+    if (hasUV)
+        vs << "  params.uv = _vUV;\n";
+
+    vs << "  vertex(params);\n"
        << "  gl_Position = params.projPos;\n"
        << "  _fsWorldPos = params.worldPos;\n"
        << "  _fsWorldNorm = params.worldNorm;\n"
-       << "  _fsColor = params.color;\n"
-       << "  _fsUV = params.uv;\n"
-       << "}\n";
+       << "  _fsColor = params.color;\n";
+    if (hasUV)
+        vs << "  _fsUV = params.uv;\n";
+    vs << "}\n";
 
     std::stringstream fs;
 
@@ -114,8 +126,9 @@ void ShaderArchetypeBase::Process(const ShaderArchetype::InputData &inputData, S
 
     fs << "in vec3 _fsWorldPos;\n"
        << "in vec3 _fsWorldNorm;\n"
-       << "in vec3 _fsColor;\n"
-       << "in vec2 _fsUV;\n";
+       << "in vec3 _fsColor;\n";
+    if (hasUV)
+        fs << "in vec2 _fsUV;\n";
 
     fs << "struct Params {\n"
        << "  vec4 outColor;\n"
@@ -123,8 +136,9 @@ void ShaderArchetypeBase::Process(const ShaderArchetype::InputData &inputData, S
 
     fs << "vec3 getWorldPos() { return _fsWorldPos; }\n"
        << "vec3 getWorldNorm() { return _fsWorldNorm; }\n"
-       << "vec3 getColor() { return _fsColor; }\n"
-       << "vec2 getUV() { return _fsUV; }\n";
+       << "vec3 getColor() { return _fsColor; }\n";
+    if (hasUV)
+        fs << "vec2 getUV() { return _fsUV; }\n";
 
     UtilsGLSL::GenerateStruct(SHADER_PARAMS_BLOCK, "std140", *inputData.params, fs);
     UtilsGLSL::GenerateUniformParams(*inputData.params, fs);

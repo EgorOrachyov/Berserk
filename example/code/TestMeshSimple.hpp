@@ -292,7 +292,7 @@ protected:
         pipelineDesc.primitivesType = RHIPrimitivesType::Triangles;
         pipelineDesc.shader = material->GetTechnique()->GetPass(0)->GetShader();
         pipelineDesc.declaration = mesh->GetDeclaration();
-        pipelineDesc.depthStencilState = RHIDepthStencilState::CreateDepthState(false);
+        pipelineDesc.depthStencilState = RHIDepthStencilState::CreateDepthState(true);
         pipelineDesc.blendState.attachments.resize(1);
         pipelineDesc.renderPass = renderPass;
         pipeline = device->CreateGraphicsPipeline(pipelineDesc);

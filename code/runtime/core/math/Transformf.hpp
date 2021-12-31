@@ -96,6 +96,11 @@ public:
         return *this;
     }
 
+    Transformf &Scale(float scale) {
+        mScale *= scale;
+        return *this;
+    }
+
     Transformf &Translate(const Vec3f &t) {
         mOffset += t;
         return *this;
