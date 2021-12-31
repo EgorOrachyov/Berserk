@@ -44,8 +44,8 @@ public:
     berserk::Ref<berserk::RHIGraphicsPipeline> pipeline;
     berserk::Ref<berserk::RHICommandList> commandList;
 
-    berserk::Ref<const berserk::Shader> shader;
     berserk::Ref<berserk::Material> material;
+    berserk::Ref<berserk::ResShader> shader;
     berserk::Ref<berserk::ResMesh> mesh;
     berserk::Ref<berserk::ResTexture> texture;
 
@@ -195,14 +195,14 @@ protected:
     }
 
     void InitMaterial() {
-        auto &shaderManager = engine->GetRenderEngine().GetShaderManager();
-        auto options = berserk::Ref<berserk::ShaderCompileOptions>(new berserk::ShaderCompileOptions);
+        using namespace berserk;
 
-        options->Set(berserk::StringName("D_NO_UV"));
+        String shaderPath = BRK_TEXT("shaders/toon.shader.xml");
+        Ref<ResShaderImportOptions> importOptions(new ResShaderImportOptions);
+        importOptions->options->Set(StringName("D_NO_UV"));
+        shader = resourceManager->Import(shaderPath, importOptions.As<ResourceImportOptions>()).Cast<ResShader>();
 
-        shader = shaderManager.Load("shaders/toon.shader.xml", options);
-        material = berserk::Ref<berserk::Material>(new berserk::Material(shader));
-
+        material = berserk::Ref<berserk::Material>(new berserk::Material(shader->GetShader()));
         material->SetName(berserk::StringName("mat-toon-diffuse"));
         material->SetDescription(BRK_TEXT("Tiled toon polygon"));
     }

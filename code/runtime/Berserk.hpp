@@ -162,6 +162,7 @@
 
 #include <resource/ResMaterial.hpp>
 #include <resource/ResMesh.hpp>
+#include <resource/ResShader.hpp>
 #include <resource/ResTexture.hpp>
 #include <resource/Resource.hpp>
 #include <resource/ResourceImporter.hpp>

@@ -28,6 +28,7 @@
 #include <core/Engine.hpp>
 #include <resource/ResourceManager.hpp>
 #include <resource/importers/ImporterMesh.hpp>
+#include <resource/importers/ImporterShader.hpp>
 #include <resource/importers/ImporterTexture.hpp>
 
 #include <algorithm>
@@ -37,6 +38,7 @@ BRK_NS_BEGIN
 ResourceManager::ResourceManager() {
     // Register default importers
     RegisterImporter(std::make_shared<ImporterMesh>());
+    RegisterImporter(std::make_shared<ImporterShader>());
     RegisterImporter(std::make_shared<ImporterTexture>());
 }
 
@@ -49,7 +51,7 @@ Ref<Resource> ResourceManager::Import(const String &filepath, const Ref<Resource
         return Ref<Resource>();
     }
 
-    auto importer = FindImporter(fileSystem.GetFileExtension(filepath));
+    auto importer = FindImporter(fileSystem.GetFileExtension(fileSystem.GetFileName(filepath)));
     if (!importer) {
         BRK_ERROR("Failed to find importer for resource path " << filepath);
         return Ref<Resource>();

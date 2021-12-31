@@ -25,16 +25,13 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_RESMESH_HPP
-#define BERSERK_RESMESH_HPP
+#ifndef BERSERK_RESSHADER_HPP
+#define BERSERK_RESSHADER_HPP
 
-#include <resource/ResMaterial.hpp>
-#include <resource/ResTexture.hpp>
 #include <resource/Resource.hpp>
 #include <resource/ResourceImporter.hpp>
 
-#include <render/mesh/Mesh.hpp>
-#include <render/mesh/MeshFormats.hpp>
+#include <render/shader/Shader.hpp>
 
 BRK_NS_BEGIN
 
@@ -44,55 +41,37 @@ BRK_NS_BEGIN
  */
 
 /**
- * @class ResMeshImportOptions
- * @brief Texture import options
+ * @class ResShaderImportOptions
+ * @brief Options to import shader resource
  */
-class ResMeshImportOptions final : public ResourceImportOptions {
+class ResShaderImportOptions final : public ResourceImportOptions {
 public:
-    BRK_API ResMeshImportOptions() = default;
-    BRK_API ~ResMeshImportOptions() override = default;
+    BRK_API ~ResShaderImportOptions() override = default;
 
-    MeshFormat meshFormat = {MeshAttribute::Position, MeshAttribute::Normal, MeshAttribute::Tangent, MeshAttribute::UV}; /** Format of the data to import and preserve */
-
-    bool flipUVs = true;     /** Flip uv coords on loading */
-    bool triangulate = true; /** Triangulate so primitives type is triangles */
-    bool indexed = true;     /** Make indices to draw indexed */
+    Ref<ShaderCompileOptions> options{new ShaderCompileOptions}; /** Options to compile shader */
 };
 
 /**
- * @class ResMesh
- * @brief 3d mesh geometry for rendering
+ * @class ResShader
+ * @brief Engine shader program for rendering
  */
-class ResMesh final : public Resource {
+class ResShader final : public Resource {
 public:
-    /** @brief Single sub-mesh info */
-    struct SubMesh {
-        uint32 baseVertex{};
-        uint32 verticesCount{};
-        uint32 indicesCount{};
-        RHIIndexType indexType;
-        RHIPrimitivesType primitivesType;
-        Ref<ResMaterial> material;
-        Aabbf aabb;
-    };
-
-    BRK_API ResMesh() = default;
-    BRK_API ~ResMesh() override = default;
+    BRK_API ResShader() = default;
+    BRK_API ~ResShader() override = default;
 
     BRK_API const StringName &GetResourceType() const override;
     BRK_API static const StringName &GetResourceTypeStatic();
 
-    BRK_API void CreateFromArrays(MeshFormat format, uint32 verticesCount, const MeshArrays &arrays);
-    BRK_API void CreateFromData(MeshFormat format, uint32 verticesCount, const Ref<Data> &vertexData, const Ref<Data> &attributeData, const Ref<Data> &skinningData);
-    BRK_API void AddSubMesh(const StringName &name, RHIPrimitivesType primitivesType, const Aabbf &aabb, uint32 baseVertex, RHIIndexType indexType, uint32 indicesCount, const Ref<Data> &indexData);
-    BRK_API void SetAabb(const Aabbf &aabb);
+    BRK_API void CreateFromShader(Ref<const Shader> shader);
+    BRK_API bool HasParam(const StringName &name) const;
 
-    BRK_API const Ref<Mesh> &GetMesh() const { return mMesh; }
-    BRK_API const std::vector<SubMesh> &GetSubMeshes() const { return mSubMeshes; }
+    BRK_API const StringName &GetArchetype() const;
+    BRK_API const Ref<ShaderCompileOptions> &GetCompileOptions() const;
+    BRK_API const Ref<const Shader> &GetShader() const { return mShader; }
 
 private:
-    Ref<Mesh> mMesh;                 /** Internal mesh resource for rendering */
-    std::vector<SubMesh> mSubMeshes; /** Cached light sub-meshes info */
+    Ref<const Shader> mShader; /** Actual shader program */
 };
 
 /**
@@ -101,4 +80,4 @@ private:
 
 BRK_NS_END
 
-#endif//BERSERK_RESMESH_HPP
+#endif//BERSERK_RESSHADER_HPP

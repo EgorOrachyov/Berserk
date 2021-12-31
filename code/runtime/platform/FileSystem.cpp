@@ -156,7 +156,7 @@ String FileSystem::GetFullDirPath(const String &dirname) {
 }
 
 String FileSystem::GetFileExtension(const String &filename) {
-    auto pos = filename.find_last_of('.');
+    auto pos = filename.find_first_of('.');
     if (pos != String::npos)
         return filename.substr(pos + 1);
 

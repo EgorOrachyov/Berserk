@@ -4,8 +4,10 @@ set(BERSERK_RESOURCE_HEADER
         resource/ResourceManager.hpp
         resource/ResMaterial.hpp
         resource/ResMesh.hpp
+        resource/ResShader.hpp
         resource/ResTexture.hpp
         resource/importers/ImporterMesh.hpp
+        resource/importers/ImporterShader.hpp
         resource/importers/ImporterTexture.hpp
         )
 
@@ -14,7 +16,9 @@ set(BERSERK_RESOURCE_SRC
         resource/ResourceManager.cpp
         resource/ResMaterial.cpp
         resource/ResMesh.cpp
+        resource/ResShader.cpp
         resource/ResTexture.cpp
         resource/importers/ImporterMesh.cpp
+        resource/importers/ImporterShader.cpp
         resource/importers/ImporterTexture.cpp
         )
