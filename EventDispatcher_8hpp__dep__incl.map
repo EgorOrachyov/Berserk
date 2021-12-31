@@ -1,8 +1,8 @@
 <map id="code/runtime/core/EventDispatcher.hpp" name="code/runtime/core/EventDispatcher.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="2139,5,2389,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="2239,5,2489,32"/>
 <area shape="rect" id="node2" href="$Berserk_8hpp.html" title=" " alt="" coords="5,266,176,293"/>
-<area shape="rect" id="node3" href="$Engine_8hpp.html" title=" " alt="" coords="2167,80,2361,107"/>
-<area shape="rect" id="node29" href="$EventDispatcher_8cpp.html" title=" " alt="" coords="2385,80,2634,107"/>
+<area shape="rect" id="node3" href="$Engine_8hpp.html" title=" " alt="" coords="2267,80,2461,107"/>
+<area shape="rect" id="node30" href="$EventDispatcher_8cpp.html" title=" " alt="" coords="2485,80,2734,107"/>
 <area shape="rect" id="node4" href="$Engine_8cpp.html" title=" " alt="" coords="129,169,322,196"/>
 <area shape="rect" id="node5" href="$Config_8cpp.html" title=" " alt="" coords="346,162,486,203"/>
 <area shape="rect" id="node6" href="$LoggerListenerOutput_8cpp.html" title=" " alt="" coords="511,162,687,203"/>
@@ -17,15 +17,16 @@
 <area shape="rect" id="node16" href="$ShaderCompiler_8cpp.html" title=" " alt="" coords="2271,162,2457,203"/>
 <area shape="rect" id="node17" href="$ShaderManager_8cpp.html" title=" " alt="" coords="2481,162,2665,203"/>
 <area shape="rect" id="node18" href="$ImporterMesh_8cpp.html" title=" " alt="" coords="2690,162,2878,203"/>
-<area shape="rect" id="node19" href="$ImporterTexture_8cpp.html" title=" " alt="" coords="2902,162,3101,203"/>
-<area shape="rect" id="node20" href="$ResourceManager_8cpp.html" title=" " alt="" coords="3124,162,3279,203"/>
-<area shape="rect" id="node21" href="$ResTexture_8cpp.html" title=" " alt="" coords="3303,162,3454,203"/>
-<area shape="rect" id="node22" href="$GLCommandList_8cpp.html" title=" " alt="" coords="3479,162,3636,203"/>
-<area shape="rect" id="node23" href="$GLDevice_8cpp.html" title=" " alt="" coords="3660,162,3817,203"/>
-<area shape="rect" id="node24" href="$GLRenderPass_8cpp.html" title=" " alt="" coords="3841,162,3999,203"/>
-<area shape="rect" id="node25" href="$GLSampler_8cpp.html" title=" " alt="" coords="4023,162,4180,203"/>
-<area shape="rect" id="node26" href="$GLShader_8cpp.html" title=" " alt="" coords="4204,162,4361,203"/>
-<area shape="rect" id="node27" href="$RHIDevice_8cpp.html" title=" " alt="" coords="4386,169,4593,196"/>
-<area shape="rect" id="node28" href="$RHIResource_8cpp.html" title=" " alt="" coords="4617,169,4839,196"/>
+<area shape="rect" id="node19" href="$ImporterShader_8cpp.html" title=" " alt="" coords="2903,162,3100,203"/>
+<area shape="rect" id="node20" href="$ImporterTexture_8cpp.html" title=" " alt="" coords="3125,162,3323,203"/>
+<area shape="rect" id="node21" href="$ResourceManager_8cpp.html" title=" " alt="" coords="3347,162,3501,203"/>
+<area shape="rect" id="node22" href="$ResTexture_8cpp.html" title=" " alt="" coords="3526,162,3677,203"/>
+<area shape="rect" id="node23" href="$GLCommandList_8cpp.html" title=" " alt="" coords="3701,162,3859,203"/>
+<area shape="rect" id="node24" href="$GLDevice_8cpp.html" title=" " alt="" coords="3883,162,4040,203"/>
+<area shape="rect" id="node25" href="$GLRenderPass_8cpp.html" title=" " alt="" coords="4064,162,4221,203"/>
+<area shape="rect" id="node26" href="$GLSampler_8cpp.html" title=" " alt="" coords="4245,162,4403,203"/>
+<area shape="rect" id="node27" href="$GLShader_8cpp.html" title=" " alt="" coords="4427,162,4584,203"/>
+<area shape="rect" id="node28" href="$RHIDevice_8cpp.html" title=" " alt="" coords="4609,169,4815,196"/>
+<area shape="rect" id="node29" href="$RHIResource_8cpp.html" title=" " alt="" coords="4840,169,5061,196"/>
 <area shape="rect" id="node8" href="$Application_8cpp.html" title=" " alt="" coords="711,259,859,300"/>
 </map>

@@ -1,10 +1,10 @@
 <map id="code/runtime/render/shader/ShaderManager.hpp" name="code/runtime/render/shader/ShaderManager.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="2197,5,2381,47"/>
+<area shape="rect" id="node1" title=" " alt="" coords="2297,5,2481,47"/>
 <area shape="rect" id="node2" href="$Berserk_8hpp.html" title=" " alt="" coords="5,385,176,411"/>
-<area shape="rect" id="node3" href="$RenderEngine_8hpp.html" title=" " alt="" coords="2221,95,2358,136"/>
-<area shape="rect" id="node18" href="$ShaderManager_8cpp.html" title=" " alt="" coords="4679,281,4863,322"/>
-<area shape="rect" id="node4" href="$Engine_8hpp.html" title=" " alt="" coords="2193,191,2386,218"/>
-<area shape="rect" id="node30" href="$RenderEngine_8cpp.html" title=" " alt="" coords="2410,184,2547,225"/>
+<area shape="rect" id="node3" href="$RenderEngine_8hpp.html" title=" " alt="" coords="2321,95,2458,136"/>
+<area shape="rect" id="node18" href="$ShaderManager_8cpp.html" title=" " alt="" coords="4901,281,5085,322"/>
+<area shape="rect" id="node4" href="$Engine_8hpp.html" title=" " alt="" coords="2293,191,2486,218"/>
+<area shape="rect" id="node31" href="$RenderEngine_8cpp.html" title=" " alt="" coords="2510,184,2647,225"/>
 <area shape="rect" id="node5" href="$Engine_8cpp.html" title=" " alt="" coords="154,288,347,315"/>
 <area shape="rect" id="node6" href="$Config_8cpp.html" title=" " alt="" coords="371,281,511,322"/>
 <area shape="rect" id="node7" href="$LoggerListenerOutput_8cpp.html" title=" " alt="" coords="536,281,712,322"/>
@@ -18,15 +18,16 @@
 <area shape="rect" id="node16" href="$MeshFormats_8cpp.html" title=" " alt="" coords="2106,281,2273,322"/>
 <area shape="rect" id="node17" href="$ShaderCompiler_8cpp.html" title=" " alt="" coords="2297,281,2482,322"/>
 <area shape="rect" id="node19" href="$ImporterMesh_8cpp.html" title=" " alt="" coords="2506,281,2694,322"/>
-<area shape="rect" id="node20" href="$ImporterTexture_8cpp.html" title=" " alt="" coords="2718,281,2917,322"/>
-<area shape="rect" id="node21" href="$ResourceManager_8cpp.html" title=" " alt="" coords="2940,281,3095,322"/>
-<area shape="rect" id="node22" href="$ResTexture_8cpp.html" title=" " alt="" coords="3119,281,3270,322"/>
-<area shape="rect" id="node23" href="$GLCommandList_8cpp.html" title=" " alt="" coords="3295,281,3452,322"/>
-<area shape="rect" id="node24" href="$GLDevice_8cpp.html" title=" " alt="" coords="3476,281,3633,322"/>
-<area shape="rect" id="node25" href="$GLRenderPass_8cpp.html" title=" " alt="" coords="3657,281,3815,322"/>
-<area shape="rect" id="node26" href="$GLSampler_8cpp.html" title=" " alt="" coords="3839,281,3996,322"/>
-<area shape="rect" id="node27" href="$GLShader_8cpp.html" title=" " alt="" coords="4020,281,4177,322"/>
-<area shape="rect" id="node28" href="$RHIDevice_8cpp.html" title=" " alt="" coords="4202,288,4409,315"/>
-<area shape="rect" id="node29" href="$RHIResource_8cpp.html" title=" " alt="" coords="4433,288,4655,315"/>
+<area shape="rect" id="node20" href="$ImporterShader_8cpp.html" title=" " alt="" coords="2719,281,2916,322"/>
+<area shape="rect" id="node21" href="$ImporterTexture_8cpp.html" title=" " alt="" coords="2941,281,3139,322"/>
+<area shape="rect" id="node22" href="$ResourceManager_8cpp.html" title=" " alt="" coords="3163,281,3317,322"/>
+<area shape="rect" id="node23" href="$ResTexture_8cpp.html" title=" " alt="" coords="3342,281,3493,322"/>
+<area shape="rect" id="node24" href="$GLCommandList_8cpp.html" title=" " alt="" coords="3517,281,3675,322"/>
+<area shape="rect" id="node25" href="$GLDevice_8cpp.html" title=" " alt="" coords="3699,281,3856,322"/>
+<area shape="rect" id="node26" href="$GLRenderPass_8cpp.html" title=" " alt="" coords="3880,281,4037,322"/>
+<area shape="rect" id="node27" href="$GLSampler_8cpp.html" title=" " alt="" coords="4061,281,4219,322"/>
+<area shape="rect" id="node28" href="$GLShader_8cpp.html" title=" " alt="" coords="4243,281,4400,322"/>
+<area shape="rect" id="node29" href="$RHIDevice_8cpp.html" title=" " alt="" coords="4425,288,4631,315"/>
+<area shape="rect" id="node30" href="$RHIResource_8cpp.html" title=" " alt="" coords="4656,288,4877,315"/>
 <area shape="rect" id="node9" href="$Application_8cpp.html" title=" " alt="" coords="737,377,885,419"/>
 </map>

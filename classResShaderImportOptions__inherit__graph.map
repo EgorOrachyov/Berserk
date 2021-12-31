@@ -1,0 +1,5 @@
+<map id="ResShaderImportOptions" name="ResShaderImportOptions">
+<area shape="rect" id="node1" title="Options to import shader resource." alt="" coords="5,155,173,181"/>
+<area shape="rect" id="node2" href="$classResourceImportOptions.html" title="Base class for import options to import specific resource." alt="" coords="10,80,169,107"/>
+<area shape="rect" id="node3" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="58,5,121,32"/>
+</map>

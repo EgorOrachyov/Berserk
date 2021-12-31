@@ -1,5 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classResourceImporter.html" title="Base class responsible for importing a specific resource type." alt="" coords="5,31,131,57"/>
+<area shape="rect" id="node1" href="$classResourceImporter.html" title="Base class responsible for importing a specific resource type." alt="" coords="5,56,131,83"/>
 <area shape="rect" id="node2" href="$classImporterMesh.html" title="Raw simple mesh resources importer." alt="" coords="184,5,287,32"/>
-<area shape="rect" id="node3" href="$classImporterTexture.html" title="Texture resources importer." alt="" coords="179,56,292,83"/>
+<area shape="rect" id="node3" href="$classImporterShader.html" title="Texture resources importer." alt="" coords="180,56,291,83"/>
+<area shape="rect" id="node4" href="$classImporterTexture.html" title="Texture resources importer." alt="" coords="179,107,292,133"/>
 </map>

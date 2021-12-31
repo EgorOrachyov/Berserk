@@ -1,6 +1,7 @@
 <map id="ResourceImportOptions" name="ResourceImportOptions">
-<area shape="rect" id="node1" title="Base class for import options to import specific resource." alt="" coords="100,80,259,107"/>
+<area shape="rect" id="node1" title="Base class for import options to import specific resource." alt="" coords="193,80,352,107"/>
 <area shape="rect" id="node3" href="$classResMeshImportOptions.html" title="Texture import options." alt="" coords="5,155,164,181"/>
-<area shape="rect" id="node4" href="$classResTextureImportOptions.html" title="Texture import options." alt="" coords="189,155,359,181"/>
-<area shape="rect" id="node2" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="148,5,211,32"/>
+<area shape="rect" id="node4" href="$classResShaderImportOptions.html" title="Options to import shader resource." alt="" coords="189,155,357,181"/>
+<area shape="rect" id="node5" href="$classResTextureImportOptions.html" title="Texture import options." alt="" coords="381,155,551,181"/>
+<area shape="rect" id="node2" href="$classRefCnt.html" title="Reference counted base object." alt="" coords="241,5,304,32"/>
 </map>

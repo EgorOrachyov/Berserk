@@ -1,0 +1,4 @@
+<map id="ImporterShader" name="ImporterShader">
+<area shape="rect" id="node1" title="Texture resources importer." alt="" coords="13,80,123,107"/>
+<area shape="rect" id="node2" href="$classResourceImporter.html" title="Base class responsible for importing a specific resource type." alt="" coords="5,5,131,32"/>
+</map>
