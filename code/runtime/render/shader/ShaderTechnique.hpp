@@ -63,7 +63,7 @@ using ShaderTechniqueTags = Mask<ShaderTechniqueTag>;
  */
 class ShaderTechnique final : public RefCnt {
 public:
-    /** Create empty technique */
+    /** CreateFromImage empty technique */
     BRK_API ShaderTechnique() = default;
     BRK_API ~ShaderTechnique() override = default;
 

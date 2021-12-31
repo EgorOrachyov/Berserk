@@ -46,10 +46,10 @@ BRK_NS_BEGIN
  * @class Config
  * @brief Key-values based config file in `plist` style
  */
-class Config final : public RefCnt {
+class Config final {
 public:
     BRK_API Config();
-    BRK_API ~Config() override;
+    BRK_API ~Config();
 
     /**
      * @brief Open config file path with specified path
@@ -111,14 +111,13 @@ public:
     BRK_API String GetProperty(const StringName &section, const StringName &key, const String &defaultValue) const;
 
     /** @return Open filepath of config */
-    BRK_API const String &GetFilepath() const { return mFilepath; }
+    BRK_API const String &GetFilepath() const;
 
     /** @return True if file is open */
     BRK_API bool IsOpen() const { return mData != nullptr; }
 
 private:
-    String mFilepath;
-    std::unique_ptr<class ConfigData> mData;
+    std::shared_ptr<class ConfigData> mData;
 };
 
 /**

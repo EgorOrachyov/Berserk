@@ -107,7 +107,7 @@ Ref<RHIVertexDeclaration> MeshFormats::GetDeclaration(MeshFormat target, MeshFor
     auto declaration = device.CreateVertexDeclaration(desc);
 
 #ifdef BERSERK_DEBUG
-    BRK_INFO("Create mesh vertex declaration key=" << key);
+    BRK_INFO("CreateFromImage mesh vertex declaration key=" << key);
 #endif//BERSERK_DEBUG
 
     mCached.emplace(std::move(key), declaration);

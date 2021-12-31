@@ -88,7 +88,7 @@ void Mesh::AddMaterial(Ref<Material> material) {
     mMaterials.push_back(std::move(material));
 }
 
-void Mesh::AddSubMesh(const StringName &name, RHIPrimitivesType primitivesType, Aabbf aabb, uint32 baseVertex, RHIIndexType indexType, uint32 indicesCount, const Ref<Data> &indexData) {
+void Mesh::AddSubMesh(const StringName &name, RHIPrimitivesType primitivesType, const Aabbf& aabb, uint32 baseVertex, RHIIndexType indexType, uint32 indicesCount, const Ref<Data> &indexData) {
     assert(indexType != RHIIndexType::Unknown);
     assert(indicesCount > 0);
     assert(indexData.IsNotNull());
@@ -106,7 +106,7 @@ void Mesh::AddSubMesh(const StringName &name, RHIPrimitivesType primitivesType, 
 
     subMesh->mName = name;
     subMesh->mPrimitivesType = primitivesType;
-    subMesh->mAabb = std::move(aabb);
+    subMesh->mAabb = aabb;
     subMesh->mBaseVertex = baseVertex;
     subMesh->mIndexType = indexType;
     subMesh->mIndicesCount = indicesCount;

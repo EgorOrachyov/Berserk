@@ -25,20 +25,17 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <resource/Resource.hpp>
+#include <resource/ResMaterial.hpp>
 
 BRK_NS_BEGIN
 
-void Resource::SetName(StringName name) {
-    mName = std::move(name);
+const StringName &ResMaterial::GetResourceType() const {
+    return GetResourceTypeStatic();
 }
 
-void Resource::SetPath(String path) {
-    mPath = std::move(path);
-}
-
-void Resource::SetUUID(UUID uuid) {
-    mUUID = uuid;
+const StringName &ResMaterial::GetResourceTypeStatic() {
+    static StringName resourceType(BRK_TEXT("_brk_resource_material"));
+    return resourceType;
 }
 
 BRK_NS_END

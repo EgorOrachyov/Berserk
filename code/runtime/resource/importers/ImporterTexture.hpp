@@ -25,20 +25,38 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <resource/Resource.hpp>
+#ifndef BERSERK_IMPORTERTEXTURE_HPP
+#define BERSERK_IMPORTERTEXTURE_HPP
+
+#include <resource/ResourceImporter.hpp>
 
 BRK_NS_BEGIN
 
-void Resource::SetName(StringName name) {
-    mName = std::move(name);
-}
+/**
+ * @addtogroup resource
+ * @{
+ */
 
-void Resource::SetPath(String path) {
-    mPath = std::move(path);
-}
+/**
+ * @class ImporterTexture
+ * @brief Texture resources importer
+ */
+class ImporterTexture final : public ResourceImporter {
+public:
+    BRK_API ImporterTexture();
+    BRK_API ~ImporterTexture() override = default;
+    Ref<ResourceImportOptions> CreateDefaultOptions() const override;
+    const std::vector<String> &GetSupportedExtensions() const override;
+    void Import(const String &fullpath, const Ref<ResourceImportOptions> &options, ResourceImportResult &result) override;
 
-void Resource::SetUUID(UUID uuid) {
-    mUUID = uuid;
-}
+private:
+    std::vector<String> mExtensions;
+};
+
+/**
+ * @}
+ */
 
 BRK_NS_END
+
+#endif//BERSERK_IMPORTERTEXTURE_HPP

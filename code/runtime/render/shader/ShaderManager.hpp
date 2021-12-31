@@ -45,7 +45,7 @@ BRK_NS_BEGIN
 
 /**
  * @class ShaderManager
- * @brief
+ * @brief Class for loading and importing engine shaders
  */
 class ShaderManager {
 public:

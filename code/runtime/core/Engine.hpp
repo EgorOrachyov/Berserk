@@ -87,7 +87,7 @@ public:
     BRK_API bool CloseRequested();
 
     /** @return Engine config file */
-    BRK_API const Ref<Config> &GetConfig();
+    BRK_API const Config &GetConfig();
 
     /** @return Engine standard output */
     BRK_API Output &GetOutput();
@@ -144,7 +144,7 @@ private:
     void Update(float t, float dt);
 
 private:
-    Ref<Config> mConfig; /** Engine config file */
+    Config mConfig; /** Engine config file */
 
     std::unique_ptr<Output> mOutput;                   /** Engine standard output */
     std::unique_ptr<FileSystem> mFileSystem;           /** Engine file system utils */

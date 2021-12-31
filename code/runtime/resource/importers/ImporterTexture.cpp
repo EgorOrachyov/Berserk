@@ -25,98 +25,70 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_TAABB_HPP
-#define BERSERK_TAABB_HPP
-
-#include <core/Config.hpp>
-#include <core/math/MathUtils.hpp>
-#include <core/math/TVecN.hpp>
+#include <core/Engine.hpp>
+#include <core/io/Logger.hpp>
+#include <resource/ResTexture.hpp>
+#include <resource/importers/ImporterTexture.hpp>
 
 BRK_NS_BEGIN
 
-/**
- * @addtogroup core
- * @{
- */
+ImporterTexture::ImporterTexture() {
+    mExtensions.emplace_back(BRK_TEXT("png"));
+    mExtensions.emplace_back(BRK_TEXT("jpg"));
+    mExtensions.emplace_back(BRK_TEXT("jpeg"));
+    mExtensions.emplace_back(BRK_TEXT("bmp"));
+    mExtensions.emplace_back(BRK_TEXT("gif"));
+    mExtensions.emplace_back(BRK_TEXT("tga"));
+    mExtensions.emplace_back(BRK_TEXT("pic"));
+    mExtensions.emplace_back(BRK_TEXT("ppm"));
+    mExtensions.emplace_back(BRK_TEXT("pgm"));
+}
 
-/**
- * @class TAabb
- * @brief Axis-aligned 3d bounding box
- *
- * @tparam T Type of internal values (float/double)
- */
-template<typename T>
-class TAabb {
-public:
-    TAabb() = default;
+Ref<ResourceImportOptions> ImporterTexture::CreateDefaultOptions() const {
+    return Ref<ResourceImportOptions>(new ResTextureImportOptions);
+}
 
-    TAabb(const TVecN<T, 3> &minv, const TVecN<T, 3> &maxv) {
-        min = minv;
-        max = maxv;
+const std::vector<String> &ImporterTexture::GetSupportedExtensions() const {
+    return mExtensions;
+}
+
+void ImporterTexture::Import(const String &fullpath, const Ref<ResourceImportOptions> &options, ResourceImportResult &result) {
+    auto ops = options.Cast<ResTextureImportOptions>();
+
+    if (ops.IsNull()) {
+        BRK_ERROR("Provided invalid options for resource " << fullpath);
+        ops = Ref<ResTextureImportOptions>(new ResTextureImportOptions);
     }
 
-    TAabb(const TVecN<T, 3> &center, T radius) {
-        TVecN<T, 3> offset = {radius, radius, radius};
-        min = center - offset;
-        max = center + radius;
+    auto image = Image::LoadRgba(fullpath, ops->channels);
+
+    if (image.Empty()) {
+        result.failed = true;
+        result.error = BRK_TEXT("Failed load rgba image");
+        return;
     }
 
-    void Fit(const TVecN<T, 3> &p) {
-        min = TVecN<T, 3>::min(min, p);
-        max = TVecN<T, 3>::max(max, p);
+    if (ops->width > 0 || ops->height > 0) {
+        image = image.Resize(ops->width > 0 ? ops->width : image.GetWidth(), ops->height > 0 ? ops->height : image.GetHeight());
     }
 
-    void Fit(const TAabb &aabb) {
-        min = TVecN<T, 3>::min(min, aabb.min);
-        max = TVecN<T, 3>::max(max, aabb.max);
-    }
+    Ref<ResTexture> texture(new ResTexture());
+    texture->CreateFromImage(image, ops->mipmaps, ops->cacheCPU);
 
-    bool Contains(const TVecN<T, 3> &p) const {
-        return min <= p && p <= max;
-    }
+    // todo: remove
+    RHISamplerDesc samplerDesc;
+    samplerDesc.minFilter = RHISamplerMinFilter::LinearMipmapLinear;
+    samplerDesc.magFilter = RHISamplerMagFilter::Linear;
+    samplerDesc.maxAnisotropy = 16.0f;
+    samplerDesc.useAnisotropy = true;
+    samplerDesc.u = RHISamplerRepeatMode::Repeat;
+    samplerDesc.v = RHISamplerRepeatMode::Repeat;
+    samplerDesc.w = RHISamplerRepeatMode::Repeat;
+    auto sampler = Engine::Instance().GetRHIDevice().CreateSampler(samplerDesc);
 
-    bool Contains(const TAabb<T> &aabb) const {
-        return min <= aabb.min && aabb.max <= max;
-    }
+    texture->SetSampler(sampler);
+    result.resource = texture.As<Resource>();
+}
 
-    void GetPoints(T *points) const {
-        points[0] = TVecN<T, 3>(min[0], min[1], min[2]);
-        points[1] = TVecN<T, 3>(min[0], min[1], max[2]);
-        points[2] = TVecN<T, 3>(min[0], max[1], min[2]);
-        points[3] = TVecN<T, 3>(min[0], max[1], max[2]);
-        points[4] = TVecN<T, 3>(max[0], min[1], min[2]);
-        points[5] = TVecN<T, 3>(max[0], min[1], max[2]);
-        points[6] = TVecN<T, 3>(max[0], max[1], min[2]);
-        points[7] = TVecN<T, 3>(max[0], max[1], max[2]);
-    }
-
-    TVecN<T, 3> GetCenter() const {
-        return (max + min) * static_cast<T>(0.5);
-    }
-
-    TVecN<T, 3> GetExtent() const {
-        return (max - min) * static_cast<T>(0.5);
-    }
-
-    const TVecN<T, 3> &GetMin() const {
-        return min;
-    }
-
-    const TVecN<T, 3> &GetMax() const {
-        return max;
-    }
-
-private:
-    TVecN<T, 3> min{0, 0, 0};
-    TVecN<T, 3> max{0, 0, 0};
-};
-
-using Aabbf = TAabb<float>;
-
-/**
- * @}
- */
 
 BRK_NS_END
-
-#endif//BERSERK_TAABB_HPP

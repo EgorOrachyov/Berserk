@@ -2,13 +2,19 @@ set(BERSERK_RESOURCE_HEADER
         resource/Resource.hpp
         resource/ResourceImporter.hpp
         resource/ResourceManager.hpp
+        resource/ResMaterial.hpp
+        resource/ResMesh.hpp
         resource/ResTexture.hpp
-        resource/importers/TextureImporter.hpp
+        resource/importers/ImporterMesh.hpp
+        resource/importers/ImporterTexture.hpp
         )
 
 set(BERSERK_RESOURCE_SRC
         resource/Resource.cpp
         resource/ResourceManager.cpp
+        resource/ResMaterial.cpp
+        resource/ResMesh.cpp
         resource/ResTexture.cpp
-        resource/importers/TextureImporter.cpp
+        resource/importers/ImporterMesh.cpp
+        resource/importers/ImporterTexture.cpp
         )

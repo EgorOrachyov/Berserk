@@ -56,7 +56,7 @@ BRK_NS_BEGIN
  *
  * Device object exposes common object creation api.
  *
- * Device provided objects can be safely created from any thread. Create functions
+ * Device provided objects can be safely created from any thread. CreateFromImage functions
  * immediately return the created object reference, but actual object creation
  * on the GPU side is deferred, until the RHI execution thread reaches
  * object creation and does it its side.
@@ -68,37 +68,37 @@ class RHIDevice {
 public:
     BRK_API virtual ~RHIDevice() = default;
 
-    /** @return Create vertex declaration from desc */
+    /** @return CreateFromImage vertex declaration from desc */
     BRK_API virtual Ref<RHIVertexDeclaration> CreateVertexDeclaration(const RHIVertexDeclarationDesc &desc) = 0;
 
-    /** @return Create vertex buffer from desc */
+    /** @return CreateFromImage vertex buffer from desc */
     BRK_API virtual Ref<RHIVertexBuffer> CreateVertexBuffer(const RHIBufferDesc &desc) = 0;
 
-    /** @return Create vertex buffer from desc */
+    /** @return CreateFromImage vertex buffer from desc */
     BRK_API virtual Ref<RHIIndexBuffer> CreateIndexBuffer(const RHIBufferDesc &desc) = 0;
 
-    /** @return Create vertex buffer from desc */
+    /** @return CreateFromImage vertex buffer from desc */
     BRK_API virtual Ref<RHIUniformBuffer> CreateUniformBuffer(const RHIBufferDesc &desc) = 0;
 
-    /** @return Create sampler object from desc */
+    /** @return CreateFromImage sampler object from desc */
     BRK_API virtual Ref<RHISampler> CreateSampler(const RHISamplerDesc &desc) = 0;
 
-    /** @return Create texture from desc */
+    /** @return CreateFromImage texture from desc */
     BRK_API virtual Ref<RHITexture> CreateTexture(const RHITextureDesc &desc) = 0;
 
-    /** @return Create resource set from desc */
+    /** @return CreateFromImage resource set from desc */
     BRK_API virtual Ref<RHIResourceSet> CreateResourceSet(const RHIResourceSetDesc &desc) = 0;
 
-    /** @return Create framebuffer from desc */
+    /** @return CreateFromImage framebuffer from desc */
     BRK_API virtual Ref<RHIFramebuffer> CreateFramebuffer(const RHIFramebufferDesc &desc) = 0;
 
-    /** @return Create and compile shader from desc */
+    /** @return CreateFromImage and compile shader from desc */
     BRK_API virtual Ref<RHIShader> CreateShader(const RHIShaderDesc &desc) = 0;
 
-    /** @return Create render pass from desc */
+    /** @return CreateFromImage render pass from desc */
     BRK_API virtual Ref<RHIRenderPass> CreateRenderPass(const RHIRenderPassDesc &desc) = 0;
 
-    /** @return Create and compile pipeline from desc */
+    /** @return CreateFromImage and compile pipeline from desc */
     BRK_API virtual Ref<RHIGraphicsPipeline> CreateGraphicsPipeline(const RHIGraphicsPipelineDesc &desc) = 0;
 
     /** Update vertex buffer with data */

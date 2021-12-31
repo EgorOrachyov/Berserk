@@ -25,20 +25,38 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <resource/Resource.hpp>
+#ifndef BERSERK_IMPORTERMESH_HPP
+#define BERSERK_IMPORTERMESH_HPP
+
+#include <resource/ResourceImporter.hpp>
 
 BRK_NS_BEGIN
 
-void Resource::SetName(StringName name) {
-    mName = std::move(name);
-}
+/**
+ * @addtogroup resource
+ * @{
+ */
 
-void Resource::SetPath(String path) {
-    mPath = std::move(path);
-}
+/**
+ * @class ImporterMesh
+ * @brief Raw simple mesh resources importer
+ */
+class ImporterMesh final : public ResourceImporter {
+public:
+    BRK_API ImporterMesh();
+    BRK_API ~ImporterMesh() override = default;
+    Ref<ResourceImportOptions> CreateDefaultOptions() const override;
+    const std::vector<String> &GetSupportedExtensions() const override;
+    void Import(const String &fullpath, const Ref<ResourceImportOptions> &options, ResourceImportResult &result) override;
 
-void Resource::SetUUID(UUID uuid) {
-    mUUID = uuid;
-}
+private:
+    std::vector<String> mExtensions;
+};
+
+/**
+ * @}
+ */
 
 BRK_NS_END
+
+#endif//BERSERK_IMPORTERMESH_HPP

@@ -25,20 +25,44 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
+#ifndef BERSERK_RESMATERIAL_HPP
+#define BERSERK_RESMATERIAL_HPP
+
+#include <resource/ResTexture.hpp>
 #include <resource/Resource.hpp>
+#include <resource/ResourceImporter.hpp>
+
+#include <render/material/Material.hpp>
 
 BRK_NS_BEGIN
 
-void Resource::SetName(StringName name) {
-    mName = std::move(name);
-}
+/**
+ * @addtogroup resource
+ * @{
+ */
 
-void Resource::SetPath(String path) {
-    mPath = std::move(path);
-}
+/**
+ * @class ResMaterial
+ * @brief 3d mesh geometry for rendering
+ */
+class ResMaterial final : public Resource {
+public:
+    BRK_API ResMaterial() = default;
+    BRK_API ~ResMaterial() override = default;
 
-void Resource::SetUUID(UUID uuid) {
-    mUUID = uuid;
-}
+    BRK_API const StringName &GetResourceType() const override;
+    BRK_API static const StringName &GetResourceTypeStatic();
+
+    BRK_API const Ref<Material> &GetMaterial() const { return mMaterial; }
+
+private:
+    Ref<Material> mMaterial; /** Internal material object for rendering */
+};
+
+/**
+ * @}
+ */
 
 BRK_NS_END
+
+#endif//BERSERK_RESMATERIAL_HPP

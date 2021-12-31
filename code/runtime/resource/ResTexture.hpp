@@ -42,6 +42,10 @@ BRK_NS_BEGIN
  * @{
  */
 
+/**
+ * @class ResTextureImportOptions
+ * @brief Texture import options
+ */
 class ResTextureImportOptions : public ResourceImportOptions {
 public:
     BRK_API ResTextureImportOptions() = default;
@@ -66,7 +70,7 @@ public:
     BRK_API const StringName &GetResourceType() const override;
     BRK_API static const StringName &GetResourceTypeStatic();
 
-    BRK_API void Create(const Image &image, bool mipmaps, bool cache);
+    BRK_API void CreateFromImage(const Image &image, bool mipmaps, bool cache);
     BRK_API void SetSampler(Ref<RHISampler> sampler);
 
     BRK_API uint32 GetWidth() const { return mWidth; }

@@ -27,7 +27,8 @@
 
 #include <core/Engine.hpp>
 #include <resource/ResourceManager.hpp>
-#include <resource/importers/TextureImporter.hpp>
+#include <resource/importers/ImporterMesh.hpp>
+#include <resource/importers/ImporterTexture.hpp>
 
 #include <algorithm>
 
@@ -35,7 +36,8 @@ BRK_NS_BEGIN
 
 ResourceManager::ResourceManager() {
     // Register default importers
-    RegisterImporter(std::make_shared<TextureImporter>());
+    RegisterImporter(std::make_shared<ImporterMesh>());
+    RegisterImporter(std::make_shared<ImporterTexture>());
 }
 
 Ref<Resource> ResourceManager::Import(const String &filepath, const Ref<ResourceImportOptions> &options, const UUID &uuid) {
@@ -70,7 +72,7 @@ Ref<Resource> ResourceManager::Import(const String &filepath, const Ref<Resource
 #endif
 
     importResult.resource->SetUUID(uuid);
-    importResult.resource->SetName(filepath);
+    importResult.resource->SetName(StringName(filepath));
     importResult.resource->SetPath(std::move(path));
 
     return importResult.resource;

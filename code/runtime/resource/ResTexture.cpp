@@ -41,7 +41,7 @@ const StringName &ResTexture::GetResourceTypeStatic() {
     return resourceType;
 }
 
-void ResTexture::Create(const Image &image, bool mipmaps, bool cache) {
+void ResTexture::CreateFromImage(const Image &image, bool mipmaps, bool cache) {
     if (image.Empty()) {
         BRK_ERROR("an attempt to create texture from empty image");
         return;
@@ -58,7 +58,7 @@ void ResTexture::Create(const Image &image, bool mipmaps, bool cache) {
     auto &device = Engine::Instance().GetRHIDevice();
 
     RHITextureDesc textureDesc{};
-    textureDesc.name = std::move(StringName(GetName()));
+    textureDesc.name = GetName();
     textureDesc.width = GetWidth();
     textureDesc.height = GetHeight();
     textureDesc.depth = 1;
@@ -72,7 +72,7 @@ void ResTexture::Create(const Image &image, bool mipmaps, bool cache) {
     // Upload actual data
     device.UpdateTexture2D(mRHITexture, 0, {0, 0, image.GetWidth(), image.GetHeight()}, image.GetPixelData());
 
-    // Generate mip maps if requried
+    // Generate mip maps if required
     if (MipMaps())
         device.GenerateMipMaps(mRHITexture);
 }

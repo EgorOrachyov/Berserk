@@ -25,38 +25,32 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#ifndef BERSERK_TEXTUREIMPORTER_HPP
-#define BERSERK_TEXTUREIMPORTER_HPP
+#include <resource/ResMesh.hpp>
+#include <resource/importers/ImporterMesh.hpp>
 
-#include <resource/ResourceImporter.hpp>
+#include <tiny_obj_loader.h>
 
 BRK_NS_BEGIN
 
-/**
- * @addtogroup resource
- * @{
- */
+ImporterMesh::ImporterMesh() {
+    mExtensions.emplace_back("obj");
+}
 
-/**
- * @class TextureImporter
- * @brief Texture resources importer
- */
-class TextureImporter final : public ResourceImporter {
-public:
-    BRK_API TextureImporter();
-    BRK_API ~TextureImporter() override = default;
-    Ref<ResourceImportOptions> CreateDefaultOptions() const override;
-    const std::vector<String> &GetSupportedExtensions() const override;
-    void Import(const String &fullpath, const Ref<ResourceImportOptions> &options, ResourceImportResult &result) override;
+Ref<ResourceImportOptions> ImporterMesh::CreateDefaultOptions() const {
+    return Ref<ResourceImportOptions>(new ResMeshImportOptions);
+}
 
-private:
-    std::vector<String> mExtensions;
-};
+const std::vector<String> &ImporterMesh::GetSupportedExtensions() const {
+    return mExtensions;
+}
 
-/**
- * @}
- */
+void ImporterMesh::Import(const String &fullpath, const Ref<ResourceImportOptions> &options, ResourceImportResult &result) {
+    auto opt = options.Cast<ResMeshImportOptions>();
+
+    if (opt.IsNull()) {
+        BRK_ERROR("Passed invalid options for import file=" << fullpath);
+        opt = Ref<ResMeshImportOptions>(new ResMeshImportOptions);
+    }
+}
 
 BRK_NS_END
-
-#endif//BERSERK_TEXTUREIMPORTER_HPP

@@ -72,7 +72,7 @@ public:
     BRK_API SwapBuffersFunc &GetSwapFunc();
 
     /**
-     * @brief Create GL RHI device
+     * @brief CreateFromImage GL RHI device
      *
      * Attempts to load and initialize GL functions
      * and create GL RHI device.

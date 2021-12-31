@@ -25,70 +25,42 @@
 /* SOFTWARE.                                                                      */
 /**********************************************************************************/
 
-#include <core/Engine.hpp>
-#include <core/io/Logger.hpp>
-#include <resource/ResTexture.hpp>
-#include <resource/importers/TextureImporter.hpp>
+#include <resource/ResMesh.hpp>
+#include <utility>
 
 BRK_NS_BEGIN
 
-TextureImporter::TextureImporter() {
-    mExtensions.emplace_back(BRK_TEXT("png"));
-    mExtensions.emplace_back(BRK_TEXT("jpg"));
-    mExtensions.emplace_back(BRK_TEXT("jpeg"));
-    mExtensions.emplace_back(BRK_TEXT("bmp"));
-    mExtensions.emplace_back(BRK_TEXT("gif"));
-    mExtensions.emplace_back(BRK_TEXT("tga"));
-    mExtensions.emplace_back(BRK_TEXT("pic"));
-    mExtensions.emplace_back(BRK_TEXT("ppm"));
-    mExtensions.emplace_back(BRK_TEXT("pgm"));
+const StringName &ResMesh::GetResourceType() const {
+    return GetResourceTypeStatic();
 }
 
-Ref<ResourceImportOptions> TextureImporter::CreateDefaultOptions() const {
-    return Ref<ResourceImportOptions>(new ResTextureImportOptions);
+const StringName &ResMesh::GetResourceTypeStatic() {
+    static StringName resourceType(BRK_TEXT("_brk_resource_mesh"));
+    return resourceType;
 }
 
-const std::vector<String> &TextureImporter::GetSupportedExtensions() const {
-    return mExtensions;
+void ResMesh::CreateFromData(MeshFormat format, uint32 verticesCount, const Ref<Data> &vertexData, const Ref<Data> &attributeData, const Ref<Data> &skinningData) {
+    mMesh.Reset();
+    mSubMeshes.clear();
+    mMesh = Ref<Mesh>(new Mesh(format, verticesCount, vertexData, attributeData, skinningData));
+    mMesh->SetName(GetName());
 }
 
-void TextureImporter::Import(const String &fullpath, const Ref<ResourceImportOptions> &options, ResourceImportResult &result) {
-    auto ops = options.Cast<ResTextureImportOptions>();
-
-    if (ops.IsNull()) {
-        BRK_ERROR("Provided invalid options for resource " << fullpath);
-        ops = Ref<ResTextureImportOptions>(new ResTextureImportOptions);
-    }
-
-    auto image = Image::LoadRgba(fullpath, ops->channels);
-
-    if (image.Empty()) {
-        result.failed = true;
-        result.error = BRK_TEXT("Failed load rgba image");
+void ResMesh::AddSubMesh(const StringName &name, RHIPrimitivesType primitivesType, const Aabbf& aabb, uint32 baseVertex, RHIIndexType indexType, uint32 indicesCount, const Ref<Data> &indexData) {
+    if (mMesh.IsNull()) {
+        BRK_ERROR("No mesh object created in mesh " << GetName());
         return;
     }
 
-    if (ops->width > 0 || ops->height > 0) {
-        image = image.Resize(ops->width > 0 ? ops->width : image.GetWidth(), ops->height > 0 ? ops->height : image.GetHeight());
-    }
+    mMesh->AddSubMesh(name, primitivesType, aabb, baseVertex, indexType, indicesCount, indexData);
+    mSubMeshes.emplace_back();
 
-    Ref<ResTexture> texture(new ResTexture());
-    texture->Create(image, ops->mipmaps, ops->cacheCPU);
-
-    // todo: remove
-    RHISamplerDesc samplerDesc;
-    samplerDesc.minFilter = RHISamplerMinFilter::LinearMipmapLinear;
-    samplerDesc.magFilter = RHISamplerMagFilter::Linear;
-    samplerDesc.maxAnisotropy = 16.0f;
-    samplerDesc.useAnisotropy = true;
-    samplerDesc.u = RHISamplerRepeatMode::Repeat;
-    samplerDesc.v = RHISamplerRepeatMode::Repeat;
-    samplerDesc.w = RHISamplerRepeatMode::Repeat;
-    auto sampler = Engine::Instance().GetRHIDevice().CreateSampler(samplerDesc);
-
-    texture->SetSampler(sampler);
-    result.resource = texture.As<Resource>();
+    auto& subMesh = mSubMeshes.back();
+    subMesh.baseVertex = baseVertex;
+    subMesh.indicesCount = indicesCount;
+    subMesh.indexType = indexType;
+    subMesh.primitivesType = primitivesType;
+    subMesh.aabb = aabb;
 }
-
 
 BRK_NS_END

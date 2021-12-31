@@ -52,18 +52,18 @@ public:
     /** @return Unique resource type identifier */
     virtual const StringName &GetResourceType() const = 0;
 
-    BRK_API void SetName(String name);
+    BRK_API void SetName(StringName name);
     BRK_API void SetPath(String path);
     BRK_API void SetUUID(UUID uuid);
 
-    BRK_API const String &GetName() const { return mName; };
+    BRK_API const StringName &GetName() const { return mName; };
     BRK_API const String &GetPath() const { return mPath; };
     BRK_API const UUID &GetUUID() const { return mUUID; };
 
 private:
-    String mName; /** Resource name */
-    String mPath; /** Load path */
-    UUID mUUID;   /** Unique id */
+    StringName mName; /** Resource name */
+    String mPath;     /** Load path */
+    UUID mUUID;       /** Unique id */
 };
 
 /**

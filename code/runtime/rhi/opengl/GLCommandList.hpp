@@ -46,8 +46,8 @@ BRK_NS_BEGIN
  */
 
 /**
- * @class
- * @brief
+ * @class GLCommandList
+ * @brief GL command list implementation (wrapper for context)
  */
 class GLCommandList final : public RHICommandList {
 public:

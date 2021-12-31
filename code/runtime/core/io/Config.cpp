@@ -36,22 +36,43 @@
 
 BRK_NS_BEGIN
 
+/**
+ * @class ConfigData
+ * @brief Internal parsed config data in xml format
+ */
 class ConfigData {
 private:
+    String filepath;
     tinyxml2::XMLDocument document;
     tinyxml2::XMLElement *root{};
     std::unordered_map<StringName, tinyxml2::XMLElement *> sections;
     std::unordered_map<tinyxml2::XMLElement *, std::unordered_map<StringName, tinyxml2::XMLElement *>> keys;
 
 public:
-    inline bool Open(std::FILE *file) {
+    explicit ConfigData(String filepath) : filepath(std::move(filepath)) {}
+
+    inline bool Open() {
+        auto &fileSystem = Engine::Instance().GetFileSystem();
+        auto file = fileSystem.OpenFile(filepath, "rb");
+
+        if (!file) {
+            BRK_ERROR("Failed open file " << filepath);
+            return false;
+        }
+
         auto error = document.LoadFile(file);
-        return error == tinyxml2::XML_SUCCESS;
+
+        if (error != tinyxml2::XML_SUCCESS) {
+            BRK_ERROR("Failed to parse file " << filepath);
+            return false;
+        }
+
+        return true;
     }
 
     inline bool Parse() {
         if (!(root = document.FirstChildElement("config"))) {
-            BRK_ERROR("No `config` section");
+            BRK_ERROR("No `config` section file=" << filepath);
             return false;
         }
 
@@ -64,7 +85,7 @@ public:
                 sections[StringName(atrSectionName->Value())] = nextSection;
                 auto &keysMap = keys[nextSection];
 
-                auto nextEntry = nextSection->FirstChildElement("entry");
+                auto nextEntry = nextSection->FirstChildElement("property");
                 while (nextEntry) {
                     auto atrEntryKey = nextEntry->FindAttribute("key");
                     assert(atrEntryKey);
@@ -72,7 +93,7 @@ public:
                     if (atrEntryKey)
                         keysMap[StringName(atrEntryKey->Value())] = nextEntry;
 
-                    nextEntry = nextEntry->NextSiblingElement("entry");
+                    nextEntry = nextEntry->NextSiblingElement("property");
                 }
 
                 nextSection = nextSection->NextSiblingElement("section");
@@ -101,6 +122,8 @@ public:
         auto s = FindSection(section);
         return s ? FindKey(s, key) : nullptr;
     }
+
+    inline const String &GetFilepath() const { return filepath; }
 };
 
 Config::Config() = default;
@@ -115,32 +138,13 @@ bool Config::Open(const String &filepath) {
         return false;
     }
 
-    auto file = fileSystem.OpenFile(fullPath, "rb");
+    mData = std::make_shared<ConfigData>(filepath);
+    auto status = mData->Open() && mData->Parse();
 
-    if (!file) {
-        BRK_ERROR("Failed open file " << fullPath);
-        return false;
-    }
-
-    mFilepath = std::move(fullPath);
-    mData = std::unique_ptr<ConfigData>(new ConfigData);
-
-    auto status = mData->Open(file);
-    fileSystem.CloseFile(file);
-
-    if (!status) {
+    if (!status)
         mData.reset();
-        BRK_ERROR("Failed to parse file " << mFilepath);
-        return false;
-    }
 
-    if (!mData->Parse()) {
-        mData.reset();
-        BRK_ERROR("Failed to parse config " << mFilepath);
-        return false;
-    }
-
-    return true;
+    return status;
 }
 
 int32 Config::GetProperty(const StringName &section, const StringName &key, int32 defaultValue) const {
@@ -193,6 +197,11 @@ String Config::GetProperty(const StringName &section, const StringName &key, con
     }
 
     return defaultValue;
+}
+
+const String &Config::GetFilepath() const {
+    assert(IsOpen());
+    return mData->GetFilepath();
 }
 
 BRK_NS_END

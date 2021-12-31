@@ -109,7 +109,7 @@ public:
         uint32 offset = 0;
     };
 
-    /** Create params layout from list of params */
+    /** CreateFromImage params layout from list of params */
     BRK_API explicit ShaderParams(std::vector<ShaderParam> params);
     BRK_API ~ShaderParams() override = default;
 

@@ -56,7 +56,7 @@ bool Engine::CloseRequested() {
     return mCloseRequested.load();
 }
 
-const Ref<Config> &Engine::GetConfig() {
+const Config &Engine::GetConfig() {
     return mConfig;
 }
 
@@ -145,8 +145,7 @@ void Engine::InitCore() {
     mFileSystem->AddSearchPath(mFileSystem->GetExecutableDir());
 
     // Create config file
-    mConfig = Ref<Config>(new Config);
-    mConfig->Open("config/engine.config.xml");
+    mConfig.Open("config/engine.config.xml");
 }
 
 void Engine::InitEngine() {
@@ -158,10 +157,10 @@ void Engine::ConfigureWindow() {
     // Create primary window if is not created
     if (mWindowManager->GetPrimaryWindow().IsNull()) {
         StringName sectionApp("application");
-        auto w = mConfig->GetProperty(sectionApp, StringName("window.width"), 1280);
-        auto h = mConfig->GetProperty(sectionApp, StringName("window.height"), 720);
-        auto caption = mConfig->GetProperty(sectionApp, StringName("window.caption"), "Default window");
-        auto name = mConfig->GetProperty(sectionApp, StringName("window.name"), "MAIN");
+        auto w = mConfig.GetProperty(sectionApp, StringName("window.width"), 1280);
+        auto h = mConfig.GetProperty(sectionApp, StringName("window.height"), 720);
+        auto caption = mConfig.GetProperty(sectionApp, StringName("window.caption"), "Default window");
+        auto name = mConfig.GetProperty(sectionApp, StringName("window.name"), "MAIN");
         mWindowManager->CreateWindow(StringName(name), Size2i{w, h}, caption);
     }
 }

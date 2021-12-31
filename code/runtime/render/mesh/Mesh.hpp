@@ -145,7 +145,7 @@ public:
      * @param indicesCount Number of indices
      * @param indexData Index data
      */
-    BRK_API void AddSubMesh(const StringName &name, RHIPrimitivesType primitivesType, Aabbf aabb, uint32 baseVertex, RHIIndexType indexType, uint32 indicesCount, const Ref<Data> &indexData);
+    BRK_API void AddSubMesh(const StringName &name, RHIPrimitivesType primitivesType, const Aabbf& aabb, uint32 baseVertex, RHIIndexType indexType, uint32 indicesCount, const Ref<Data> &indexData);
 
     /**
      * @brief Set sub-mesh material

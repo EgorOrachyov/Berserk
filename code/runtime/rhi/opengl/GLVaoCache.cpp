@@ -146,7 +146,7 @@ void GLVaoCache::CreateVaoObject(const GLVaoDescriptor &descriptor, GLVaoCache::
     vao.handle = handle;
     vao.frameUsed = mCurrentFrame;
 
-    BRK_INFO("Create VAO hnd=" << vao.handle << " frame used=" << vao.frameUsed);
+    BRK_INFO("CreateFromImage VAO hnd=" << vao.handle << " frame used=" << vao.frameUsed);
 }
 
 void GLVaoCache::ReleaseVaoObject(const GLVaoCache::GLVaoValue &vao) const {

@@ -49,7 +49,7 @@ public:
     BRK_API virtual ~WindowManager() = default;
 
     /**
-     * @brief Create new OS native rendering window
+     * @brief CreateFromImage new OS native rendering window
      *
      * Creates new window object with specified properties.
      * Automatically initializes rendering context of window, so it is ready for actual rendering.

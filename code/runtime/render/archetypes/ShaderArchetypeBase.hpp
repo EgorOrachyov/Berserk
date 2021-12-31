@@ -39,6 +39,10 @@ BRK_NS_BEGIN
  * @{
  */
 
+/**
+ * @class ShaderArchetypeBase
+ * @brief Base shader type to draw a mesh on screen
+ */
 class ShaderArchetypeBase final : public ShaderArchetype {
 public:
     ~ShaderArchetypeBase() override = default;
